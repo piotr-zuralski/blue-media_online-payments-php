@@ -1,0 +1,43 @@
+{
+    "name": "blue-media/online-payments",
+    "type": "library",
+    "description": "PHP SDK for Blue Media Online Payments",
+    "license": "GPL-3.0",
+    "config": {
+        "bin-dir": "bin",
+        "discard-changes": true
+    },
+    "authors": [
+        {
+            "name": "Piotr Żuralski",
+            "email": "piotr@zuralski.net"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "guzzlehttp/guzzle": "6.0.2",
+        "ext-xmlwriter": "*",
+        "ext-xmlreader": "*",
+        "ext-curl": "*",
+        "ext-iconv": "*",
+        "ext-mbstring": "*",
+        "ext-hash": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.6.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "BlueMedia\\OnlinePayments\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BlueMedia\\OnlinePayments\\Tests\\": "tests/"
+        }
+    },
+    "minimum-stability": "stable",
+    "scripts": {
+        "tests": "phpunit"
+    }
+}
