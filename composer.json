@@ -2,6 +2,7 @@
     "name": "blue-media/online-payments",
     "type": "library",
     "description": "PHP SDK for Blue Media Online Payments",
+    "keywords": [],
     "license": "GPL-3.0",
     "config": {
         "bin-dir": "bin",
@@ -14,11 +15,11 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5",
         "guzzlehttp/guzzle": "6.0.2",
+        "psr/log": "~1.0",
         "ext-xmlwriter": "*",
         "ext-xmlreader": "*",
-        "ext-curl": "*",
         "ext-iconv": "*",
         "ext-mbstring": "*",
         "ext-hash": "*"

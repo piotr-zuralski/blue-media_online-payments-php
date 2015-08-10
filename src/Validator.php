@@ -5,22 +5,22 @@ namespace BlueMedia\OnlinePayments;
 use InvalidArgumentException;
 
 /**
- * (description) 
+ * Validator
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
- * @since     2015-07-12 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class Validator 
 {
 
     /**
-     * (description)
+     * Validates string length
      *
-     * @param $value
-     * @param $maxLength
+     * @param string $value
+     * @param integer $maxLength
      *
      * @return bool
      */
@@ -29,20 +29,28 @@ class Validator
         return !(is_string($value) && mb_strlen($value) >= 1 && mb_strlen($value) <= $maxLength);
     }
 
-    public static function validateAmount($amount)
+    /**
+     * Validates amount
+     *
+     * @param float $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
+    public static function validateAmount($value)
     {
-        if (mb_strlen(mb_substr($amount, mb_strrpos($amount, '.'))) > 14) {
+        if (mb_strlen(mb_substr($value, mb_strrpos($value, '.'))) > 14) {
             throw new InvalidArgumentException('Wrong Amount format, requires max 14 numbers before ".", only numbers');
         }
     }
 
     /**
-     * (description)
+     * Validates currency code
      *
-     * @param $value
+     * @param string $value
      *
      * @return void
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public static function validateCurrency($value)
     {
@@ -51,6 +59,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates e-mail address
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateEmail($value)
     {
         if (self::validateStringLength($value, 60)) {
@@ -61,6 +77,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates IP address
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateIP($value)
     {
         if (self::validateStringLength($value, 15)) {
@@ -71,6 +95,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates bank account number
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateNrb($value)
     {
         if (!is_numeric($value)) {
@@ -81,6 +113,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates tax country name
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateTaxCountry($value)
     {
         if (self::validateStringLength($value, 64)) {
@@ -88,6 +128,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates description
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateDescription($value)
     {
         if (self::validateStringLength($value, 79)) {
@@ -95,6 +143,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates gateway id
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateGatewayId($value)
     {
         if (!is_numeric($value)) {
@@ -105,6 +161,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates hash
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateHash($value)
     {
         if (self::validateStringLength($value, 128)) {
@@ -112,6 +176,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates order id
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateOrderId($value)
     {
         if (self::validateStringLength($value, 32)) {
@@ -119,6 +191,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates service id
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateServiceId($value)
     {
         if (!(is_numeric($value) && mb_strlen($value) >= 1 && mb_strlen($value) <= 10)) {
@@ -126,6 +206,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates receiver name
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateReceiverName($value)
     {
         if (self::validateStringLength($value, 35)) {
@@ -133,6 +221,14 @@ class Validator
         }
     }
 
+    /**
+     * Validates title
+     *
+     * @param string $value
+     *
+     * @return void
+     * @throws InvalidArgumentException
+     */
     public static function validateTitle($value)
     {
         if (self::validateStringLength($value, 95)) {

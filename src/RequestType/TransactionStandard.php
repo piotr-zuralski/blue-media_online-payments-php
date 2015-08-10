@@ -6,11 +6,11 @@ namespace BlueMedia\OnlinePayments\RequestType;
 /**
  * (description) 
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\RequestType
- * @since     2015-06-28 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class TransactionStandard extends AbstractRequestType
 {

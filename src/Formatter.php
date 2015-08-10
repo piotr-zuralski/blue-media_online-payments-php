@@ -5,11 +5,11 @@ namespace BlueMedia\OnlinePayments;
 /**
  * Formatter
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
- * @since     2015-07-12 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class Formatter
 {

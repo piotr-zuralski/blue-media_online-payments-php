@@ -2,24 +2,28 @@
 
 namespace BlueMedia\OnlinePayments;
 
+use BlueMedia\OnlinePayments\Model;
+use DateTime;
+use GuzzleHttp;
+use XMLReader;
+use XMLWriter;
 use RuntimeException;
 
 /**
- * (description) 
+ * Gateway
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
- * @since     2015-06-28 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class Gateway 
 {
     const MODE_SANDBOX = 'sandbox';
     const MODE_LIVE = 'live';
 
-//    const PAYMENT_DOMAIN_SANDBOX = 'pay-accept.bm.pl';
-    const PAYMENT_DOMAIN_SANDBOX = 'httpbin.org';
+    const PAYMENT_DOMAIN_SANDBOX = 'pay-accept.bm.pl';
     const PAYMENT_DOMAIN_LIVE = 'payment.blue.pl';
 
     const PAYMENT_ACTON_SECURE = '/secure?';
@@ -30,6 +34,7 @@ class Gateway
     const STATUS_CONFIRMED = 'CONFIRMED';
     const STATUS_NOT_CONFIRMED = 'NOTCONFIRMED';
 
+
     protected $hashingAlgorithmSupported = [
         'md5' => 1,
         'sha1' => 1,
@@ -37,27 +42,129 @@ class Gateway
         'sha512' => 1,
     ];
 
-    protected $mode = self::MODE_SANDBOX;
+    protected static $mode = self::MODE_SANDBOX;
 
-    protected $hashingAlgorithm = '';
+    protected static $hashingAlgorithm = '';
 
-    protected $hashingSalt = '';
+    protected static $hashingSalt = '';
 
-    protected $serviceId = 0;
+    protected static $hashingSeparator = '';
+
+    protected static $serviceId = 0;
+
+    private $response = '';
+
+    private function parseResponse()
+    {
+        $this->isErrorResponse();
+        if ($this->isPaywayFormResponse()) {
+            preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER);
+            return htmlspecialchars_decode($data['1']['0']);
+        }
+        return $this->parseTransferResponse();
+    }
+
+    private function parseTransferResponse()
+    {
+        $xmlData = $this->parseXml($this->response);
+
+        $transactionBackground = new Model\TransactionBackground();
+        $transactionBackground
+            ->setReceiverNrb($xmlData['receiverNRB'])
+            ->setReceiverName($xmlData['receiverName'])
+            ->setReceiverAddress($xmlData['receiverAddress'])
+            ->setOrderId($xmlData['orderID'])
+            ->setAmount($xmlData['amount'])
+            ->setCurrency($xmlData['currency'])
+            ->setTitle($xmlData['title'])
+            ->setRemoteId($xmlData['remoteID'])
+            ->setBankHref($xmlData['bankHref'])
+            ->setHash($xmlData['hash']);
+
+        $transactionBackgroundHash = self::generateHash($transactionBackground->toArray());
+        if ($transactionBackgroundHash !== $transactionBackground->getHash()) {
+            throw new RuntimeException('Received wrong hash!');
+        }
+        return $transactionBackground;
+    }
+
+    private function isErrorResponse()
+    {
+        if (preg_match_all('@<error>(.*)</error>@Usi',$this->response, $data, PREG_PATTERN_ORDER)) {
+            $xmlData = $this->parseXml($this->response);
+            throw new RuntimeException($xmlData['name'], $xmlData['statusCode']);
+        }
+    }
+
+    private function isPaywayFormResponse()
+    {
+        return (preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER));
+    }
+
+    private function parseXml($xml)
+    {
+        $data = [];
+        $xmlReader = new XMLReader();
+        $xmlReader->XML($xml, 'UTF-8', (LIBXML_NOERROR | LIBXML_NOWARNING));
+        while ($xmlReader->read()) {
+            switch ($xmlReader->nodeType) {
+                case XMLREADER::ELEMENT:
+                    $nodeName = $xmlReader->name;
+                    $xmlReader->read();
+                    $nodeValue = $xmlReader->value;
+                    if (!empty($nodeName) && !empty(trim($nodeValue))) {
+                        $data[$nodeName] = $nodeValue;
+                    }
+                    break;
+            }
+        }
+        $xmlReader->close();
+        return $data;
+    }
+
+    /**
+     * Checks PHP required environment
+     *
+     * @return void
+     * @throws \RuntimeException
+     */
+    protected function checkPhpEnvironment()
+    {
+        if (!version_compare(PHP_VERSION, '5.5', '>=')) {
+            throw new RuntimeException(sprintf('Required at least PHP version 5.5, current version "%s"', PHP_VERSION));
+        }
+        if (!extension_loaded('xmlwriter')) {
+            throw new RuntimeException('Extension "xmlwriter" is required');
+        }
+        if (!extension_loaded('xmlreader')) {
+            throw new RuntimeException('Extension "xmlreader" is required');
+        }
+        if (!extension_loaded('iconv')) {
+            throw new RuntimeException('Extension "iconv" is required');
+        }
+        if (!extension_loaded('mbstring')) {
+            throw new RuntimeException('Extension "mbstring" is required');
+        }
+        if (!extension_loaded('hash')) {
+            throw new RuntimeException('Extension "hash" is required');
+        }
+    }
 
     /**
      * Initialize
      *
+     * @param integer $serviceId
+     * @param string $hashingSalt
      * @param string $mode
      * @param string $hashingAlgorithm
-         * @param integer $serviceId
-         * @param string $hashingSalt
-
+     * @param string $hashingSeparator
      *
      * @throws RuntimeException
      */
-    public function __construct($mode = self::MODE_SANDBOX, $hashingAlgorithm = 'sha256', $serviceId, $hashingSalt)
+    public function __construct($serviceId, $hashingSalt, $mode = self::MODE_SANDBOX, $hashingAlgorithm = 'sha256', $hashingSeparator = '|')
     {
+        $this->checkPhpEnvironment();
+
         if ($mode != self::MODE_LIVE && $mode != self::MODE_SANDBOX) {
             throw new RuntimeException(sprintf('Not supported mode "%s"', $mode));
         }
@@ -71,36 +178,126 @@ class Gateway
             throw new RuntimeException(sprintf('Not supported hashingSalt "%s" - must be string, %s given', $hashingSalt, gettype($hashingSalt)));
         }
 
-
-        $this->mode             = $mode;
-        $this->hashingAlgorithm = $hashingAlgorithm;
-        $this->serviceId        = $serviceId;
-        $this->hashingSalt      = $hashingSalt;
+        self::$mode             = $mode;
+        self::$hashingAlgorithm = $hashingAlgorithm;
+        self::$serviceId        = $serviceId;
+        self::$hashingSalt      = $hashingSalt;
+        self::$hashingSeparator = $hashingSeparator;
     }
 
-    public function doBack()
+    public function doItnIn()
     {
+        if (empty($_POST['transactions'])) {
+            return;
+        }
 
+        $transactionXml = $_POST['transactions'];
+        $transactionXml = base64_decode($transactionXml);
+        $transactionData = $this->parseXml($transactionXml);
+
+        var_dump([$transactionXml]);
+
+        $itnIn = new Model\ItnIn();
+        $itnIn->setServiceId($transactionData['serviceID'])
+            ->setOrderId($transactionData['orderID'])
+            ->setRemoteId($transactionData['remoteID'])
+            ->setAmount($transactionData['amount'])
+            ->setCurrency($transactionData['currency'])
+            ->setGatewayId($transactionData['gatewayID'])
+            ->setPaymentDate(DateTime::createFromFormat('YmdHis', $transactionData['paymentDate']))
+            ->setPaymentStatus($transactionData['paymentStatus'])
+            ->setPaymentStatusDetails($transactionData['paymentStatusDetails'])
+            ->setHash($transactionData['hash']);
+
+        return $itnIn;
     }
 
-    public function doITN()
+    public function doItnInResponse(Model\ItnIn $transaction)
     {
+        $transactionHash = self::generateHash($transaction->toArray());
+        $confirmationStatus = self::STATUS_NOT_CONFIRMED;
 
+        if ($transactionHash == $transaction->getHash()) {
+            $confirmationStatus = self::STATUS_CONFIRMED;
+        }
+
+        $confirmationList = [
+            'serviceID' => self::$serviceId,
+            'orderID' => $transaction->getOrderId(),
+            'confirmation' => $confirmationStatus,
+        ];
+
+        $confirmationList['hash'] = self::generateHash($confirmationList);
+
+        $xml = new XMLWriter();
+        $xml->openMemory();
+        $xml->startDocument(1.0, 'UTF-8');
+        $xml->startElement('confirmationList');
+            $xml->writeElement('serviceID', $confirmationList['serviceID']);
+                $xml->startElement('transactionsConfirmations');
+                    $xml->startElement('transactionConfirmed');
+                        $xml->writeElement('orderID', $confirmationList['orderID']);
+                        $xml->writeElement('confirmation', $confirmationList['confirmation']);
+                    $xml->endElement();
+                $xml->endElement();
+            $xml->writeElement('hash', $confirmationList['hash']);
+        $xml->endElement();
+
+        return $xml->outputMemory();
     }
 
-    public function doTransactionBackground()
+    public function doTransactionBackground(Model\TransactionStandard $transaction)
     {
+        $transaction->setServiceId(self::$serviceId);
+        $transaction->setHash(self::generateHash($transaction->toArray()));
+        $transaction->validate();
 
+        $url = self::getActionUrl(self::PAYMENT_ACTON_PAYMENT);
+        $request = new GuzzleHttp\Psr7\Request('POST', $url, ['BmHeader' => 'pay-bm']);
+
+        $client = new GuzzleHttp\Client([
+            GuzzleHttp\RequestOptions::VERIFY => true,
+            'exceptions' => false,
+        ]);
+
+        $responseObject = $client->send($request, [GuzzleHttp\RequestOptions::FORM_PARAMS => $transaction->toArray()]);
+        $this->response = (string)$responseObject->getBody();
+        return $this->parseResponse();
     }
 
-    public function doTransactionCancel()
+    public function doTransactionCancel(Model\TransactionCancel $transaction)
     {
+        $transaction->setServiceId(self::$serviceId);
+        $transaction->setDocHash(self::generateHash($transaction->toArray()));
+        $transaction->validate();
 
+        $url  = self::getActionUrl(self::PAYMENT_ACTON_CANCEL);
+        $url .= http_build_query($transaction->toArray());
+        $request = new GuzzleHttp\Psr7\Request('GET', $url, ['BmHeader' => 'pay-bm']);
+
+        $client = new GuzzleHttp\Client([
+            GuzzleHttp\RequestOptions::VERIFY => true,
+            'exceptions' => false,
+        ]);
+
+        $responseObject = $client->send($request);
+        $this->response = (string)$responseObject->getBody();
+        $this->parseResponse();
     }
 
-    public function doTransactionStandard()
+    /**
+     * Perform standard transaction
+     *
+     * @param Model\TransactionStandard $transaction
+     *
+     * @return string
+     */
+    public function doTransactionStandard(Model\TransactionStandard $transaction)
     {
-
+        $transaction->setServiceId(self::$serviceId);
+        $transaction->setHash(self::generateHash($transaction->toArray()));
+        $transaction->validate();
+        return $transaction->getHtmlForm();
     }
 
     /**
@@ -137,14 +334,13 @@ class Gateway
     /**
      * Returns payment service action URL
      *
-     * @param string $mode
      * @param string $action
      *
      * @return string
      */
-    final public static function getActionUrl($mode, $action)
+    final public static function getActionUrl($action)
     {
-        $domain = self::mapModeToDomain($mode);
+        $domain = self::mapModeToDomain(self::$mode);
 
         switch ($action) {
             case self::PAYMENT_ACTON_CANCEL:
@@ -160,5 +356,18 @@ class Gateway
         }
 
         return sprintf('https://%s%s', $domain, $action);
+    }
+
+    final public static function generateHash(array $data)
+    {
+        $result = '';
+        foreach ($data as $name => $value) {
+            if (mb_strtolower($name) == 'hash' || empty($value)) {
+                continue;
+            }
+            $result .= $value . self::$hashingSeparator;
+        }
+        $result .= self::$hashingSalt;
+        return hash(self::$hashingAlgorithm, $result);
     }
 } 

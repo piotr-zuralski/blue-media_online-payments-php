@@ -3,17 +3,17 @@
 namespace BlueMedia\OnlinePayments\Model;
 
 use BlueMedia\OnlinePayments\Validator;
+use BlueMedia\OnlinePayments\Formatter;
 use DomainException;
 
 /**
- * [outgoing]
  * (description)
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
- * @since     2015-07-07 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class TransactionBackground extends AbstractModel
 {
@@ -118,7 +118,7 @@ class TransactionBackground extends AbstractModel
      */
     public function getAmount()
     {
-        return $this->amount;
+        return Formatter::formatAmount($this->amount);
     }
 
     /**
@@ -366,6 +366,23 @@ class TransactionBackground extends AbstractModel
         if (empty($this->hash)) {
             throw new DomainException('Hash cannot be empty');
         }
+    }
+
+    public function toArray()
+    {
+        $result = [];
+        $result['receiverNRB'] = $this->getReceiverNrb();
+        $result['receiverName'] = $this->getReceiverName();
+        $result['receiverAddress'] = $this->getReceiverAddress();
+        $result['orderID'] = $this->getOrderId();
+        $result['amount'] = $this->getAmount();
+        $result['currency'] = $this->getCurrency();
+        $result['title'] = $this->getTitle();
+        $result['remoteID'] = $this->getRemoteId();
+        $result['bankHref'] = $this->getBankHref();
+        $result['hash'] = $this->getHash();
+
+        return $result;
     }
 
 }

@@ -3,6 +3,7 @@
 namespace BlueMedia\OnlinePayments\Model;
 
 use BlueMedia\OnlinePayments\Formatter;
+use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Validator;
 use DomainException;
 use DateTime;
@@ -10,11 +11,11 @@ use DateTime;
 /**
  * (description) 
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
- * @since     2015-07-07 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class TransactionStandard extends AbstractModel
 {
@@ -22,8 +23,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Service id
      *
-     * @hashOrder 1
-     * @required
      * @var integer
      */
     protected $serviceId;
@@ -31,8 +30,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction order id
      *
-     * @hashOrder 2
-     * @required
      * @var string
      */
     protected $orderId;
@@ -40,8 +37,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction amount
      *
-     * @hashOrder 3
-     * @required
      * @var float
      */
     protected $amount;
@@ -49,7 +44,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction description
      *
-     * @hashOrder 4
      * @var string
      */
     protected $description;
@@ -57,7 +51,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction gateway id
      *
-     * @hashOrder 5
      * @var integer
      */
     protected $gatewayId;
@@ -65,7 +58,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction currency
      *
-     * @hashOrder 6
      * @var string
      */
     protected $currency;
@@ -73,7 +65,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction customer e-mail address
      *
-     * @hashOrder 7
      * @var string
      */
     protected $customerEmail;
@@ -81,7 +72,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction customer bank account number
      *
-     * @hashOrder 8
      * @var string
      */
     protected $customerNrb;
@@ -89,7 +79,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction tax country
      *
-     * @hashOrder 9
      * @var string
      */
     protected $taxCountry;
@@ -97,7 +86,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Customer IP address
      *
-     * @hashOrder 10
      * @var string
      */
     protected $customerIp;
@@ -105,7 +93,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction title
      *
-     * @hashOrder 11
      * @var string
      */
     protected $title;
@@ -113,7 +100,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction receiver name
      *
-     * @hashOrder 12
      * @var string
      */
     protected $receiverName;
@@ -121,7 +107,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction validity time
      *
-     * @hashOrder 20
      * @var DateTime
      */
     protected $validityTime;
@@ -129,7 +114,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Transaction link validity time
      *
-     * @hashOrder 30
      * @var DateTime
      */
     protected $linkValidityTime;
@@ -137,7 +121,6 @@ class TransactionStandard extends AbstractModel
     /**
      * Hash
      *
-     * @required
      * @var string
      */
     protected $hash;
@@ -164,7 +147,7 @@ class TransactionStandard extends AbstractModel
      */
     public function getAmount()
     {
-        return $this->amount;
+        return Formatter::formatAmount($this->amount);
     }
 
     /**
@@ -456,6 +439,52 @@ class TransactionStandard extends AbstractModel
         return $this->title;
     }
 
+    /**
+     * Set linkValidityTime
+     *
+     * @param DateTime $linkValidityTime
+     *
+     * @return $this
+     */
+    public function setLinkValidityTime(DateTime $linkValidityTime)
+    {
+        $this->linkValidityTime = $linkValidityTime;
+        return $this;
+    }
+
+    /**
+     * Return linkValidityTime
+     *
+     * @return DateTime
+     */
+    public function getLinkValidityTime()
+    {
+        return $this->linkValidityTime;
+    }
+
+    /**
+     * Set validityTime
+     *
+     * @param DateTime $validityTime
+     *
+     * @return $this
+     */
+    public function setValidityTime(DateTime $validityTime)
+    {
+        $this->validityTime = $validityTime;
+        return $this;
+    }
+
+    /**
+     * Return validityTime
+     *
+     * @return DateTime
+     */
+    public function getValidityTime()
+    {
+        return $this->validityTime;
+    }
+    
     public function validate()
     {
         if (empty($this->serviceId)) {
@@ -470,6 +499,65 @@ class TransactionStandard extends AbstractModel
         if (empty($this->hash)) {
             throw new DomainException('Hash cannot be empty');
         }
+    }
+
+    public function toArray()
+    {
+        $result = [];
+        $result['ServiceID'] = $this->getServiceId();
+        $result['OrderID'] = $this->getOrderId();
+        $result['Amount'] = $this->getAmount();
+
+        if (!empty($this->getDescription())) {
+            $result['Description'] = $this->getDescription();
+        }
+        if (!empty($this->getGatewayId())) {
+            $result['GatewayID'] = $this->getGatewayId();
+        }
+        if (!empty($this->getCurrency())) {
+            $result['Currency'] = $this->getCurrency();
+        }
+        if (!empty($this->getCustomerEmail())) {
+            $result['CustomerEmail'] = $this->getCustomerEmail();
+        }
+        if (!empty($this->getCustomerNrb())) {
+            $result['CustomerNRB'] = $this->getCustomerNrb();
+        }
+        if (!empty($this->getTaxCountry())) {
+            $result['TaxCountry'] = $this->getTaxCountry();
+        }
+        if (!empty($this->getCustomerIp())) {
+            $result['CustomerIP'] = $this->getCustomerIp();
+        }
+        if (!empty($this->getTitle())) {
+            $result['Title'] = $this->getTitle();
+        }
+        if (!empty($this->getReceiverName())) {
+            $result['ReceiverName'] = $this->getReceiverName();
+        }
+        if ($this->getValidityTime() instanceof DateTime) {
+            $result['ValidityTime'] = $this->getValidityTime()->format('Y-m-d H:i:s');
+        }
+        if ($this->getLinkValidityTime() instanceof DateTime) {
+            $result['LinkValidityTime'] = $this->getLinkValidityTime()->format('Y-m-d H:i:s');
+        }
+        $result['Hash'] = $this->getHash();
+        return $result;
+    }
+
+    public function getHtmlForm()
+    {
+        $result = sprintf('<form action="%s" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm">', Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT)) . PHP_EOL;
+        foreach($this->toArray() as $fieldName => $fieldValue) {
+            if (empty($fieldValue)) {
+                continue;
+            }
+            $result .= sprintf('<input type="hidden" name="%s" value="%s" />', $fieldName, $fieldValue) . PHP_EOL;
+        }
+        $result .= '<input type="submit" />' . PHP_EOL;
+        $result .= '</form>' . PHP_EOL;
+        $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
+        return $result;
     }
 
 } 

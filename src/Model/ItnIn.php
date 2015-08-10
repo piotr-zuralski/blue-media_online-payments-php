@@ -3,19 +3,20 @@
 namespace BlueMedia\OnlinePayments\Model;
 
 use BlueMedia\OnlinePayments\Validator;
+use BlueMedia\OnlinePayments\Formatter;
 use DomainException;
 use DateTime;
 
 /**
- * ITN Model 
+ * ITN IN Model
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
- * @since     2015-07-07
+ * @since     2015-08-08
  * @version   2.3.1
  */
-class ITN extends AbstractModel
+class ItnIn extends AbstractModel
 {
 
     const PAYMENT_STATUS_PENDING = 'PENDING';
@@ -29,11 +30,12 @@ class ITN extends AbstractModel
     const PAYMENT_STATUS_DETAILS_CANCELLED = 'CANCELLED';
     const PAYMENT_STATUS_DETAILS_ANOTHER_ERROR = 'ANOTHER_ERROR';
 
+    const CONFIRMATION_CONFIRMED = 'CONFIRMED';
+    const CONFIRMATION_NOT_CONFIRMED = 'NOTCONFIRMED';
+
     /**
      * Service id
      *
-     * @hashOrder 1
-     * @required
      * @var integer
      */
     protected $serviceId;
@@ -41,8 +43,6 @@ class ITN extends AbstractModel
     /**
      * Payment order id
      *
-     * @hashOrder 2
-     * @required
      * @var string
      */
     protected $orderId;
@@ -50,8 +50,6 @@ class ITN extends AbstractModel
     /**
      * Payment remote id
      *
-     * @hashOrder 3
-     * @required
      * @var string
      */
     protected $remoteId;
@@ -59,8 +57,6 @@ class ITN extends AbstractModel
     /**
      * Payment amount
      *
-     * @hashOrder 5
-     * @required
      * @var float
      */
     protected $amount;
@@ -68,8 +64,6 @@ class ITN extends AbstractModel
     /**
      * Payment currency
      *
-     * @hashOrder 6
-     * @required
      * @var string
      */
     protected $currency;
@@ -77,7 +71,6 @@ class ITN extends AbstractModel
     /**
      * Payment gateway id
      *
-     * @hashOrder 7
      * @var integer
      */
     protected $gatewayId;
@@ -85,15 +78,13 @@ class ITN extends AbstractModel
     /**
      * Payment date
      *
-     * @hashOrder 8
-     * @var string
+     * @var DateTime
      */
     protected $paymentDate;
 
     /**
      * Payment status
      *
-     * @hashOrder 9
      * @var string
      */
     protected $paymentStatus;
@@ -101,7 +92,6 @@ class ITN extends AbstractModel
     /**
      * Payment status details
      *
-     * @hashOrder 10
      * @var string
      */
     protected $paymentStatusDetails;
@@ -109,7 +99,6 @@ class ITN extends AbstractModel
     /**
      * Customer IP address
      *
-     * @hashOrder 20
      * @var string
      */
     protected $addressIp;
@@ -117,7 +106,6 @@ class ITN extends AbstractModel
     /**
      * Transaction title
      *
-     * @hashOrder 21
      * @var string
      */
     protected $title;
@@ -125,7 +113,6 @@ class ITN extends AbstractModel
     /**
      * Customer first name
      *
-     * @hashOrder 22
      * @var string
      */
     protected $customerDatafName;
@@ -133,7 +120,6 @@ class ITN extends AbstractModel
     /**
      * Customer last name
      *
-     * @hashOrder 23
      * @var string
      */
     protected $customerDatalName;
@@ -141,7 +127,6 @@ class ITN extends AbstractModel
     /**
      * Customer address - street name
      *
-     * @hashOrder 24
      * @var string
      */
     protected $customerDataStreetName;
@@ -149,7 +134,6 @@ class ITN extends AbstractModel
     /**
      * Customer address - house number
      *
-     * @hashOrder 25
      * @var string
      */
     protected $customerDataStreetHouseNo;
@@ -157,7 +141,6 @@ class ITN extends AbstractModel
     /**
      * Customer address - staircase number
      *
-     * @hashOrder 26
      * @var string
      */
     protected $customerDataStreetStaircaseNo;
@@ -165,7 +148,6 @@ class ITN extends AbstractModel
     /**
      * Customer address - premise number
      *
-     * @hashOrder 27
      * @var string
      */
     protected $customerDataStreetPremiseNo;
@@ -173,7 +155,6 @@ class ITN extends AbstractModel
     /**
      * Customer address - postal code
      *
-     * @hashOrder 28
      * @var string
      */
     protected $customerDataPostalCode;
@@ -181,7 +162,6 @@ class ITN extends AbstractModel
     /**
      * Customer address - city
      *
-     * @hashOrder 29
      * @var string
      */
     protected $customerDataCity;
@@ -189,7 +169,6 @@ class ITN extends AbstractModel
     /**
      * Customer bank account number
      *
-     * @hashOrder 30
      * @var string
      */
     protected $customerDataNrb;
@@ -197,8 +176,6 @@ class ITN extends AbstractModel
     /**
      * Transaction authorisation date
      *
-     * @hashOrder 40
-     * @required
      * @var DateTime
      */
     protected $transferDate;
@@ -206,8 +183,6 @@ class ITN extends AbstractModel
     /**
      * Transaction authorisation status
      *
-     * @hashOrder 41
-     * @required
      * @var string
      */
     protected $transferStatus;
@@ -215,15 +190,55 @@ class ITN extends AbstractModel
     /**
      * Transaction authorisation details
      *
-     * @hashOrder 42
      * @var string
      */
     protected $transferStatusDetails;
 
     /**
+     * Transaction receiver bank
+     *
+     * @var string
+     */
+    protected $receiverBank;
+
+    /**
+     * Transaction receiver bank account number
+     *
+     * @var string
+     */
+    protected $receiverNRB;
+
+    /**
+     * Transaction receiver name
+     *
+     * @var string
+     */
+    protected $receiverName;
+
+    /**
+     * Transaction receiver address
+     *
+     * @var string
+     */
+    protected $receiverAddress;
+
+    /**
+     * Transaction sender bank
+     *
+     * @var string
+     */
+    protected $senderBank;
+
+    /**
+     * Transaction sender account bank
+     *
+     * @var string
+     */
+    protected $senderNRB;
+
+    /**
      * Hash
      *
-     * @required
      * @var string
      */
     protected $hash;
@@ -273,7 +288,7 @@ class ITN extends AbstractModel
      */
     public function getAmount()
     {
-        return $this->amount;
+        return Formatter::formatAmount($this->amount);
     }
 
     /**
@@ -583,20 +598,20 @@ class ITN extends AbstractModel
     /**
      * Set paymentDate
      *
-     * @param string $paymentDate
+     * @param DateTime $paymentDate
      *
      * @return $this
      */
-    public function setPaymentDate($paymentDate)
+    public function setPaymentDate(DateTime $paymentDate)
     {
-        $this->paymentDate = (string)$paymentDate;
+        $this->paymentDate = $paymentDate;
         return $this;
     }
 
     /**
      * Return paymentDate
      *
-     * @return string
+     * @return DateTime
      */
     public function getPaymentDate()
     {
@@ -720,6 +735,213 @@ class ITN extends AbstractModel
         return $this->title;
     }
 
+    /**
+     * Set receiverAddress
+     *
+     * @param string $receiverAddress
+     *
+     * @return $this
+     */
+    public function setReceiverAddress($receiverAddress)
+    {
+        $this->receiverAddress = (string)$receiverAddress;
+        return $this;
+    }
+
+    /**
+     * Return receiverAddress
+     *
+     * @return string
+     */
+    public function getReceiverAddress()
+    {
+        return $this->receiverAddress;
+    }
+
+    /**
+     * Set receiverBank
+     *
+     * @param string $receiverBank
+     *
+     * @return $this
+     */
+    public function setReceiverBank($receiverBank)
+    {
+        $this->receiverBank = (string)$receiverBank;
+        return $this;
+    }
+
+    /**
+     * Return receiverBank
+     *
+     * @return string
+     */
+    public function getReceiverBank()
+    {
+        return $this->receiverBank;
+    }
+
+    /**
+     * Set receiverNRB
+     *
+     * @param string $receiverNRB
+     *
+     * @return $this
+     */
+    public function setReceiverNRB($receiverNRB)
+    {
+        $this->receiverNRB = (string)$receiverNRB;
+        return $this;
+    }
+
+    /**
+     * Return receiverNRB
+     *
+     * @return string
+     */
+    public function getReceiverNRB()
+    {
+        return $this->receiverNRB;
+    }
+
+    /**
+     * Set receiverName
+     *
+     * @param string $receiverName
+     *
+     * @return $this
+     */
+    public function setReceiverName($receiverName)
+    {
+        $this->receiverName = (string)$receiverName;
+        return $this;
+    }
+
+    /**
+     * Return receiverName
+     *
+     * @return string
+     */
+    public function getReceiverName()
+    {
+        return $this->receiverName;
+    }
+
+    /**
+     * Set senderBank
+     *
+     * @param string $senderBank
+     *
+     * @return $this
+     */
+    public function setSenderBank($senderBank)
+    {
+        $this->senderBank = (string)$senderBank;
+        return $this;
+    }
+
+    /**
+     * Return senderBank
+     *
+     * @return string
+     */
+    public function getSenderBank()
+    {
+        return $this->senderBank;
+    }
+
+    /**
+     * Set senderNRB
+     *
+     * @param string $senderNRB
+     *
+     * @return $this
+     */
+    public function setSenderNRB($senderNRB)
+    {
+        $this->senderNRB = (string)$senderNRB;
+        return $this;
+    }
+
+    /**
+     * Return senderNRB
+     *
+     * @return string
+     */
+    public function getSenderNRB()
+    {
+        return $this->senderNRB;
+    }
+
+    /**
+     * Set transferDate
+     *
+     * @param DateTime $transferDate
+     *
+     * @return $this
+     */
+    public function setTransferDate(DateTime $transferDate)
+    {
+        $this->transferDate = $transferDate;
+        return $this;
+    }
+
+    /**
+     * Return transferDate
+     *
+     * @return DateTime
+     */
+    public function getTransferDate()
+    {
+        return $this->transferDate;
+    }
+
+    /**
+     * Set transferStatus
+     *
+     * @param string $transferStatus
+     *
+     * @return $this
+     */
+    public function setTransferStatus($transferStatus)
+    {
+        $this->transferStatus = (string)$transferStatus;
+        return $this;
+    }
+
+    /**
+     * Return transferStatus
+     *
+     * @return string
+     */
+    public function getTransferStatus()
+    {
+        return $this->transferStatus;
+    }
+
+    /**
+     * Set transferStatusDetails
+     *
+     * @param string $transferStatusDetails
+     *
+     * @return $this
+     */
+    public function setTransferStatusDetails($transferStatusDetails)
+    {
+        $this->transferStatusDetails = (string)$transferStatusDetails;
+        return $this;
+    }
+
+    /**
+     * Return transferStatusDetails
+     *
+     * @return string
+     */
+    public function getTransferStatusDetails()
+    {
+        return $this->transferStatusDetails;
+    }
+    
     public function validate()
     {
         if (empty($this->serviceId)) {
@@ -737,9 +959,40 @@ class ITN extends AbstractModel
         if (empty($this->currency)) {
             throw new DomainException('Currency cannot be empty');
         }
+        if (empty($this->paymentDate)) {
+            throw new DomainException('PaymentDate cannot be empty');
+        }
+        if (empty($this->paymentStatus)) {
+            throw new DomainException('PaymentStatus cannot be empty');
+        }
         if (empty($this->hash)) {
             throw new DomainException('Hash cannot be empty');
         }
+    }
+
+    public function toArray()
+    {
+        $result = [];
+        $result['serviceID'] = $this->getServiceId();
+        $result['orderID'] = $this->getOrderId();
+        $result['remoteID'] = $this->getRemoteId();
+        $result['amount'] = $this->getAmount();
+        $result['currency'] = $this->getCurrency();
+
+        if (!empty($this->getGatewayId())) {
+            $result['gatewayID'] = $this->getGatewayId();
+        }
+        if ($this->getPaymentDate() instanceof DateTime) {
+            $result['paymentDate'] = $this->getPaymentDate()->format('YmdHis');
+        }
+        if (!empty($this->getPaymentStatus())) {
+            $result['paymentStatus'] = $this->getPaymentStatus();
+        }
+        if (!empty($this->getPaymentStatusDetails())) {
+            $result['paymentStatusDetails'] = $this->getPaymentStatusDetails();
+        }
+        $result['Hash'] = $this->getHash();
+        return $result;
     }
 
 }

@@ -2,17 +2,18 @@
 
 namespace BlueMedia\OnlinePayments\Model;
 
+use BlueMedia\OnlinePayments\Formatter;
 use BlueMedia\OnlinePayments\Validator;
 use DomainException;
 
 /**
  * (description) 
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
- * @since     2015-07-07 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class TransactionCancel extends AbstractModel
 {
@@ -52,10 +53,17 @@ class TransactionCancel extends AbstractModel
     /**
      * (description)
      *
+     * @var string
+     */
+    protected $action = 'CANCEL';
+
+    /**
+     * (description)
+     *
      * @required
      * @var string
      */
-    protected $action;
+    protected $status;
 
     /**
      * (description)
@@ -109,7 +117,7 @@ class TransactionCancel extends AbstractModel
      */
     public function getAmount()
     {
-        return $this->amount;
+        return Formatter::formatAmount($this->amount);
     }
 
     /**
@@ -208,6 +216,29 @@ class TransactionCancel extends AbstractModel
         return $this->serviceId;
     }
 
+    /**
+     * Ustawia status
+     *
+     * @param string $status
+     *
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = (string)$status;
+        return $this;
+    }
+
+    /**
+     * Zwraca status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
     public function validate()
     {
         if (empty($this->serviceId)) {
@@ -228,6 +259,23 @@ class TransactionCancel extends AbstractModel
         if (empty($this->docHash)) {
             throw new DomainException('DocHash cannot be empty');
         }
+    }
+
+    public function toArray()
+    {
+        $result = [
+            'serviceID' => $this->getServiceId(),
+            'orderID' => $this->getOrderId(),
+            'amount' => $this->getAmount(),
+            'currency' => $this->getCurrency(),
+            'action' => $this->getAction(),
+        ];
+
+        if (!empty($this->getStatus())) {
+            $result['status'] = $this->getStatus();
+        }
+        $result['docHash'] = $this->getDocHash();
+        return $result;
     }
 
 } 

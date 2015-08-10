@@ -2,14 +2,18 @@
 
 namespace BlueMedia\OnlinePayments\RequestType;
 
+use BlueMedia\OnlinePayments\Gateway;
+use BlueMedia\OnlinePayments\Model;
+use XMLWriter;
+
 /**
  * (description) 
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\RequestType
- * @since     2015-06-28 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class ITN extends AbstractRequestType
 {
@@ -58,5 +62,47 @@ class ITN extends AbstractRequestType
         29 => self::FIELD_CUSTOMER_DATA_CITY,
         30 => self::FIELD_CUSTOMER_DATA_NRB,
     );
+
+    protected function orderHashFields(Model\ItnIn $transaction)
+    {
+        $data = [];
+        foreach($this->fieldsHashOrder as $order => $fieldName) {
+            $fieldValue = $this->getValueFromObject($transaction, $fieldName);
+            if ($fieldValue !== null) {
+                $data[$order] = $fieldValue;
+            }
+        }
+        return $data;
+    }
+
+    public function parseRequestXML($transactionData)
+    {
+
+    }
+
+    public function makeResponseXML(Model\ItnIn $transaction)
+    {
+        $hash = Gateway::generateHash($this->orderHashFields($transaction));
+
+        $confirmation = $transaction::CONFIRMATION_CONFIRMED;
+        if ($hash !== $transaction->getHash()) {
+            $confirmation = $transaction::CONFIRMATION_NOT_CONFIRMED;
+        }
+
+        $xml = new XMLWriter();
+        $xml->openMemory();
+        $xml->startElement('confirmationList');
+            $xml->writeElement('serviceID', $transaction->getServiceId());
+            $xml->startElement('transactionsConfirmations');
+                $xml->startElement('transactionConfirmed');
+                    $xml->writeElement('orderID', $transaction->getOrderId());
+                    $xml->writeElement('confirmation', $confirmation);
+                $xml->endElement();
+            $xml->endElement();
+        $xml->writeElement('hash', $hash);
+        $xml->endElement();
+
+        return $xml->outputMemory();
+    }
 
 } 

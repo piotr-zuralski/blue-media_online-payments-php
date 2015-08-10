@@ -6,11 +6,11 @@ namespace BlueMedia\OnlinePayments\RequestType;
 /**
  * (description) 
  *
- * @author    Piotr Żuralski <piotr.zuralski@invicta.pl>
- * @copyright 2015 INVICTA
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\RequestType
- * @since     2015-06-28 
- * @version   Release: $Id$
+ * @since     2015-08-08
+ * @version   2.3.1
  */
 class TransactionBackground extends AbstractRequestType
 {
@@ -25,9 +25,6 @@ class TransactionBackground extends AbstractRequestType
     const FIELD_REMOTE_ID           = 'remoteID';
     const FIELD_BANK_HREF           = 'bankHref';
     const FIELD_HASH            = 'hash';
-
-    const FORM_PAYWAY_BEGIN     = '<!-- PAYWAY FORM BEGIN -->';
-    const FORM_PAYWAY_END       = '<!-- PAYWAY FORM END -->';
 
     protected $fieldsHashOrder = array(
         1 => self::FIELD_RECEIVER_NRB,
