@@ -185,17 +185,20 @@ class Gateway
         self::$hashingSeparator = $hashingSeparator;
     }
 
+    /**
+     * Process ITN IN requests
+     *
+     * @return Model\ItnIn|null
+     */
     public function doItnIn()
     {
         if (empty($_POST['transactions'])) {
-            return;
+            return null;
         }
 
         $transactionXml = $_POST['transactions'];
         $transactionXml = base64_decode($transactionXml);
         $transactionData = $this->parseXml($transactionXml);
-
-        var_dump([$transactionXml]);
 
         $itnIn = new Model\ItnIn();
         $itnIn->setServiceId($transactionData['serviceID'])
@@ -212,6 +215,13 @@ class Gateway
         return $itnIn;
     }
 
+    /**
+     * Returns response for ITN IN request
+     *
+     * @param Model\ItnIn $transaction
+     *
+     * @return string
+     */
     public function doItnInResponse(Model\ItnIn $transaction)
     {
         $transactionHash = self::generateHash($transaction->toArray());
@@ -263,26 +273,6 @@ class Gateway
         $responseObject = $client->send($request, [GuzzleHttp\RequestOptions::FORM_PARAMS => $transaction->toArray()]);
         $this->response = (string)$responseObject->getBody();
         return $this->parseResponse();
-    }
-
-    public function doTransactionCancel(Model\TransactionCancel $transaction)
-    {
-        $transaction->setServiceId(self::$serviceId);
-        $transaction->setDocHash(self::generateHash($transaction->toArray()));
-        $transaction->validate();
-
-        $url  = self::getActionUrl(self::PAYMENT_ACTON_CANCEL);
-        $url .= http_build_query($transaction->toArray());
-        $request = new GuzzleHttp\Psr7\Request('GET', $url, ['BmHeader' => 'pay-bm']);
-
-        $client = new GuzzleHttp\Client([
-            GuzzleHttp\RequestOptions::VERIFY => true,
-            'exceptions' => false,
-        ]);
-
-        $responseObject = $client->send($request);
-        $this->response = (string)$responseObject->getBody();
-        $this->parseResponse();
     }
 
     /**
