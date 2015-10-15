@@ -5,9 +5,9 @@ namespace BlueMedia\OnlinePayments;
 use BlueMedia\OnlinePayments\Model;
 use DateTime;
 use GuzzleHttp;
+use RuntimeException;
 use XMLReader;
 use XMLWriter;
-use RuntimeException;
 
 /**
  * Gateway
@@ -18,7 +18,7 @@ use RuntimeException;
  * @since     2015-08-08
  * @version   2.3.1
  */
-class Gateway 
+class Gateway
 {
     const MODE_SANDBOX = 'sandbox';
     const MODE_LIVE = 'live';
@@ -35,12 +35,12 @@ class Gateway
     const STATUS_NOT_CONFIRMED = 'NOTCONFIRMED';
 
 
-    protected $hashingAlgorithmSupported = [
+    protected $hashingAlgorithmSupported = array(
         'md5' => 1,
         'sha1' => 1,
         'sha256' => 1,
         'sha512' => 1,
-    ];
+    );
 
     protected static $mode = self::MODE_SANDBOX;
 
@@ -90,7 +90,7 @@ class Gateway
 
     private function isErrorResponse()
     {
-        if (preg_match_all('@<error>(.*)</error>@Usi',$this->response, $data, PREG_PATTERN_ORDER)) {
+        if (preg_match_all('@<error>(.*)</error>@Usi', $this->response, $data, PREG_PATTERN_ORDER)) {
             $xmlData = $this->parseXml($this->response);
             throw new RuntimeException($xmlData['name'], $xmlData['statusCode']);
         }
@@ -103,7 +103,7 @@ class Gateway
 
     private function parseXml($xml)
     {
-        $data = [];
+        $data = array();
         $xmlReader = new XMLReader();
         $xmlReader->XML($xml, 'UTF-8', (LIBXML_NOERROR | LIBXML_NOWARNING));
         while ($xmlReader->read()) {
@@ -125,8 +125,8 @@ class Gateway
     /**
      * Checks PHP required environment
      *
-     * @return void
      * @throws \RuntimeException
+     * @return void
      */
     protected function checkPhpEnvironment()
     {
@@ -165,7 +165,7 @@ class Gateway
     {
         $this->checkPhpEnvironment();
 
-        if ($mode != self::MODE_LIVE && $mode != self::MODE_SANDBOX) {
+        if ($mode !== self::MODE_LIVE && $mode !== self::MODE_SANDBOX) {
             throw new RuntimeException(sprintf('Not supported mode "%s"', $mode));
         }
         if (!array_key_exists($hashingAlgorithm, $this->hashingAlgorithmSupported)) {
@@ -197,7 +197,7 @@ class Gateway
         }
 
         $transactionXml = $_POST['transactions'];
-        $transactionXml = base64_decode($transactionXml);
+        $transactionXml = base64_decode($transactionXml, true);
         $transactionData = $this->parseXml($transactionXml);
 
         $itnIn = new Model\ItnIn();
@@ -227,15 +227,15 @@ class Gateway
         $transactionHash = self::generateHash($transaction->toArray());
         $confirmationStatus = self::STATUS_NOT_CONFIRMED;
 
-        if ($transactionHash == $transaction->getHash()) {
+        if ($transactionHash === $transaction->getHash()) {
             $confirmationStatus = self::STATUS_CONFIRMED;
         }
 
-        $confirmationList = [
+        $confirmationList = array(
             'serviceID' => self::$serviceId,
             'orderID' => $transaction->getOrderId(),
             'confirmation' => $confirmationStatus,
-        ];
+        );
 
         $confirmationList['hash'] = self::generateHash($confirmationList);
 
@@ -243,14 +243,14 @@ class Gateway
         $xml->openMemory();
         $xml->startDocument(1.0, 'UTF-8');
         $xml->startElement('confirmationList');
-            $xml->writeElement('serviceID', $confirmationList['serviceID']);
-                $xml->startElement('transactionsConfirmations');
-                    $xml->startElement('transactionConfirmed');
-                        $xml->writeElement('orderID', $confirmationList['orderID']);
-                        $xml->writeElement('confirmation', $confirmationList['confirmation']);
-                    $xml->endElement();
-                $xml->endElement();
-            $xml->writeElement('hash', $confirmationList['hash']);
+        $xml->writeElement('serviceID', $confirmationList['serviceID']);
+        $xml->startElement('transactionsConfirmations');
+        $xml->startElement('transactionConfirmed');
+        $xml->writeElement('orderID', $confirmationList['orderID']);
+        $xml->writeElement('confirmation', $confirmationList['confirmation']);
+        $xml->endElement();
+        $xml->endElement();
+        $xml->writeElement('hash', $confirmationList['hash']);
         $xml->endElement();
 
         return $xml->outputMemory();
@@ -263,14 +263,14 @@ class Gateway
         $transaction->validate();
 
         $url = self::getActionUrl(self::PAYMENT_ACTON_PAYMENT);
-        $request = new GuzzleHttp\Psr7\Request('POST', $url, ['BmHeader' => 'pay-bm']);
+        $request = new GuzzleHttp\Psr7\Request('POST', $url, array('BmHeader' => 'pay-bm'));
 
-        $client = new GuzzleHttp\Client([
+        $client = new GuzzleHttp\Client(array(
             GuzzleHttp\RequestOptions::VERIFY => true,
             'exceptions' => false,
-        ]);
+        ));
 
-        $responseObject = $client->send($request, [GuzzleHttp\RequestOptions::FORM_PARAMS => $transaction->toArray()]);
+        $responseObject = $client->send($request, array(GuzzleHttp\RequestOptions::FORM_PARAMS => $transaction->toArray()));
         $this->response = (string)$responseObject->getBody();
         return $this->parseResponse();
     }
@@ -352,7 +352,7 @@ class Gateway
     {
         $result = '';
         foreach ($data as $name => $value) {
-            if (mb_strtolower($name) == 'hash' || empty($value)) {
+            if (mb_strtolower($name) === 'hash' || empty($value)) {
                 continue;
             }
             $result .= $value . self::$hashingSeparator;
@@ -360,4 +360,4 @@ class Gateway
         $result .= self::$hashingSalt;
         return hash(self::$hashingAlgorithm, $result);
     }
-} 
+}

@@ -13,9 +13,8 @@ use InvalidArgumentException;
  * @since     2015-08-08
  * @version   2.3.1
  */
-class Validator 
+class Validator
 {
-
     /**
      * Validates string length
      *
@@ -34,8 +33,8 @@ class Validator
      *
      * @param float $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateAmount($value)
     {
@@ -49,8 +48,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateCurrency($value)
     {
@@ -64,8 +63,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateEmail($value)
     {
@@ -82,8 +81,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateIP($value)
     {
@@ -100,15 +99,15 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateNrb($value)
     {
         if (!is_numeric($value)) {
             throw new InvalidArgumentException('Wrong CustomerNRB format, requires only numbers');
         }
-        if (mb_strlen($value) != 26) {
+        if (mb_strlen($value) !== 26) {
             throw new InvalidArgumentException('Wrong CustomerNRB format, requires exactly 26 characters');
         }
     }
@@ -118,8 +117,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateTaxCountry($value)
     {
@@ -133,8 +132,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateDescription($value)
     {
@@ -148,8 +147,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateGatewayId($value)
     {
@@ -166,8 +165,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateHash($value)
     {
@@ -181,8 +180,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateOrderId($value)
     {
@@ -196,8 +195,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateServiceId($value)
     {
@@ -211,8 +210,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateReceiverName($value)
     {
@@ -226,8 +225,8 @@ class Validator
      *
      * @param string $value
      *
-     * @return void
      * @throws InvalidArgumentException
+     * @return void
      */
     public static function validateTitle($value)
     {

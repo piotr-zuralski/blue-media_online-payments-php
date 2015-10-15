@@ -2,7 +2,6 @@
 
 namespace BlueMedia\OnlinePayments\Model;
 
-
 /**
  * (description) 
  *
@@ -14,7 +13,5 @@ namespace BlueMedia\OnlinePayments\Model;
  */
 abstract class AbstractModel
 {
-
     abstract public function validate();
-
-} 
+}

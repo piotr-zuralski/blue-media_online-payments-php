@@ -18,5 +18,5 @@ $transactionStandard->setOrderId((string)time())
     ->setReceiverName('Zuralski.net')
 ;
 
-/** @var Gateway $gateway */
+/** @type Gateway $gateway */
 echo $gateway->doTransactionStandard($transactionStandard);

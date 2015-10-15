@@ -1,9 +1,9 @@
 <?php
 
-namespace BlueMedia\OnlinePayments\Tests;
+namespace BlueMedia\OnlinePayments\tests;
 
-use BlueMedia\OnlinePayments\Validator;
 use \InvalidArgumentException;
+use BlueMedia\OnlinePayments\Validator;
 
 /**
  * (description) 
@@ -16,7 +16,6 @@ use \InvalidArgumentException;
  */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidInputValidateAmount()
     {
         $this->assertNull(Validator::validateAmount(123.00));
@@ -205,4 +204,3 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 //        }
 //    }
 }
- 

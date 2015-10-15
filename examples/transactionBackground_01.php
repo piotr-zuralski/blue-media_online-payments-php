@@ -20,8 +20,8 @@ $transactionStandard->setOrderId((string)time())
     ->setLinkValidityTime((new DateTime())->modify('+3days'))
 ;
 
-/** @var Gateway $gateway */
-/** @var Model\TransactionBackground $transactionBackground */
+/** @type Gateway $gateway */
+/** @type Model\TransactionBackground $transactionBackground */
 $transactionBackground = $gateway->doTransactionBackground($transactionStandard);
 
 var_dump($transactionBackground);

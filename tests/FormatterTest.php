@@ -1,8 +1,8 @@
 <?php
 
-namespace BlueMedia\OnlinePayments\Tests;
-use BlueMedia\OnlinePayments\Formatter;
+namespace BlueMedia\OnlinePayments\tests;
 
+use BlueMedia\OnlinePayments\Formatter;
 
 /**
  * (description) 
@@ -15,18 +15,15 @@ use BlueMedia\OnlinePayments\Formatter;
  */
 class FormatterTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidInputFormatAmount()
     {
-        $this->assertEquals('1234567890.00', Formatter::formatAmount(1234567890));
-        $this->assertEquals('1234567890.00', Formatter::formatAmount('12345678,90'));
-        $this->assertEquals('1234567890.00', Formatter::formatAmount('1234 567890'));
+        $this->assertSame('1234567890.00', Formatter::formatAmount(1234567890));
+        $this->assertSame('1234567890.00', Formatter::formatAmount('12345678,90'));
+        $this->assertSame('1234567890.00', Formatter::formatAmount('1234 567890'));
     }
 
     public function testValidInputFormatDescription()
     {
-        $this->assertEquals('EOASLZZCN eoaslzzcn', Formatter::formatDescription('ĘÓĄŚŁŻŹĆŃ ęóąśłżźćń'));
+        $this->assertSame('EOASLZZCN eoaslzzcn', Formatter::formatDescription('ĘÓĄŚŁŻŹĆŃ ęóąśłżźćń'));
     }
-
 }
- 

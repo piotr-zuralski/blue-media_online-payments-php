@@ -2,10 +2,10 @@
 
 namespace BlueMedia\OnlinePayments\Model;
 
-use BlueMedia\OnlinePayments\Validator;
 use BlueMedia\OnlinePayments\Formatter;
-use DomainException;
+use BlueMedia\OnlinePayments\Validator;
 use DateTime;
+use DomainException;
 
 /**
  * ITN IN Model
@@ -18,7 +18,6 @@ use DateTime;
  */
 class ItnIn extends AbstractModel
 {
-
     const PAYMENT_STATUS_PENDING = 'PENDING';
     const PAYMENT_STATUS_SUCCESS = 'SUCCESS';
     const PAYMENT_STATUS_FAILURE = 'FAILURE';
@@ -36,210 +35,210 @@ class ItnIn extends AbstractModel
     /**
      * Service id
      *
-     * @var integer
+     * @type integer
      */
     protected $serviceId;
 
     /**
      * Payment order id
      *
-     * @var string
+     * @type string
      */
     protected $orderId;
 
     /**
      * Payment remote id
      *
-     * @var string
+     * @type string
      */
     protected $remoteId;
 
     /**
      * Payment amount
      *
-     * @var float
+     * @type float
      */
     protected $amount;
 
     /**
      * Payment currency
      *
-     * @var string
+     * @type string
      */
     protected $currency;
 
     /**
      * Payment gateway id
      *
-     * @var integer
+     * @type integer
      */
     protected $gatewayId;
 
     /**
      * Payment date
      *
-     * @var DateTime
+     * @type DateTime
      */
     protected $paymentDate;
 
     /**
      * Payment status
      *
-     * @var string
+     * @type string
      */
     protected $paymentStatus;
 
     /**
      * Payment status details
      *
-     * @var string
+     * @type string
      */
     protected $paymentStatusDetails;
 
     /**
      * Customer IP address
      *
-     * @var string
+     * @type string
      */
     protected $addressIp;
 
     /**
      * Transaction title
      *
-     * @var string
+     * @type string
      */
     protected $title;
 
     /**
      * Customer first name
      *
-     * @var string
+     * @type string
      */
     protected $customerDatafName;
 
     /**
      * Customer last name
      *
-     * @var string
+     * @type string
      */
     protected $customerDatalName;
 
     /**
      * Customer address - street name
      *
-     * @var string
+     * @type string
      */
     protected $customerDataStreetName;
 
     /**
      * Customer address - house number
      *
-     * @var string
+     * @type string
      */
     protected $customerDataStreetHouseNo;
 
     /**
      * Customer address - staircase number
      *
-     * @var string
+     * @type string
      */
     protected $customerDataStreetStaircaseNo;
 
     /**
      * Customer address - premise number
      *
-     * @var string
+     * @type string
      */
     protected $customerDataStreetPremiseNo;
 
     /**
      * Customer address - postal code
      *
-     * @var string
+     * @type string
      */
     protected $customerDataPostalCode;
 
     /**
      * Customer address - city
      *
-     * @var string
+     * @type string
      */
     protected $customerDataCity;
 
     /**
      * Customer bank account number
      *
-     * @var string
+     * @type string
      */
     protected $customerDataNrb;
 
     /**
      * Transaction authorisation date
      *
-     * @var DateTime
+     * @type DateTime
      */
     protected $transferDate;
 
     /**
      * Transaction authorisation status
      *
-     * @var string
+     * @type string
      */
     protected $transferStatus;
 
     /**
      * Transaction authorisation details
      *
-     * @var string
+     * @type string
      */
     protected $transferStatusDetails;
 
     /**
      * Transaction receiver bank
      *
-     * @var string
+     * @type string
      */
     protected $receiverBank;
 
     /**
      * Transaction receiver bank account number
      *
-     * @var string
+     * @type string
      */
     protected $receiverNRB;
 
     /**
      * Transaction receiver name
      *
-     * @var string
+     * @type string
      */
     protected $receiverName;
 
     /**
      * Transaction receiver address
      *
-     * @var string
+     * @type string
      */
     protected $receiverAddress;
 
     /**
      * Transaction sender bank
      *
-     * @var string
+     * @type string
      */
     protected $senderBank;
 
     /**
      * Transaction sender account bank
      *
-     * @var string
+     * @type string
      */
     protected $senderNRB;
 
     /**
      * Hash
      *
-     * @var string
+     * @type string
      */
     protected $hash;
 
@@ -972,7 +971,7 @@ class ItnIn extends AbstractModel
 
     public function toArray()
     {
-        $result = [];
+        $result = array();
         $result['serviceID'] = $this->getServiceId();
         $result['orderID'] = $this->getOrderId();
         $result['remoteID'] = $this->getRemoteId();
@@ -994,5 +993,4 @@ class ItnIn extends AbstractModel
         $result['Hash'] = $this->getHash();
         return $result;
     }
-
 }

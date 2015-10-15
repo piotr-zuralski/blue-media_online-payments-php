@@ -18,8 +18,8 @@ $transactionStandard->setOrderId((string)time())
     ->setReceiverName('Zuralski.net')
 ;
 
-/** @var Gateway $gateway */
-/** @var Model\TransactionBackground $transactionBackground */
+/** @type Gateway $gateway */
+/** @type Model\TransactionBackground $transactionBackground */
 $transactionBackground = $gateway->doTransactionBackground($transactionStandard);
 
 var_dump($transactionBackground);

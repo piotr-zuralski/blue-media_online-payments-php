@@ -2,8 +2,8 @@
 
 namespace BlueMedia\OnlinePayments\Model;
 
-use BlueMedia\OnlinePayments\Validator;
 use BlueMedia\OnlinePayments\Formatter;
+use BlueMedia\OnlinePayments\Validator;
 use DomainException;
 
 /**
@@ -21,7 +21,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $receiverNrb;
 
@@ -29,7 +29,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $receiverName;
 
@@ -37,7 +37,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $receiverAddress;
 
@@ -45,7 +45,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $orderId;
 
@@ -53,7 +53,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var float
+     * @type float
      */
     protected $amount;
 
@@ -61,7 +61,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $currency;
 
@@ -69,7 +69,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $title;
 
@@ -77,7 +77,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $remoteId;
 
@@ -85,7 +85,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $bankHref;
 
@@ -93,7 +93,7 @@ class TransactionBackground extends AbstractModel
      * (description)
      *
      * @required
-     * @var string
+     * @type string
      */
     protected $hash;
 
@@ -370,7 +370,7 @@ class TransactionBackground extends AbstractModel
 
     public function toArray()
     {
-        $result = [];
+        $result = array();
         $result['receiverNRB'] = $this->getReceiverNrb();
         $result['receiverName'] = $this->getReceiverName();
         $result['receiverAddress'] = $this->getReceiverAddress();
@@ -384,5 +384,4 @@ class TransactionBackground extends AbstractModel
 
         return $result;
     }
-
 }

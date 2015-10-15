@@ -1,6 +1,6 @@
 <?php
 
-namespace BlueMedia\OnlinePayments\Tests;
+namespace BlueMedia\OnlinePayments\tests;
 
 use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Model;
@@ -16,7 +16,6 @@ use BlueMedia\OnlinePayments\Model;
  */
 class GatewayTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testDoTransactionStandard()
     {
         $transactionStandard = new Model\TransactionStandard();
@@ -35,6 +34,4 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $gateway = new Gateway('100006', '81532ad38b71944834059480537b324bd1ab2bd9', Gateway::MODE_SANDBOX, 'sha256');
         $gateway->doTransactionStandard($transactionStandard);
     }
-
 }
- 

@@ -13,7 +13,6 @@ namespace BlueMedia\OnlinePayments;
  */
 class Formatter
 {
-
     /**
      * Format amount
      *
@@ -23,7 +22,7 @@ class Formatter
      */
     public static function formatAmount($amount)
     {
-        $amount = str_replace([',', ' '], '', $amount);
+        $amount = str_replace(array(',', ' '), '', $amount);
         return number_format((float)$amount, 2, '.', '');
     }
 
@@ -34,5 +33,4 @@ class Formatter
         }
         return $value;
     }
-
-} 
+}

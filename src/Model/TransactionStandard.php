@@ -5,8 +5,8 @@ namespace BlueMedia\OnlinePayments\Model;
 use BlueMedia\OnlinePayments\Formatter;
 use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Validator;
-use DomainException;
 use DateTime;
+use DomainException;
 
 /**
  * (description) 
@@ -19,109 +19,108 @@ use DateTime;
  */
 class TransactionStandard extends AbstractModel
 {
-
     /**
      * Service id
      *
-     * @var integer
+     * @type integer
      */
     protected $serviceId;
 
     /**
      * Transaction order id
      *
-     * @var string
+     * @type string
      */
     protected $orderId;
 
     /**
      * Transaction amount
      *
-     * @var float
+     * @type float
      */
     protected $amount;
 
     /**
      * Transaction description
      *
-     * @var string
+     * @type string
      */
     protected $description;
 
     /**
      * Transaction gateway id
      *
-     * @var integer
+     * @type integer
      */
     protected $gatewayId;
 
     /**
      * Transaction currency
      *
-     * @var string
+     * @type string
      */
     protected $currency;
 
     /**
      * Transaction customer e-mail address
      *
-     * @var string
+     * @type string
      */
     protected $customerEmail;
 
     /**
      * Transaction customer bank account number
      *
-     * @var string
+     * @type string
      */
     protected $customerNrb;
 
     /**
      * Transaction tax country
      *
-     * @var string
+     * @type string
      */
     protected $taxCountry;
 
     /**
      * Customer IP address
      *
-     * @var string
+     * @type string
      */
     protected $customerIp;
 
     /**
      * Transaction title
      *
-     * @var string
+     * @type string
      */
     protected $title;
 
     /**
      * Transaction receiver name
      *
-     * @var string
+     * @type string
      */
     protected $receiverName;
 
     /**
      * Transaction validity time
      *
-     * @var DateTime
+     * @type DateTime
      */
     protected $validityTime;
 
     /**
      * Transaction link validity time
      *
-     * @var DateTime
+     * @type DateTime
      */
     protected $linkValidityTime;
 
     /**
      * Hash
      *
-     * @var string
+     * @type string
      */
     protected $hash;
 
@@ -503,7 +502,7 @@ class TransactionStandard extends AbstractModel
 
     public function toArray()
     {
-        $result = [];
+        $result = array();
         $result['ServiceID'] = $this->getServiceId();
         $result['OrderID'] = $this->getOrderId();
         $result['Amount'] = $this->getAmount();
@@ -548,7 +547,7 @@ class TransactionStandard extends AbstractModel
     public function getHtmlForm()
     {
         $result = sprintf('<form action="%s" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm">', Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT)) . PHP_EOL;
-        foreach($this->toArray() as $fieldName => $fieldValue) {
+        foreach ($this->toArray() as $fieldName => $fieldValue) {
             if (empty($fieldValue)) {
                 continue;
             }
@@ -559,5 +558,4 @@ class TransactionStandard extends AbstractModel
         $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
         return $result;
     }
-
-} 
+}
