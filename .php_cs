@@ -2,7 +2,7 @@
 
 $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->in(__DIR__)
-    ->ignoreDotFiles(true)
+    ->ignoreDotFiles(false)
     ->ignoreVCS(true);
 
 return Symfony\CS\Config\Config::create()
