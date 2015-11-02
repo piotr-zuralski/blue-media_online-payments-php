@@ -201,17 +201,36 @@ class Gateway
         $transactionData = $this->parseXml($transactionXml);
 
         $itnIn = new Model\ItnIn();
-        $itnIn->setServiceId($transactionData['serviceID'])
-            ->setOrderId($transactionData['orderID'])
-            ->setRemoteId($transactionData['remoteID'])
-            ->setAmount($transactionData['amount'])
-            ->setCurrency($transactionData['currency'])
-            ->setGatewayId($transactionData['gatewayID'])
-            ->setPaymentDate(DateTime::createFromFormat('YmdHis', $transactionData['paymentDate']))
-            ->setPaymentStatus($transactionData['paymentStatus'])
-            ->setPaymentStatusDetails($transactionData['paymentStatusDetails'])
-            ->setHash($transactionData['hash']);
-
+        if (isset($transactionData['serviceID'])) {
+            $itnIn->setServiceId($transactionData['serviceID']);
+        }
+        if (isset($transactionData['orderID'])) {
+            $itnIn->setOrderId($transactionData['orderID']);
+        }
+        if (isset($transactionData['remoteID'])) {
+            $itnIn->setRemoteId($transactionData['remoteID']);
+        }
+        if (isset($transactionData['amount'])) {
+            $itnIn->setAmount($transactionData['amount']);
+        }
+        if (isset($transactionData['currency'])) {
+            $itnIn->setCurrency($transactionData['currency']);
+        }
+        if (isset($transactionData['gatewayID'])) {
+            $itnIn->setGatewayId($transactionData['gatewayID']);
+        }
+        if (isset($transactionData['paymentDate'])) {
+            $itnIn->setPaymentDate(DateTime::createFromFormat('YmdHis', $transactionData['paymentDate']));
+        }
+        if (isset($transactionData['paymentStatus'])) {
+            $itnIn->setPaymentStatus($transactionData['paymentStatus']);
+        }
+        if (isset($transactionData['paymentStatusDetails'])) {
+            $itnIn->setPaymentStatusDetails($transactionData['paymentStatusDetails']);
+        }
+        if (isset($transactionData['hash'])) {
+            $itnIn->setHash($transactionData['hash']);
+        }
         return $itnIn;
     }
 

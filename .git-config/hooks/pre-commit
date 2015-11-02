@@ -1,0 +1,15 @@
+#!/bin/bash
+
+toplevel=`git rev-parse --show-toplevel`
+
+if git rev-parse --verify HEAD >/dev/null 2>&1
+then
+    against=HEAD
+else
+    # Initial commit: diff against an empty tree object
+    against=580d68f3b007a2587ff524c38a1b958e50fd2b54
+fi
+
+#exec 1>&2
+
+./bin/phpFixer.sh

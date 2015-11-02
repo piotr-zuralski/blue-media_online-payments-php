@@ -7,3 +7,5 @@
 /phpunit.xml export-ignore
 /README.md export-ignore
 /phpunit.xml.dist export-ignore
+/bin export-ignore
+/.git-config export-ignore
