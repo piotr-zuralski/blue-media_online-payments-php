@@ -21,4 +21,5 @@ $_POST['transactions'] = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW
 /** @type Model\ItnIn $itnIn */
 $itnIn = $gateway->doItnIn();
 
+header('Content-Type: application/xml; charset="utf-8"');
 echo $gateway->doItnInResponse($itnIn);

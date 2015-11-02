@@ -260,7 +260,7 @@ class Gateway
 
         $xml = new XMLWriter();
         $xml->openMemory();
-        $xml->startDocument(1.0, 'UTF-8');
+        $xml->startDocument('1.0', 'UTF-8');
         $xml->startElement('confirmationList');
         $xml->writeElement('serviceID', $confirmationList['serviceID']);
         $xml->startElement('transactionsConfirmations');
