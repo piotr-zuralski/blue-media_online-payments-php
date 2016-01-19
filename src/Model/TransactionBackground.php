@@ -7,18 +7,18 @@ use BlueMedia\OnlinePayments\Validator;
 use DomainException;
 
 /**
- * (description)
+ * Model for transaction in background.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 class TransactionBackground extends AbstractModel
 {
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -26,7 +26,7 @@ class TransactionBackground extends AbstractModel
     protected $receiverNrb;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -34,7 +34,7 @@ class TransactionBackground extends AbstractModel
     protected $receiverName;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -42,7 +42,7 @@ class TransactionBackground extends AbstractModel
     protected $receiverAddress;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -50,7 +50,7 @@ class TransactionBackground extends AbstractModel
     protected $orderId;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type float
@@ -58,7 +58,7 @@ class TransactionBackground extends AbstractModel
     protected $amount;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -66,7 +66,7 @@ class TransactionBackground extends AbstractModel
     protected $currency;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -74,7 +74,7 @@ class TransactionBackground extends AbstractModel
     protected $title;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -82,7 +82,7 @@ class TransactionBackground extends AbstractModel
     protected $remoteId;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -90,7 +90,7 @@ class TransactionBackground extends AbstractModel
     protected $bankHref;
 
     /**
-     * (description)
+     * (description).
      *
      * @required
      * @type string
@@ -98,7 +98,7 @@ class TransactionBackground extends AbstractModel
     protected $hash;
 
     /**
-     * Ustawia amount
+     * Ustawia amount.
      *
      * @param float $amount
      *
@@ -107,12 +107,13 @@ class TransactionBackground extends AbstractModel
     public function setAmount($amount)
     {
         Validator::validateAmount($amount);
-        $this->amount = (float)$amount;
+        $this->amount = (float) $amount;
+
         return $this;
     }
 
     /**
-     * Zwraca amount
+     * Zwraca amount.
      *
      * @return float
      */
@@ -122,7 +123,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia bankHref
+     * Ustawia bankHref.
      *
      * @param string $bankHref
      *
@@ -130,12 +131,13 @@ class TransactionBackground extends AbstractModel
      */
     public function setBankHref($bankHref)
     {
-        $this->bankHref = (string)$bankHref;
+        $this->bankHref = (string) $bankHref;
+
         return $this;
     }
 
     /**
-     * Zwraca bankHref
+     * Zwraca bankHref.
      *
      * @return string
      */
@@ -145,7 +147,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia currency
+     * Ustawia currency.
      *
      * @param string $currency
      *
@@ -154,12 +156,13 @@ class TransactionBackground extends AbstractModel
     public function setCurrency($currency)
     {
         Validator::validateCurrency($currency);
-        $this->currency = (string)$currency;
+        $this->currency = (string) $currency;
+
         return $this;
     }
 
     /**
-     * Zwraca currency
+     * Zwraca currency.
      *
      * @return string
      */
@@ -169,7 +172,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia hash
+     * Ustawia hash.
      *
      * @param string $hash
      *
@@ -178,12 +181,13 @@ class TransactionBackground extends AbstractModel
     public function setHash($hash)
     {
         Validator::validateHash($hash);
-        $this->hash = (string)$hash;
+        $this->hash = (string) $hash;
+
         return $this;
     }
 
     /**
-     * Zwraca hash
+     * Zwraca hash.
      *
      * @return string
      */
@@ -193,7 +197,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia orderId
+     * Ustawia orderId.
      *
      * @param string $orderId
      *
@@ -202,12 +206,13 @@ class TransactionBackground extends AbstractModel
     public function setOrderId($orderId)
     {
         Validator::validateOrderId($orderId);
-        $this->orderId = (string)$orderId;
+        $this->orderId = (string) $orderId;
+
         return $this;
     }
 
     /**
-     * Zwraca orderId
+     * Zwraca orderId.
      *
      * @return string
      */
@@ -217,7 +222,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia receiverAddress
+     * Ustawia receiverAddress.
      *
      * @param string $receiverAddress
      *
@@ -225,12 +230,13 @@ class TransactionBackground extends AbstractModel
      */
     public function setReceiverAddress($receiverAddress)
     {
-        $this->receiverAddress = (string)$receiverAddress;
+        $this->receiverAddress = (string) $receiverAddress;
+
         return $this;
     }
 
     /**
-     * Zwraca receiverAddress
+     * Zwraca receiverAddress.
      *
      * @return string
      */
@@ -240,7 +246,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia receiverName
+     * Ustawia receiverName.
      *
      * @param string $receiverName
      *
@@ -249,12 +255,13 @@ class TransactionBackground extends AbstractModel
     public function setReceiverName($receiverName)
     {
         Validator::validateReceiverName($receiverName);
-        $this->receiverName = (string)$receiverName;
+        $this->receiverName = (string) $receiverName;
+
         return $this;
     }
 
     /**
-     * Zwraca receiverName
+     * Zwraca receiverName.
      *
      * @return string
      */
@@ -264,7 +271,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia receiverNrb
+     * Ustawia receiverNrb.
      *
      * @param string $receiverNrb
      *
@@ -273,12 +280,13 @@ class TransactionBackground extends AbstractModel
     public function setReceiverNrb($receiverNrb)
     {
         Validator::validateNrb($receiverNrb);
-        $this->receiverNrb = (string)$receiverNrb;
+        $this->receiverNrb = (string) $receiverNrb;
+
         return $this;
     }
 
     /**
-     * Zwraca receiverNrb
+     * Zwraca receiverNrb.
      *
      * @return string
      */
@@ -288,7 +296,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia remoteId
+     * Ustawia remoteId.
      *
      * @param string $remoteId
      *
@@ -296,12 +304,13 @@ class TransactionBackground extends AbstractModel
      */
     public function setRemoteId($remoteId)
     {
-        $this->remoteId = (string)$remoteId;
+        $this->remoteId = (string) $remoteId;
+
         return $this;
     }
 
     /**
-     * Zwraca remoteId
+     * Zwraca remoteId.
      *
      * @return string
      */
@@ -311,7 +320,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia title
+     * Ustawia title.
      *
      * @param string $title
      *
@@ -320,12 +329,13 @@ class TransactionBackground extends AbstractModel
     public function setTitle($title)
     {
         Validator::validateTitle($title);
-        $this->title = (string)$title;
+        $this->title = (string) $title;
+
         return $this;
     }
 
     /**
-     * Zwraca title
+     * Zwraca title.
      *
      * @return string
      */
@@ -370,7 +380,7 @@ class TransactionBackground extends AbstractModel
 
     public function toArray()
     {
-        $result = array();
+        $result = [];
         $result['receiverNRB'] = $this->getReceiverNrb();
         $result['receiverName'] = $this->getReceiverName();
         $result['receiverAddress'] = $this->getReceiverAddress();

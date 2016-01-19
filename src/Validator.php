@@ -5,21 +5,21 @@ namespace BlueMedia\OnlinePayments;
 use InvalidArgumentException;
 
 /**
- * Validator
+ * Validator.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 class Validator
 {
     /**
-     * Validates string length
+     * Validates string length.
      *
      * @param string $value
-     * @param integer $maxLength
+     * @param int    $maxLength
      *
      * @return bool
      */
@@ -29,11 +29,12 @@ class Validator
     }
 
     /**
-     * Validates amount
+     * Validates amount.
      *
      * @param float $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateAmount($value)
@@ -44,11 +45,12 @@ class Validator
     }
 
     /**
-     * Validates currency code
+     * Validates currency code.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateCurrency($value)
@@ -59,11 +61,12 @@ class Validator
     }
 
     /**
-     * Validates e-mail address
+     * Validates e-mail address.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateEmail($value)
@@ -77,11 +80,12 @@ class Validator
     }
 
     /**
-     * Validates IP address
+     * Validates IP address.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateIP($value)
@@ -95,11 +99,12 @@ class Validator
     }
 
     /**
-     * Validates bank account number
+     * Validates bank account number.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateNrb($value)
@@ -113,11 +118,12 @@ class Validator
     }
 
     /**
-     * Validates tax country name
+     * Validates tax country name.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateTaxCountry($value)
@@ -128,11 +134,12 @@ class Validator
     }
 
     /**
-     * Validates description
+     * Validates description.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateDescription($value)
@@ -143,11 +150,12 @@ class Validator
     }
 
     /**
-     * Validates gateway id
+     * Validates gateway id.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateGatewayId($value)
@@ -161,11 +169,12 @@ class Validator
     }
 
     /**
-     * Validates hash
+     * Validates hash.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateHash($value)
@@ -176,11 +185,12 @@ class Validator
     }
 
     /**
-     * Validates order id
+     * Validates order id.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateOrderId($value)
@@ -191,11 +201,12 @@ class Validator
     }
 
     /**
-     * Validates service id
+     * Validates service id.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateServiceId($value)
@@ -206,11 +217,12 @@ class Validator
     }
 
     /**
-     * Validates receiver name
+     * Validates receiver name.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateReceiverName($value)
@@ -221,11 +233,12 @@ class Validator
     }
 
     /**
-     * Validates title
+     * Validates title.
      *
      * @param string $value
      *
      * @throws InvalidArgumentException
+     *
      * @return void
      */
     public static function validateTitle($value)

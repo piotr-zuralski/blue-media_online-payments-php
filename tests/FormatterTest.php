@@ -5,13 +5,13 @@ namespace BlueMedia\OnlinePayments\tests;
 use BlueMedia\OnlinePayments\Formatter;
 
 /**
- * (description) 
+ * Formatter test.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Tests
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 class FormatterTest extends \PHPUnit_Framework_TestCase
 {

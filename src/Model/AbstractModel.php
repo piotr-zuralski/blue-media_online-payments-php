@@ -3,13 +3,13 @@
 namespace BlueMedia\OnlinePayments\Model;
 
 /**
- * (description) 
+ * Abstract model class.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 abstract class AbstractModel
 {

@@ -2,17 +2,17 @@
 
 namespace BlueMedia\OnlinePayments\tests;
 
-use \InvalidArgumentException;
 use BlueMedia\OnlinePayments\Validator;
+use InvalidArgumentException;
 
 /**
- * (description) 
+ * Validator test.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Tests
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {

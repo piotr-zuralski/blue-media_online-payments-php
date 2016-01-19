@@ -9,123 +9,123 @@ use DateTime;
 use DomainException;
 
 /**
- * (description) 
+ * Model for transaction standard.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 class TransactionStandard extends AbstractModel
 {
     /**
-     * Service id
+     * Service id.
      *
-     * @type integer
+     * @type int
      */
     protected $serviceId;
 
     /**
-     * Transaction order id
+     * Transaction order id.
      *
      * @type string
      */
     protected $orderId;
 
     /**
-     * Transaction amount
+     * Transaction amount.
      *
      * @type float
      */
     protected $amount;
 
     /**
-     * Transaction description
+     * Transaction description.
      *
      * @type string
      */
     protected $description;
 
     /**
-     * Transaction gateway id
+     * Transaction gateway id.
      *
-     * @type integer
+     * @type int
      */
     protected $gatewayId;
 
     /**
-     * Transaction currency
+     * Transaction currency.
      *
      * @type string
      */
     protected $currency;
 
     /**
-     * Transaction customer e-mail address
+     * Transaction customer e-mail address.
      *
      * @type string
      */
     protected $customerEmail;
 
     /**
-     * Transaction customer bank account number
+     * Transaction customer bank account number.
      *
      * @type string
      */
     protected $customerNrb;
 
     /**
-     * Transaction tax country
+     * Transaction tax country.
      *
      * @type string
      */
     protected $taxCountry;
 
     /**
-     * Customer IP address
+     * Customer IP address.
      *
      * @type string
      */
     protected $customerIp;
 
     /**
-     * Transaction title
+     * Transaction title.
      *
      * @type string
      */
     protected $title;
 
     /**
-     * Transaction receiver name
+     * Transaction receiver name.
      *
      * @type string
      */
     protected $receiverName;
 
     /**
-     * Transaction validity time
+     * Transaction validity time.
      *
      * @type DateTime
      */
     protected $validityTime;
 
     /**
-     * Transaction link validity time
+     * Transaction link validity time.
      *
      * @type DateTime
      */
     protected $linkValidityTime;
 
     /**
-     * Hash
+     * Hash.
      *
      * @type string
      */
     protected $hash;
 
     /**
-     * Set amount
+     * Set amount.
      *
      * @param float $amount
      *
@@ -135,12 +135,13 @@ class TransactionStandard extends AbstractModel
     {
         $amount = Formatter::formatAmount($amount);
         Validator::validateAmount($amount);
-        $this->amount = (float)$amount;
+        $this->amount = (float) $amount;
+
         return $this;
     }
 
     /**
-     * Return amount
+     * Return amount.
      *
      * @return float
      */
@@ -150,7 +151,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set currency
+     * Set currency.
      *
      * @param string $currency
      *
@@ -159,12 +160,13 @@ class TransactionStandard extends AbstractModel
     public function setCurrency($currency)
     {
         Validator::validateCurrency($currency);
-        $this->currency = (string)mb_strtoupper($currency);
+        $this->currency = (string) mb_strtoupper($currency);
+
         return $this;
     }
 
     /**
-     * Return currency
+     * Return currency.
      *
      * @return string
      */
@@ -174,7 +176,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set customerEmail
+     * Set customerEmail.
      *
      * @param string $customerEmail
      *
@@ -183,12 +185,13 @@ class TransactionStandard extends AbstractModel
     public function setCustomerEmail($customerEmail)
     {
         Validator::validateEmail($customerEmail);
-        $this->customerEmail = (string)mb_strtolower($customerEmail);
+        $this->customerEmail = (string) mb_strtolower($customerEmail);
+
         return $this;
     }
 
     /**
-     * Return customerEmail
+     * Return customerEmail.
      *
      * @return string
      */
@@ -198,7 +201,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set customerIp
+     * Set customerIp.
      *
      * @param string $customerIp
      *
@@ -207,12 +210,13 @@ class TransactionStandard extends AbstractModel
     public function setCustomerIp($customerIp)
     {
         Validator::validateIP($customerIp);
-        $this->customerIp = (string)$customerIp;
+        $this->customerIp = (string) $customerIp;
+
         return $this;
     }
 
     /**
-     * Return customerIp
+     * Return customerIp.
      *
      * @return string
      */
@@ -222,7 +226,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set customerNrb
+     * Set customerNrb.
      *
      * @param string $customerNrb
      *
@@ -231,12 +235,13 @@ class TransactionStandard extends AbstractModel
     public function setCustomerNrb($customerNrb)
     {
         Validator::validateNrb($customerNrb);
-        $this->customerNrb = (string)$customerNrb;
+        $this->customerNrb = (string) $customerNrb;
+
         return $this;
     }
 
     /**
-     * Return customerNrb
+     * Return customerNrb.
      *
      * @return string
      */
@@ -246,7 +251,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
      *
@@ -256,12 +261,13 @@ class TransactionStandard extends AbstractModel
     {
         $description = Formatter::formatDescription($description);
         Validator::validateDescription($description);
-        $this->description = (string)$description;
+        $this->description = (string) $description;
+
         return $this;
     }
 
     /**
-     * Return description
+     * Return description.
      *
      * @return string
      */
@@ -271,7 +277,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set gatewayId
+     * Set gatewayId.
      *
      * @param int $gatewayId
      *
@@ -280,12 +286,13 @@ class TransactionStandard extends AbstractModel
     public function setGatewayId($gatewayId)
     {
         Validator::validateGatewayId($gatewayId);
-        $this->gatewayId = (int)$gatewayId;
+        $this->gatewayId = (int) $gatewayId;
+
         return $this;
     }
 
     /**
-     * Return gatewayId
+     * Return gatewayId.
      *
      * @return int
      */
@@ -295,7 +302,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set hash
+     * Set hash.
      *
      * @param string $hash
      *
@@ -304,12 +311,13 @@ class TransactionStandard extends AbstractModel
     public function setHash($hash)
     {
         Validator::validateHash($hash);
-        $this->hash = (string)$hash;
+        $this->hash = (string) $hash;
+
         return $this;
     }
 
     /**
-     * Return hash
+     * Return hash.
      *
      * @return string
      */
@@ -319,7 +327,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set orderId
+     * Set orderId.
      *
      * @param string $orderId
      *
@@ -328,12 +336,13 @@ class TransactionStandard extends AbstractModel
     public function setOrderId($orderId)
     {
         Validator::validateOrderId($orderId);
-        $this->orderId = (string)$orderId;
+        $this->orderId = (string) $orderId;
+
         return $this;
     }
 
     /**
-     * Return orderId
+     * Return orderId.
      *
      * @return string
      */
@@ -343,7 +352,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set receiverName
+     * Set receiverName.
      *
      * @param string $receiverName
      *
@@ -352,12 +361,13 @@ class TransactionStandard extends AbstractModel
     public function setReceiverName($receiverName)
     {
         Validator::validateReceiverName($receiverName);
-        $this->receiverName = (string)$receiverName;
+        $this->receiverName = (string) $receiverName;
+
         return $this;
     }
 
     /**
-     * Return receiverName
+     * Return receiverName.
      *
      * @return string
      */
@@ -367,7 +377,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set serviceId
+     * Set serviceId.
      *
      * @param int $serviceId
      *
@@ -376,12 +386,13 @@ class TransactionStandard extends AbstractModel
     public function setServiceId($serviceId)
     {
         Validator::validateServiceId($serviceId);
-        $this->serviceId = (int)$serviceId;
+        $this->serviceId = (int) $serviceId;
+
         return $this;
     }
 
     /**
-     * Return serviceId
+     * Return serviceId.
      *
      * @return int
      */
@@ -391,7 +402,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set taxCountry
+     * Set taxCountry.
      *
      * @param string $taxCountry
      *
@@ -400,12 +411,13 @@ class TransactionStandard extends AbstractModel
     public function setTaxCountry($taxCountry)
     {
         Validator::validateTaxCountry($taxCountry);
-        $this->taxCountry = (string)$taxCountry;
+        $this->taxCountry = (string) $taxCountry;
+
         return $this;
     }
 
     /**
-     * Return taxCountry
+     * Return taxCountry.
      *
      * @return string
      */
@@ -415,7 +427,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set title
+     * Set title.
      *
      * @param string $title
      *
@@ -424,12 +436,13 @@ class TransactionStandard extends AbstractModel
     public function setTitle($title)
     {
         Validator::validateTitle($title);
-        $this->title = (string)$title;
+        $this->title = (string) $title;
+
         return $this;
     }
 
     /**
-     * Return title
+     * Return title.
      *
      * @return string
      */
@@ -439,7 +452,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set linkValidityTime
+     * Set linkValidityTime.
      *
      * @param DateTime $linkValidityTime
      *
@@ -448,11 +461,12 @@ class TransactionStandard extends AbstractModel
     public function setLinkValidityTime(DateTime $linkValidityTime)
     {
         $this->linkValidityTime = $linkValidityTime;
+
         return $this;
     }
 
     /**
-     * Return linkValidityTime
+     * Return linkValidityTime.
      *
      * @return DateTime
      */
@@ -462,7 +476,7 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
-     * Set validityTime
+     * Set validityTime.
      *
      * @param DateTime $validityTime
      *
@@ -471,11 +485,12 @@ class TransactionStandard extends AbstractModel
     public function setValidityTime(DateTime $validityTime)
     {
         $this->validityTime = $validityTime;
+
         return $this;
     }
 
     /**
-     * Return validityTime
+     * Return validityTime.
      *
      * @return DateTime
      */
@@ -483,7 +498,12 @@ class TransactionStandard extends AbstractModel
     {
         return $this->validityTime;
     }
-    
+
+    /**
+     * Validates model.
+     *
+     * @return void
+     */
     public function validate()
     {
         if (empty($this->serviceId)) {
@@ -500,9 +520,15 @@ class TransactionStandard extends AbstractModel
         }
     }
 
+    /**
+     * Return object data as array.
+     *
+     * @api
+     * @return array
+     */
     public function toArray()
     {
-        $result = array();
+        $result = [];
         $result['ServiceID'] = $this->getServiceId();
         $result['OrderID'] = $this->getOrderId();
         $result['Amount'] = $this->getAmount();
@@ -541,21 +567,34 @@ class TransactionStandard extends AbstractModel
             $result['LinkValidityTime'] = $this->getLinkValidityTime()->format('Y-m-d H:i:s');
         }
         $result['Hash'] = $this->getHash();
+
         return $result;
     }
 
+    /**
+     * Return HTML form.
+     *
+     * @api
+     * @return string
+     */
     public function getHtmlForm()
     {
-        $result = sprintf('<form action="%s" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm">', Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT)) . PHP_EOL;
+        $result  = '<p>Trwa przekierowanie do Bramki P&#322;atniczej Blue Media...</p>' . PHP_EOL;
+        $result .= sprintf(
+                '<form action="%s" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm" style="display: none;">',
+                Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT)
+            ) . PHP_EOL;
         foreach ($this->toArray() as $fieldName => $fieldValue) {
             if (empty($fieldValue)) {
                 continue;
             }
             $result .= sprintf('<input type="hidden" name="%s" value="%s" />', $fieldName, $fieldValue) . PHP_EOL;
         }
-        $result .= '<input type="submit" />' . PHP_EOL;
+        $result .= '<input type="submit" value="Przekieruj" />' . PHP_EOL;
         $result .= '</form>' . PHP_EOL;
-        $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
+//        $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
+        $result .= '<noscript><p>Masz wy&#322;&#261;czon&#261; obs&#322;ug&#281; JavaScript.<br>Aby przej&#347;&#263; do Bramki P&#322;atniczej Blue Media musi w&#322;&#261;czy&#263; obs&#322;ug&#281; JavaScript w przegl&#261;darce.</p></noscript>' . PHP_EOL;
+
         return $result;
     }
 }

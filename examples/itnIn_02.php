@@ -6,12 +6,12 @@ use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Model;
 
 /**
- * ItnIn
+ * Incoming ITN request - example no 2.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @since     2015-08-08
- * @version   2.3.1
+ * @version   2.3.2
  */
 
 /* simulates incoming request */
@@ -22,4 +22,8 @@ $_POST['transactions'] = 'PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW
 $itnIn = $gateway->doItnIn();
 
 header('Content-Type: application/xml; charset="utf-8"');
-echo $gateway->doItnInResponse($itnIn);
+echo $gateway->doItnInResponse($itnIn, false);
+
+/** @var LoggerExample $loggerExample */
+//var_export($loggerExample->getLogStack());
+
