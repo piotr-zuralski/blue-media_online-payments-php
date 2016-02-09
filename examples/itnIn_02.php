@@ -24,7 +24,12 @@ if (empty($_POST['transactions'])) {
 $itnIn = $gateway->doItnIn();
 
 header('Content-Type: application/xml; charset="utf-8"');
-echo $gateway->doItnInResponse($itnIn, false);
+try {
+    echo $gateway->doItnInResponse($itnIn, false);
+} catch (Exception $exception) {
+    header('HTTP/1.1 400 Bad Request');
+    printf('<!-- %s -->', $exception->getMessage());
+}
 
 /** @var LoggerExample $loggerExample */
 printf('<!-- %s -->', var_export($loggerExample->getLogStack(), 1));
