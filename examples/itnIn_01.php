@@ -27,5 +27,4 @@ header('Content-Type: application/xml; charset="utf-8"');
 echo $gateway->doItnInResponse($itnIn);
 
 /** @var LoggerExample $loggerExample */
-//var_export($loggerExample->getLogStack());
-
+printf('<!-- %s -->', var_export($loggerExample->getLogStack(), 1));

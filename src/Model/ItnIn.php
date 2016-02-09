@@ -979,7 +979,7 @@ class ItnIn extends AbstractModel
     public function validate()
     {
         if (empty($this->serviceId)) {
-            throw new DomainException('ReceiverNrb cannot be empty');
+            throw new DomainException('ServiceId cannot be empty');
         }
         if (empty($this->orderId)) {
             throw new DomainException('OrderId cannot be empty');
@@ -990,7 +990,7 @@ class ItnIn extends AbstractModel
         if (empty($this->amount)) {
             throw new DomainException('Amount cannot be empty');
         }
-        if ($this->amount != $this->getAmount()) {
+        if (!($this->amount == $this->getAmount())) {
             throw new DomainException('Amount in wrong format');
         }
         if (empty($this->currency)) {
