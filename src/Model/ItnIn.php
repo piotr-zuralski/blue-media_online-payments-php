@@ -990,7 +990,7 @@ class ItnIn extends AbstractModel
         if (empty($this->amount)) {
             throw new DomainException('Amount cannot be empty');
         }
-        if ($this->amount !== $this->getAmount()) {
+        if ($this->amount != $this->getAmount()) {
             throw new DomainException('Amount in wrong format');
         }
         if (empty($this->currency)) {
