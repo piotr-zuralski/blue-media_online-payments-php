@@ -102,3 +102,4 @@ $RECYCLE.BIN/
 bin/*
 var/*
 build/*
+builds/

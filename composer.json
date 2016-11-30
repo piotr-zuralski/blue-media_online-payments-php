@@ -3,6 +3,7 @@
     "type": "library",
     "description": "PHP SDK for Blue Media Online Payments",
     "keywords": [],
+    "homepage": "https://platnosci.bm.pl/",
     "license": "GPL-3.0",
     "config": {
         "bin-dir": "bin",
@@ -38,6 +39,9 @@
         "sebastian/phpdcd": "^1.0",
         "phpunit/phpunit": ">4.6",
         "symfony/var-dumper": "^3.2"
+    },
+    "provide": {
+        "psr/log-implementation": "1.0"
     },
     "repositories": [
         {

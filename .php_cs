@@ -3,18 +3,20 @@
 $finder = Symfony\CS\Finder\DefaultFinder::create()
     ->in(__DIR__)
     ->ignoreDotFiles(false)
-    ->ignoreVCS(true)
     ->exclude([
-        '.idea'
+        '.git/',
+        '.idea/',
     ]);
 
 return Symfony\CS\Config\Config::create()
     ->level(Symfony\CS\FixerInterface::PSR2_LEVEL)
     ->fixers([
         'psr0',
+
         // psr-1
         'encoding',     // PHP code MUST use only UTF-8 without BOM (remove BOM)
         'short_tag',
+
         // psr-2
         'braces',
         'elseif',
@@ -33,6 +35,7 @@ return Symfony\CS\Config\Config::create()
         'single_line_after_imports',
         'trailing_spaces',
         'visibility',
+
         // symfony
         'array_element_white_space_after_comma',
         'blankline_after_open_tag',
@@ -49,7 +52,6 @@ return Symfony\CS\Config\Config::create()
         'phpdoc_no_access',
         'phpdoc_params',
         'phpdoc_scalar',
-//        'phpdoc_separation',
         'phpdoc_short_description',
         'phpdoc_trim',
         'phpdoc_types',
@@ -68,6 +70,7 @@ return Symfony\CS\Config\Config::create()
         'ternary_spaces',
         'unused_use',
         'whitespacy_lines',
+
         // contrib
         'concat_with_spaces',
         'ereg_to_preg',

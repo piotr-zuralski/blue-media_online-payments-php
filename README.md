@@ -17,33 +17,29 @@ Biblioteka integracyjna do systemu Płatności online BM
 
 ### Composer
 
-The recommended way to install is through
-[Composer](http://getcomposer.org).
+Zalecanym sposobem instalacji za pośrednictwem [Composer](http://getcomposer.org).
 
-```bash
-# Install Composer
-curl -sS https://getcomposer.org/installer | php
-```
-
-Next, run the Composer in root dir of "Blue Media online payments" command to install required vendors:
+1. [Zainstaluj Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
+2. Aby zainstalować "Płatności Online BM" wraz z zależnościami, uruchom Composer w głównym katalogu "Płatności Online BM":
 
 ```bash
 composer.phar install
 ```
 
-After installing, you need to require Composer's autoloader:
+3. Po zainstalowaniu, w projekcie należy załadować autoloader Composer:
 
 ```php
 require 'vendor/autoload.php';
 ```
 
-You can then later update "Blue Media online payments" using composer:
+Można potem aktualizować "Płatności Online BM" za pomocą Composer:
 
- ```bash
-composer.phar update
- ```
+```bash
+composer.phar update blue-media/online-payments
+```
 
-Documentation
--------------
+## Dokumentacja
 
-For usage see examples dir.
+1. Strona informacyjna [Płatności Online BM](https://platnosci.bm.pl/)
+2. [Przykłady użycia](examples)
+2. [Specyfikacja](docs/System_platnosci_online_obsluga_transakcji_2.3.2.pdf)

@@ -92,8 +92,6 @@
 
     <target name="qc:phpcpd" description="QC: PHP Copy/Paste Detector">
         <exec executable="${project.bin_dir}/phpcpd" checkreturn="true" logoutput="true">
-            <arg value="--no-interaction"/>
-
             <arg value="--log-pmd"/>
             <arg path="${project.build_dir}/logs/pmd-cpd.xml"/>
 

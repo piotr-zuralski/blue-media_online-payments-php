@@ -5,6 +5,7 @@ phpmetrics:
     path:
         directory: src
         extensions: php
+        exclude: features|tests
     # report and violations files
     logging:
         report:
