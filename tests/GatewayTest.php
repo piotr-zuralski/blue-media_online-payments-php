@@ -50,7 +50,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $this->assertNotContains('name="Hash" value=""', $html);
 
         $this->assertContains('<p>Trwa przekierowanie do Bramki P&#322;atniczej Blue Media...</p>', $html);
-        $this->assertContains('form action="https://pay-accept.bm.pl/payment?" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm" style="display: none;"', $html);
+        $this->assertContains('form action="https://pay-accept.bm.pl/payment" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm" style="display: none;"', $html);
         $this->assertContains('<noscript><p>Masz wy&#322;&#261;czon&#261; obs&#322;ug&#281; JavaScript.<br>Aby przej&#347;&#263; do Bramki P&#322;atniczej Blue Media musi w&#322;&#261;czy&#263; obs&#322;ug&#281; JavaScript w przegl&#261;darce.</p></noscript>', $html);
     }
 }

@@ -20,16 +20,17 @@ use XMLWriter;
  */
 class Gateway
 {
-    const MODE_SANDBOX              = 'sandbox';
-    const MODE_LIVE                 = 'live';
+    const MODE_SANDBOX = 'sandbox';
+    const MODE_LIVE = 'live';
 
-    const PAYMENT_DOMAIN_SANDBOX    = 'pay-accept.bm.pl';
-    const PAYMENT_DOMAIN_LIVE       = 'pay.bm.pl';
+    const PAYMENT_DOMAIN_SANDBOX = 'pay-accept.bm.pl';
+    const PAYMENT_DOMAIN_LIVE = 'pay.bm.pl';
 
-    const PAYMENT_ACTON_PAYMENT     = '/payment?';
+    const PAYMENT_ACTON_PAYMENT = '/payment';
+    const PAYMENT_ACTON_PAYWAY_LIST = '/paywayList';
 
-    const STATUS_CONFIRMED          = 'CONFIRMED';
-    const STATUS_NOT_CONFIRMED      = 'NOTCONFIRMED';
+    const STATUS_CONFIRMED = 'CONFIRMED';
+    const STATUS_NOT_CONFIRMED = 'NOTCONFIRMED';
 
     /** @type string */
     private $response = '';
@@ -157,15 +158,53 @@ class Gateway
         $data = [];
         $xmlReader = new XMLReader();
         $xmlReader->XML($xml, 'UTF-8', (LIBXML_NOERROR | LIBXML_NOWARNING));
+        $previousTag = $nodeName = null;
+        $previousDepth = 0;
         while ($xmlReader->read()) {
             switch ($xmlReader->nodeType) {
                 case XMLREADER::ELEMENT:
                     $nodeName = $xmlReader->name;
-                    $xmlReader->read();
-                    $nodeValue = $xmlReader->value;
-                    if (!empty($nodeName) && !empty(trim($nodeValue))) {
-                        $data[$nodeName] = $nodeValue;
+                    dump([
+                        'xmlReader' => $xmlReader,
+                        'depth' => $xmlReader->depth,
+                        'previousTag' => $previousTag,
+                        'nodeName' => $nodeName,
+                        'nodeValue' => $xmlReader->value,
+                        'previousDepth' => $previousDepth,
+                    ]);
+                    $previousTag = $nodeName;
+                    if ($xmlReader->depth > $previousDepth) {
+                        $previousDepth = $xmlReader->depth;
                     }
+                    dump([
+                        'xmlReader' => $xmlReader,
+                        'depth' => $xmlReader->depth,
+                        'previousTag' => $previousTag,
+                        'nodeName' => $nodeName,
+                        'nodeValue' => $xmlReader->value,
+                        'previousDepth' => $previousDepth,
+                    ]);
+
+                    break;
+
+                case XMLReader::TEXT:
+                case XMLReader::CDATA:
+                case XMLReader::WHITESPACE:
+                case XMLReader::SIGNIFICANT_WHITESPACE:
+                    $data[$nodeName] = $xmlReader->value;
+                dump([
+                    'xmlReader' => $xmlReader,
+                    'depth' => $xmlReader->depth,
+                    'previousTag' => $previousTag,
+                    'nodeName' => $nodeName,
+                    'nodeValue' => $xmlReader->value,
+                    'previousDepth' => $previousDepth,
+                ]);
+                    break;
+
+                case XMLReader::END_ELEMENT:
+//                    $previousDepth = $xmlReader->depth;
+                    unset($nodeName);
                     break;
             }
         }
@@ -267,9 +306,9 @@ class Gateway
             Logger::DEBUG,
             sprintf('Got "transactions" field in POST data'),
             [
-                'data-raw'          => $_POST['transactions'],
-                'data-xml'          => $transactionXml,
-                'data-xml-parsed'   => $transactionData,
+                'data-raw' => $_POST['transactions'],
+                'data-xml' => $transactionXml,
+                'data-xml-parsed' => $transactionData,
             ]
         );
 
@@ -469,13 +508,13 @@ class Gateway
 
         switch ($action) {
             case self::PAYMENT_ACTON_PAYMENT:
+            case self::PAYMENT_ACTON_PAYWAY_LIST:
                 break;
 
             default:
-                Logger::log(
-                    Logger::EMERGENCY,
-                    sprintf('Requested action "%s" not supported', $action)
-                );
+                $message = sprintf('Requested action "%s" not supported', $action);
+                Logger::log(Logger::EMERGENCY, $message);
+                throw new RuntimeException($message);
                 break;
         }
 
@@ -501,5 +540,39 @@ class Gateway
         $result .= self::$hashingSalt;
 
         return hash(self::$hashingAlgorithm, $result);
+    }
+
+    /**
+     * @return string
+     */
+    final public function doPaywayList()
+    {
+        $fields = [
+            'ServiceID' => self::$serviceId,
+            'MessageID' => md5(time()),
+        ];
+        $fields['Hash'] = self::generateHash($fields);
+
+        $request = new GuzzleHttp\Psr7\Request('POST', self::getActionUrl(self::PAYMENT_ACTON_PAYWAY_LIST));
+
+        $client = new GuzzleHttp\Client([
+            GuzzleHttp\RequestOptions::VERIFY => true,
+            'exceptions' => false,
+        ]);
+
+        $responseObject = $client->send($request, [GuzzleHttp\RequestOptions::FORM_PARAMS => $fields]);
+        $response = (string) $responseObject->getBody();
+
+        $responseParsed = $this->parseXml($response);
+
+        dump([$responseParsed, self::generateHash($responseParsed)]);
+
+        Logger::log(Logger::DEBUG, '', [
+            'request' => [$request->getUri()->__toString(), $request->getBody()],
+            'response' => $response,
+            'fields' => $fields,
+        ]);
+
+        return $response;
     }
 }
