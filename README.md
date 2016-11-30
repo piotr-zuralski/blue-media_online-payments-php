@@ -1,23 +1,21 @@
-Blue Media online payments
-==========================
+# Płatności Online BM
 
-PHP SDK for online payments.
+Biblioteka integracyjna do systemu Płatności online BM
 
-Requirements
-------------
+## Wymagania
 
-Support PHP 5.5 and up.
-Requires extensions:
-- xmlwriter
-- xmlreader
-- iconv
-- mbstring
-- hash
+1. PHP od wersji 5.5
+2. Wymagane rozszeżenia:
+    - xmlwriter
+    - xmlreader
+    - iconv
+    - mbstring
+    - hash
+3. Rozszeżenie cURL jest zalecane ale nie wymagane.
 
-cURL is recomended, but not required.
+## Instalacja
 
-Installation
-------------
+### Composer
 
 The recommended way to install is through
 [Composer](http://getcomposer.org).

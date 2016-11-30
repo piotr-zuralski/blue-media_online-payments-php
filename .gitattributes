@@ -5,4 +5,4 @@
 /.travis.yml export-ignore
 /phpunit.xml.dist export-ignore
 /bin export-ignore
-/.git-config export-ignore
+/.config export-ignore

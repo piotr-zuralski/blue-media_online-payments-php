@@ -1,0 +1,25 @@
+phpmetrics:
+#    plugins:
+#        - ./vendor/phpmetrics/composer-extension/ComposerExtension.php
+# paths to explore
+    path:
+        directory: src
+        extensions: php
+    # report and violations files
+    logging:
+        report:
+            xml:    ./build/phpmetrics.xml
+            html:   ./build/phpmetrics.html
+            csv:    ./build/phpmetrics.csv
+        violations:
+            xml:    ./build/violations.xml
+#        chart:
+#            bubbles: ./build/bubbles.svg
+
+    # condition of failure
+#    failure: average.maintainabilityIndex < 50 or sum.loc > 10000
+
+    # rules used for color ([ critical, warning, good ])
+#    rules:
+#      cyclomaticComplexity: [ 10, 6, 2 ]
+#      maintainabilityIndex: [ 0, 69, 85 ]
