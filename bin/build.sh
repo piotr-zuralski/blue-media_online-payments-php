@@ -9,7 +9,7 @@ if [[ ${_pwd} == */bin ]]; then
     _pwd=$(pwd -P);
 fi
 
-projectHooksDir=${_pwd}/.git-config/hooks/;
+projectHooksDir=${_pwd}/.config/hooks/;
 gitHooksDir=${_pwd}/.git/hooks/;
 
 function makeHookSymlink {
@@ -21,19 +21,14 @@ function makeHookSymlink {
     ln -s ${projectHooksDir}${hook} ${gitHooksDir}${hook};
 };
 
-composer="composer"
-if [ ! ${composer} ]; then
-    if [ ! "./bin/composer" ]; then
-        curl -sS https://getcomposer.org/installer | php -- --install-dir=`pwd`/bin --filename=composer;
-        ${composer}="./bin/composer";
-    else
-        ${composer}="./bin/composer";
-    fi
+composer="./bin/composer";
+if [[ ! ${composer} || ! -f ${composer} ]]; then
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=`pwd`/bin --filename=composer;
 fi
 
-if [ "composer" ]; then
-    composer self-update;
-    composer update;
+if [ ${composer} ]; then
+    ${composer} self-update;
+    ${composer} install;
 fi
 
 for hook in $(ls -a ${projectHooksDir})
@@ -70,4 +65,5 @@ do
     fi
 done
 
+./bin/phing -k;
 echo -e 'done build';

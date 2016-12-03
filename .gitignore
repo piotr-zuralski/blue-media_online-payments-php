@@ -2,7 +2,6 @@
 
 ### Composer ###
 composer.phar
-composer.lock
 vendor/
 
 ### PhpStorm ###
@@ -102,4 +101,5 @@ $RECYCLE.BIN/
 
 bin/*
 var/*
-!var/build/.gitkeep
+build/*
+builds/

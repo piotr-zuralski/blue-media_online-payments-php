@@ -41,10 +41,10 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="var/build/coverage"/>
-        <log type="testdox-html" target="var/build/testdox.html"/>
-        <log type="testdox-text" target="var/build/testdox.txt"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" logIncompleteSkipped="true"/>
-        <log type="tap" target="var/build/tests.tap "/>
+        <log type="coverage-html" target="build/coverage"/>
+        <log type="testdox-html" target="build/testdox.html"/>
+        <log type="testdox-text" target="build/testdox.txt"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" logIncompleteSkipped="true"/>
+        <log type="tap" target="build/tests.tap "/>
     </logging>
 </phpunit>

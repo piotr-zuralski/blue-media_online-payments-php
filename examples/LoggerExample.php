@@ -7,12 +7,11 @@ use Psr\Log\AbstractLogger;
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2016 Blue Media
- * @since     2016-01-18 
+ * @since     2016-01-18
  * @version   2.3.2
  */
 class LoggerExample extends AbstractLogger
 {
-
     private $logStack = [];
 
     /**
