@@ -103,3 +103,5 @@ bin/*
 var/*
 build/*
 builds/
+examples/*.log
+tests/_output/*

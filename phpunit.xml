@@ -22,7 +22,7 @@
 
     <testsuites>
         <testsuite name="Blue Media online payments">
-            <directory>tests/</directory>
+            <directory>tests/unit/</directory>
         </testsuite>
     </testsuites>
 
@@ -41,10 +41,10 @@
     </filter>
 
     <logging>
-        <log type="coverage-html" target="build/coverage"/>
-        <log type="testdox-html" target="build/testdox.html"/>
-        <log type="testdox-text" target="build/testdox.txt"/>
+        <log type="coverage-html" target="builds/coverage"/>
+        <log type="testdox-html" target="builds/testdox.html"/>
+        <log type="testdox-text" target="builds/testdox.txt"/>
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" logIncompleteSkipped="true"/>
-        <log type="tap" target="build/tests.tap "/>
+        <log type="tap" target="builds/tests.tap "/>
     </logging>
 </phpunit>

@@ -581,9 +581,10 @@ class TransactionStandard extends AbstractModel
     {
         $result  = '<p>Trwa przekierowanie do Bramki P&#322;atniczej Blue Media...</p>' . PHP_EOL;
         $result .= sprintf(
-                '<form action="%s" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm" style="display: none;">',
-                Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT)
-            ) . PHP_EOL;
+            '<form action="%s" method="post" id="%2$s" name="%2$s">',
+            Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT),
+            'BlueMediaPaymentForm'
+        ) . PHP_EOL;
         foreach ($this->toArray() as $fieldName => $fieldValue) {
             if (empty($fieldValue)) {
                 continue;
@@ -592,8 +593,10 @@ class TransactionStandard extends AbstractModel
         }
         $result .= '<input type="submit" value="Przekieruj" />' . PHP_EOL;
         $result .= '</form>' . PHP_EOL;
-//        $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
-        $result .= '<noscript><p>Masz wy&#322;&#261;czon&#261; obs&#322;ug&#281; JavaScript.<br>Aby przej&#347;&#263; do Bramki P&#322;atniczej Blue Media musi w&#322;&#261;czy&#263; obs&#322;ug&#281; JavaScript w przegl&#261;darce.</p></noscript>' . PHP_EOL;
+        $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
+        $result .= '<noscript><p>Masz wy&#322;&#261;czon&#261; obs&#322;ug&#281; JavaScript.<br>';
+        $result .= 'Aby przej&#347;&#263; do Bramki P&#322;atniczej Blue Media musi w&#322;&#261;czy&#263; ';
+        $result .= 'obs&#322;ug&#281; JavaScript w przegl&#261;darce.</p></noscript>' . PHP_EOL;
 
         return $result;
     }

@@ -1,7 +1,5 @@
 <?php
 
-namespace BlueMedia\OnlinePayments\tests;
-
 use BlueMedia\OnlinePayments\Formatter;
 
 /**
@@ -13,8 +11,22 @@ use BlueMedia\OnlinePayments\Formatter;
  * @since     2015-08-08
  * @version   2.3.2
  */
-class FormatterTest extends \PHPUnit_Framework_TestCase
+class FormatterTest extends \Codeception\Test\Unit
 {
+    /**
+     * @var \UnitTester
+     */
+    protected $tester;
+
+    protected function _before()
+    {
+    }
+
+    protected function _after()
+    {
+    }
+
+    // tests
     public function testValidInputFormatAmount()
     {
         $this->assertSame('1234567890.00', Formatter::formatAmount(1234567890));

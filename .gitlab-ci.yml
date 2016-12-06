@@ -86,7 +86,7 @@ test-7.1:
 #    untracked: true
 #    when: always
 #    paths:
-#    - build/
+#    - builds/
 #  script:
 #    - echo "ok"
 #

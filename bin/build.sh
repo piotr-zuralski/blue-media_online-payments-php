@@ -9,7 +9,7 @@ if [[ ${_pwd} == */bin ]]; then
     _pwd=$(pwd -P);
 fi
 
-projectHooksDir=${_pwd}/.config/hooks/;
+projectHooksDir=${_pwd}/.config/git/hooks/;
 gitHooksDir=${_pwd}/.git/hooks/;
 
 function makeHookSymlink {
@@ -20,16 +20,6 @@ function makeHookSymlink {
     echo -e 'making symlink for "'${hook}'"';
     ln -s ${projectHooksDir}${hook} ${gitHooksDir}${hook};
 };
-
-composer="./bin/composer";
-if [[ ! ${composer} || ! -f ${composer} ]]; then
-    curl -sS https://getcomposer.org/installer | php -- --install-dir=`pwd`/bin --filename=composer;
-fi
-
-if [ ${composer} ]; then
-    ${composer} self-update;
-    ${composer} install;
-fi
 
 for hook in $(ls -a ${projectHooksDir})
 do
@@ -53,7 +43,7 @@ do
         # checks if there's already a symlink to .git/hooks
         else
             # verify if sile is exacly the same
-            hookDiff=$(diff ${projectHooksDir}${hook} ${gitHooksDir}${hook});
+            hookDiff=$(diff ${projectHooksDir}${hook} ${gitHooksDir}${hook} 2>&1);
 
             # file is different from original, remove it
             if [[ ! ${hookDiff} == '' ]]; then
@@ -64,6 +54,16 @@ do
         fi
     fi
 done
+
+composer="./bin/composer";
+if [[ ! ${composer} || ! -f ${composer} ]]; then
+    curl -sS https://getcomposer.org/installer | php -- --install-dir=`pwd`/bin --filename=composer;
+fi
+
+if [ ${composer} ]; then
+    ${composer} self-update;
+    ${composer} install;
+fi
 
 ./bin/phing -k;
 echo -e 'done build';

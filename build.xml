@@ -12,8 +12,15 @@
 
     <property environment="env" file="build.properties"/>
     <property name="project.src_dir" value="${project.basedir}/src" override="true"/>
-    <property name="project.build_dir" value="${project.basedir}/build" override="true"/>
+    <property name="project.build_dir" value="${project.basedir}/builds" override="true"/>
     <property name="project.bin_dir" value="${project.basedir}/bin" override="true"/>
+
+    <!--<target name="build" depends="verify, analyze"/>-->
+    <!--<target name="verify" depends="phplint,composer-validate,autoload-validation,author-validation"/>-->
+    <!--<target name="analyze" depends="phploc,pdepend,phpmd,phpcs,phpcpd,phpunit,branch-alias-validation,travis-configuration-check"/>-->
+    <!--<target name="docs" depends="phpdoc, phpcb, htaccess, copysvg, copybuild"/>-->
+
+    <target name="qc" description="Quality check" depends="qc:lint,qc:pdepend,qc:phpmetrics,qc:phpunit,qc:humbug,qc:sensio-security,qc:phpcb,qc:phpcpd,qc:phpcs,qc:phpcbf,qc:php-cs-fixer,qc:phpdcd,qc:phploc,qc:phpmd"/>
 
     <target name="initialize" hidden="true">
         <delete dir="${project.build_dir}"/>
@@ -48,36 +55,41 @@
         </composer>
     </target>
 
-    <target name="qc" description="Quality check" depends="qc:pdepend,qc:phpmetrics,qc:phpspec,qc:phpunit,qc:humbug,qc:sensio-security,qc:phpcb,qc:phpcpd,qc:phpcs,qc:php-cs-fixer,qc:phpdcd,qc:phploc,qc:phpmd"/>
-
-    <target name="qc:behat" description="QC: Behat">
-        <exec executable="${project.bin_dir}/behat" checkreturn="true" logoutput="true">
-            <arg value="--config=${project.basedir}/behat.yml"/>
-            <arg path="${project.basedir}/behat.yml"/>
-
-            <arg value="--no-interaction"/>
-        </exec>
+    <target name="qc:lint" description="QC: Linting files">
+        <phplint cachefile="${project.build_dir}/cache.properties" deprecatedAsError="true" haltonfailure="true">
+            <fileset dir="${project.basedir}/examples">
+                <include name="**/*.php"/>
+            </fileset>
+            <fileset dir="${project.src_dir}">
+                <include name="**/*.php"/>
+            </fileset>
+            <fileset dir="${project.basedir}/tests">
+                <include name="**/*.php"/>
+            </fileset>
+        </phplint>
     </target>
 
     <target name="qc:pdepend" description="QC: pDepend">
         <if>
-            <available file="${project.basedir}/pdepend.xml" type="file" property="qc.pdepend.file"/>
+            <available file="${project.bin_dir}/pdepend" type="file" property="qc.pdepend.file"/>
             <then>
                 <exec executable="${project.bin_dir}/pdepend" checkreturn="true" logoutput="true">
-                    <arg value="--configuration"/>
-                    <arg path="${project.basedir}/pdepend.xml"/>
-
-                    <arg path="${project.src_dir}"/>
+                    <arg value="--jdepend-xml=${project.build_dir}/logs/jdepend.xml"/>
+                    <arg value="--dependency-xml=${project.build_dir}/logs/dependency.xml"/>
+                    <arg value="--summary-xml=${project.build_dir}/logs/pdepend-summary.xml"/>
+                    <arg value="${project.src_dir}/,${project.basedir}/tests/"/>
                 </exec>
             </then>
             <else>
                 <echo message="Skipping qc:pdepend" level="warning"/>
+                <fail status="0"/>
             </else>
         </if>
     </target>
 
     <target name="qc:phpcb" description="QC: Code browser">
         <echo message="Skipping qc:phpcb" level="warning"/>
+        <!--<fail status="0"/>-->
         <!--<exec executable="${project.bin_dir}/phpcb" checkreturn="true" logoutput="true">-->
             <!--<arg value="&#45;&#45;log"/>-->
             <!--<arg path="${project.build_dir}/logs/"/>-->
@@ -94,22 +106,34 @@
         <exec executable="${project.bin_dir}/phpcpd" checkreturn="true" logoutput="true">
             <arg value="--log-pmd"/>
             <arg path="${project.build_dir}/logs/pmd-cpd.xml"/>
-
             <arg path="${project.src_dir}"/>
         </exec>
     </target>
 
     <target name="qc:phpcs" description="QC: Code Sniffer">
-        <echo message="Skipping qc:phpcs" level="warning"/>
-        <!--<exec executable="${project.bin_dir}/phpcs" checkreturn="true" logoutput="true">-->
-            <!--<arg path="${project.src_dir}"/>-->
-            <!--<arg path="${project.basedir}/tests/"/>-->
-        <!--</exec>-->
+        <!--<echo message="Skipping qc:phpcs" level="warning"/>-->
+        <exec executable="${project.bin_dir}/phpcs" checkreturn="true" logoutput="true">
+            <arg path="${project.src_dir}"/>
+            <arg path="${project.basedir}/tests/"/>
+            <arg value="--standard=PSR2"/>
+            <arg value="--extensions=php"/>
+        </exec>
+    </target>
+
+    <target name="qc:phpcbf">
+        <exec executable="${project.bin_dir}/phpcbf" checkreturn="true" logoutput="true">
+            <arg path="${project.src_dir}"/>
+            <arg value="--standard=PSR2"/>
+            <arg value="--extensions=php"/>
+        </exec>
     </target>
 
     <target name="qc:php-cs-fixer" description="QC: Coding File fixer (dry-run)">
         <exec executable="${project.bin_dir}/php-cs-fixer" checkreturn="true" logoutput="true">
-            <arg line="fix"/>
+            <arg value="fix"/>
+            <arg path="${project.src_dir}"/>
+            <arg value="--config"/>
+            <arg path=".php_cs"/>
             <arg value="--dry-run"/>
             <arg value="-vvv"/>
         </exec>
@@ -125,23 +149,26 @@
     </target>
 
     <target name="qc:phploc" description="QC: measure the size and analyzing the structure of a project">
-        <echo message="Skipping qc:phploc" level="warning"/>
-        <!--<exec executable="${project.bin_dir}/phploc" checkreturn="true" logoutput="true">-->
-            <!--<arg value="&#45;&#45;count-tests"/>-->
-
-            <!--<arg path="${project.src_dir}"/>-->
-            <!--<arg path="${project.basedir}/tests/"/>-->
-        <!--</exec>-->
+        <exec executable="${project.bin_dir}/phploc" checkreturn="true" logoutput="true">
+            <arg value="--no-interaction"/>
+            <arg value="--count-tests"/>
+            <arg path="${project.basedir}/tests/"/>
+            <arg path="--log-csv"/>
+            <arg path="${project.build_dir}/logs/phploc.csv"/>
+            <arg path="--log-xml"/>
+            <arg path="${project.build_dir}/logs/phploc.xml"/>
+        </exec>
     </target>
 
 
     <target name="qc:phpmd" description="QC: PHP Mess Detector">
-        <echo message="Skipping qc:phpmd" level="warning"/>
-        <!--<exec executable="${project.bin_dir}/phpmd" checkreturn="true" logoutput="true">-->
-            <!--<arg path="${project.src_dir}"/>-->
-            <!--<arg value="text"/>-->
-            <!--<arg path="${project.build_dir}/logs/phpmd.xml"/>-->
-        <!--</exec>-->
+        <!--<echo message="Skipping qc:phpmd" level="warning"/>-->
+        <exec executable="${project.bin_dir}/phpmd" checkreturn="true" logoutput="true">
+            <arg path="${project.src_dir}"/>
+            <arg value="text"/>
+            <arg value="codesize"/>
+            <arg path="${project.build_dir}/logs/phpmd.xml"/>
+        </exec>
     </target>
 
     <target name="qc:phpmetrics" description="QC: static analysis tool for PHP">
@@ -156,20 +183,7 @@
             </then>
             <else>
                 <echo message="Skipping qc:phpmetrics" level="warning"/>
-            </else>
-        </if>
-    </target>
-
-    <target name="qc:phpspec" description="QC: SpecBDD - toolset to drive emergent design by specification">
-        <if>
-            <available file="${project.basedir}/phpspec.yml" type="file" property="qc.phpspec.file"/>
-            <then>
-                <exec executable="${project.bin_dir}/phpspec" checkreturn="true" logoutput="true">
-                    <arg value="run"/>
-                </exec>
-            </then>
-            <else>
-                <echo message="Skipping qc:phpspec" level="warning"/>
+                <fail status="0"/>
             </else>
         </if>
     </target>
@@ -185,6 +199,7 @@
             </then>
             <else>
                 <echo message="Skipping qc:phpunit" level="warning"/>
+                <fail status="0"/>
             </else>
         </if>
     </target>
@@ -201,6 +216,7 @@
             </then>
             <else>
                 <echo message="Skipping qc:humbug" level="warning"/>
+                <fail status="0"/>
             </else>
         </if>
     </target>
@@ -216,105 +232,12 @@
 
     <target name="php-cs-fixer">
         <exec executable="${project.bin_dir}/php-cs-fixer" checkreturn="true" logoutput="true">
-            <arg line="fix"/>
+            <arg value="fix"/>
+            <arg path="${project.src_dir}"/>
+            <arg value="--config"/>
+            <arg path=".php_cs"/>
             <arg value="-vvv"/>
         </exec>
     </target>
 
 </project>
-
-
-<!--
-
-<?xml version="1.0" encoding="UTF-8"?>
-<project name="Core vendor for Berlingske Media" default="build">
-
-    <property environment="prod"/>
-    <property name="env.SYMFONY_ENV" value="prod"/>
-    <property name="dir.build" value="${basedir}/build"/>
-
-    <target name="build"
-            depends="vendors, remove-composer-lock">
-    </target>
-
-    <target name="test"
-            depends="vendors, qc, remove-composer-lock">
-    </target>
-
-    <target name="remove-composer-lock">
-        <delete file="composer.lock"/>
-    </target>
-
-    <target name="vendors" description="Add Vendors">
-        <delete file="composer.lock"/>
-        <exec executable="composer" failonerror="true">
-            <env key="SYMFONY_ENV" value="prod"/>
-            <arg value="update"/>
-            <arg value="-\-no-interaction"/>
-            <arg value="-\-optimize-autoloader"/>
-        </exec>
-    </target>
-
-    <target name="qc" depends="phpmd,phpcs,phpunit,phpcsfixer,sensio-security"/>
-
-    <target name="phpmd">
-        <exec executable="php" failonerror="true">
-            <arg value="vendor/bin/phpmd"/>
-            <arg value="src"/>
-            <arg value="text"/>
-            <arg value="codesize"/>
-        </exec>
-    </target>
-
-    <target name="phpcs">
-        <exec executable="php" failonerror="true">
-            <arg value="vendor/bin/phpcs"/>
-            <arg value="src"/>
-            <arg value="-\-standard=PSR2"/>
-            <arg value="-\-extensions=php"/>
-        </exec>
-    </target>
-
-    <target name="phpcbf">
-        <exec executable="php" failonerror="true">
-            <arg value="vendor/bin/phpcbf"/>
-            <arg value="src"/>
-            <arg value="-\-standard=PSR2"/>
-            <arg value="-\-extensions=php"/>
-        </exec>
-    </target>
-
-    <target name="phpcsfixer">
-        <exec executable="php" failonerror="true">
-            <arg value="vendor/bin/php-cs-fixer"/>
-            <arg value="fix"/>
-            <arg value="src/"/>
-            <arg value="-\-rules=@Symfony,-concat_without_spaces"/>
-            <arg value="-\-dry-run"/>
-            <arg value="-v"/>
-            <arg value="-\-using-cache=false"/>
-        </exec>
-    </target>
-
-    <target name="phpcsfixer-fix">
-        <exec executable="php" failonerror="true">
-            <arg value="vendor/bin/php-cs-fixer"/>
-            <arg value="fix"/>
-            <arg value="src/"/>
-            <arg value="-\-rules=@Symfony,-concat_without_spaces"/>
-            <arg value="-v"/>
-            <arg value="-\-using-cache=false"/>
-        </exec>
-    </target>
-
-    <target name="phpunit">
-        <exec executable="php" failonerror="true">
-            <arg value="vendor/bin/phpunit"/>
-            <arg value="-c"/>
-            <arg value="phpunit.xml"/>
-        </exec>
-    </target>
-
-</project>
-
--->

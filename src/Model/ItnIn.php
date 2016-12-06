@@ -2,6 +2,7 @@
 
 namespace BlueMedia\OnlinePayments\Model;
 
+use BlueMedia\OnlinePayments\Action\ITN\Transformer;
 use BlueMedia\OnlinePayments\Formatter;
 use BlueMedia\OnlinePayments\Validator;
 use DateTime;
@@ -26,11 +27,38 @@ class ItnIn extends AbstractModel
     const PAYMENT_STATUS_DETAILS_ACCEPTED = 'ACCEPTED';
     const PAYMENT_STATUS_DETAILS_INCORRECT_AMOUNT = 'INCORRECT_AMOUNT';
     const PAYMENT_STATUS_DETAILS_EXPIRED = 'EXPIRED';
+    const PAYMENT_STATUS_DETAILS_CONFIRMED = 'CONFIRMED';
     const PAYMENT_STATUS_DETAILS_CANCELLED = 'CANCELLED';
     const PAYMENT_STATUS_DETAILS_ANOTHER_ERROR = 'ANOTHER_ERROR';
+    const PAYMENT_STATUS_DETAILS_REJECTED = 'REJECTED';
+    const PAYMENT_STATUS_DETAILS_REJECTED_BY_USER = 'REJECTED_BY_USER';
 
     const CONFIRMATION_CONFIRMED = 'CONFIRMED';
     const CONFIRMATION_NOT_CONFIRMED = 'NOTCONFIRMED';
+
+    const VERIFICATION_STATUS_PENDING = 'PENDING';
+    const VERIFICATION_STATUS_POSITIVE = 'POSITIVE';
+    const VERIFICATION_STATUS_NEGATIVE = 'NEGATIVE';
+
+    const VERIFICATION_STATUS_REASON_NAME = 'NAME';
+    const VERIFICATION_STATUS_REASON_NRB = 'NRB';
+    const VERIFICATION_STATUS_REASON_TITLE = 'TITLE';
+    const VERIFICATION_STATUS_REASON_STREET = 'STREET';
+    const VERIFICATION_STATUS_REASON_HOUSE_NUMBER = 'HOUSE_NUMBER';
+    const VERIFICATION_STATUS_REASON_STAIRCASE = 'STAIRCASE';
+    const VERIFICATION_STATUS_REASON_PREMISE_NUMBER = 'PREMISE_NUMBER';
+    const VERIFICATION_STATUS_REASON_POSTAL_CODE = 'POSTAL_CODE';
+    const VERIFICATION_STATUS_REASON_CITY = 'CITY';
+    const VERIFICATION_STATUS_REASON_BLACKLISTED = 'BLACKLISTED';
+    const VERIFICATION_STATUS_REASON_SHOP_FORMAL_REQUIREMENTS = 'SHOP_FORMAL_REQUIREMENTS';
+    const VERIFICATION_STATUS_REASON_NEED_FEEDBACK = 'NEED_FEEDBACK';
+
+    const CARD_DATA_ISSUER_VISA = 'VISA';
+    const CARD_DATA_ISSUER_MASTERCARD = 'MASTERCARD';
+    const CARD_DATA_ISSUER_MAESTRO = 'MAESTRO';
+    const CARD_DATA_ISSUER_AMERICAN_EXPRESS = 'AMERICAN EXPRESS';
+    const CARD_DATA_ISSUER_DISCOVER = 'DISCOVER';
+    const CARD_DATA_ISSUER_DINERS = 'DINERS';
 
     /**
      * Service id.
@@ -103,56 +131,56 @@ class ItnIn extends AbstractModel
     protected $addressIp;
 
     /**
-     * Transaction title.
+     * Tytuł wpłaty
      *
      * @type string
      */
     protected $title;
 
     /**
-     * Customer first name.
+     * Imię płatnika
      *
      * @type string
      */
     protected $customerDatafName;
 
     /**
-     * Customer last name.
+     * Nazwisko płatnika
      *
      * @type string
      */
     protected $customerDatalName;
 
     /**
-     * Customer address - street name.
+     * Nazwa ulicy płatnika
      *
      * @type string
      */
     protected $customerDataStreetName;
 
     /**
-     * Customer address - house number.
+     * Numer domu płatnika
      *
      * @type string
      */
     protected $customerDataStreetHouseNo;
 
     /**
-     * Customer address - staircase number.
+     * Numer klatki płatnika
      *
      * @type string
      */
     protected $customerDataStreetStaircaseNo;
 
     /**
-     * Customer address - premise number.
+     * Numer lokalu płatnika
      *
      * @type string
      */
     protected $customerDataStreetPremiseNo;
 
     /**
-     * Customer address - postal code.
+     * Kod pocztowy adresu płatnika
      *
      * @type string
      */
@@ -243,7 +271,65 @@ class ItnIn extends AbstractModel
     protected $hash;
 
     /**
-     * Set addressIp.
+     * Payment remote out id.
+     *
+     * @type string
+     */
+    protected $remoteOutID;
+
+    /**
+     * Numer dokumentu finansowego w Serwisie
+     *
+     * @var string
+     */
+    protected $invoiceNumber;
+
+    /**
+     * Numer Klienta w Serwisie
+     *
+     * @var string
+     */
+    protected $customerNumber;
+
+    /**
+     * Adres email Klienta
+     *
+     * @var string
+     */
+    protected $customerEmail;
+
+    /**
+     * Numer telefonu Klienta
+     *
+     * @var string
+     */
+    protected $customerPhone;
+
+    /**
+     * Dane płatnika w postaci niepodzielonej
+     *
+     * @var string
+     */
+    protected $customerDataSenderData;
+
+    /**
+     * Status weryfikacji płatnika
+     *
+     * @var string
+     */
+    protected $verificationStatus;
+
+    /**
+     * Lista zawierająca powody negatywnej, lub oczekującej weryfikacji
+     *
+     * @var array
+     */
+    protected $verificationStatusReasons;
+
+    protected $startAmount;
+
+    /**
+     * Ustawia addressIp.
      *
      * @param string $addressIp
      *
@@ -258,7 +344,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return addressIp.
+     * Zwraca addressIp.
      *
      * @return string
      */
@@ -268,7 +354,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set amount.
+     * Ustawia amount.
      *
      * @param float $amount
      *
@@ -283,7 +369,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return amount.
+     * Zwraca amount.
      *
      * @return float
      */
@@ -293,7 +379,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set currency.
+     * Ustawia currency.
      *
      * @param string $currency
      *
@@ -308,7 +394,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return currency.
+     * Zwraca currency.
      *
      * @return string
      */
@@ -318,7 +404,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataCity.
+     * Ustawia customerDataCity.
      *
      * @param string $customerDataCity
      *
@@ -332,7 +418,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataCity.
+     * Zwraca customerDataCity.
      *
      * @return string
      */
@@ -342,7 +428,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataNrb.
+     * Ustawia customerDataNrb.
      *
      * @param string $customerDataNrb
      *
@@ -357,7 +443,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataNrb.
+     * Zwraca customerDataNrb.
      *
      * @return string
      */
@@ -367,7 +453,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataPostalCode.
+     * Ustawia customerDataPostalCode.
      *
      * @param string $customerDataPostalCode
      *
@@ -381,7 +467,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataPostalCode.
+     * Zwraca customerDataPostalCode.
      *
      * @return string
      */
@@ -391,7 +477,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataStreetHouseNo.
+     * Ustawia customerDataStreetHouseNo.
      *
      * @param string $customerDataStreetHouseNo
      *
@@ -405,7 +491,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataStreetHouseNo.
+     * Zwraca customerDataStreetHouseNo.
      *
      * @return string
      */
@@ -415,7 +501,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataStreetName.
+     * Ustawia customerDataStreetName.
      *
      * @param string $customerDataStreetName
      *
@@ -429,7 +515,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataStreetName.
+     * Zwraca customerDataStreetName.
      *
      * @return string
      */
@@ -439,7 +525,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataStreetPremiseNo.
+     * Ustawia customerDataStreetPremiseNo.
      *
      * @param string $customerDataStreetPremiseNo
      *
@@ -453,7 +539,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataStreetPremiseNo.
+     * Zwraca customerDataStreetPremiseNo.
      *
      * @return string
      */
@@ -463,7 +549,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDataStreetStaircaseNo.
+     * Ustawia customerDataStreetStaircaseNo.
      *
      * @param string $customerDataStreetStaircaseNo
      *
@@ -477,7 +563,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDataStreetStaircaseNo.
+     * Zwraca customerDataStreetStaircaseNo.
      *
      * @return string
      */
@@ -487,7 +573,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDatafName.
+     * Ustawia customerDatafName.
      *
      * @param string $customerDatafName
      *
@@ -501,7 +587,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDatafName.
+     * Zwraca customerDatafName.
      *
      * @return string
      */
@@ -511,7 +597,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set customerDatalName.
+     * Ustawia customerDatalName.
      *
      * @param string $customerDatalName
      *
@@ -525,7 +611,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return customerDatalName.
+     * Zwraca customerDatalName.
      *
      * @return string
      */
@@ -535,7 +621,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set gatewayId.
+     * Ustawia gatewayId.
      *
      * @param int $gatewayId
      *
@@ -550,7 +636,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return gatewayId.
+     * Zwraca gatewayId.
      *
      * @return int
      */
@@ -560,7 +646,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set hash.
+     * Ustawia hash.
      *
      * @param string $hash
      *
@@ -575,7 +661,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return hash.
+     * Zwraca hash.
      *
      * @return string
      */
@@ -585,7 +671,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set orderId.
+     * Ustawia orderId.
      *
      * @param string $orderId
      *
@@ -600,7 +686,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return orderId.
+     * Zwraca orderId.
      *
      * @return string
      */
@@ -610,7 +696,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set paymentDate.
+     * Ustawia paymentDate.
      *
      * @param DateTime $paymentDate
      *
@@ -624,7 +710,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return paymentDate.
+     * Zwraca paymentDate.
      *
      * @return DateTime
      */
@@ -634,7 +720,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set paymentStatus.
+     * Ustawia paymentStatus.
      *
      * @param string $paymentStatus
      *
@@ -648,7 +734,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return paymentStatus.
+     * Zwraca paymentStatus.
      *
      * @return string
      */
@@ -658,7 +744,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set paymentStatusDetails.
+     * Ustawia paymentStatusDetails.
      *
      * @param string $paymentStatusDetails
      *
@@ -672,7 +758,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return paymentStatusDetails.
+     * Zwraca paymentStatusDetails.
      *
      * @return string
      */
@@ -682,7 +768,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set remoteId.
+     * Ustawia remoteId.
      *
      * @param string $remoteId
      *
@@ -696,7 +782,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return remoteId.
+     * Zwraca remoteId.
      *
      * @return string
      */
@@ -706,7 +792,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set serviceId.
+     * Ustawia serviceId.
      *
      * @param int $serviceId
      *
@@ -721,7 +807,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return serviceId.
+     * Zwraca serviceId.
      *
      * @return int
      */
@@ -731,7 +817,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set title.
+     * Ustawia tytuł wpłaty
      *
      * @param string $title
      *
@@ -746,7 +832,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return title.
+     * Zwraca tytuł wpłaty
      *
      * @return string
      */
@@ -756,7 +842,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set receiverAddress.
+     * Ustawia receiverAddress.
      *
      * @param string $receiverAddress
      *
@@ -770,7 +856,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return receiverAddress.
+     * Zwraca receiverAddress.
      *
      * @return string
      */
@@ -780,7 +866,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set receiverBank.
+     * Ustawia receiverBank.
      *
      * @param string $receiverBank
      *
@@ -794,7 +880,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return receiverBank.
+     * Zwraca receiverBank.
      *
      * @return string
      */
@@ -804,7 +890,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set receiverNRB.
+     * Ustawia receiverNRB.
      *
      * @param string $receiverNRB
      *
@@ -818,7 +904,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return receiverNRB.
+     * Zwraca receiverNRB.
      *
      * @return string
      */
@@ -828,7 +914,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set receiverName.
+     * Ustawia receiverName.
      *
      * @param string $receiverName
      *
@@ -842,7 +928,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return receiverName.
+     * Zwraca receiverName.
      *
      * @return string
      */
@@ -852,7 +938,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set senderBank.
+     * Ustawia senderBank.
      *
      * @param string $senderBank
      *
@@ -866,7 +952,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return senderBank.
+     * Zwraca senderBank.
      *
      * @return string
      */
@@ -876,7 +962,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set senderNRB.
+     * Ustawia senderNRB.
      *
      * @param string $senderNRB
      *
@@ -890,7 +976,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return senderNRB.
+     * Zwraca senderNRB.
      *
      * @return string
      */
@@ -900,7 +986,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set transferDate.
+     * Ustawia transferDate.
      *
      * @param DateTime $transferDate
      *
@@ -914,7 +1000,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return transferDate.
+     * Zwraca transferDate.
      *
      * @return DateTime
      */
@@ -924,7 +1010,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set transferStatus.
+     * Ustawia transferStatus.
      *
      * @param string $transferStatus
      *
@@ -938,7 +1024,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return transferStatus.
+     * Zwraca transferStatus.
      *
      * @return string
      */
@@ -948,7 +1034,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Set transferStatusDetails.
+     * Ustawia transferStatusDetails.
      *
      * @param string $transferStatusDetails
      *
@@ -962,7 +1048,7 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return transferStatusDetails.
+     * Zwraca transferStatusDetails.
      *
      * @return string
      */
@@ -970,6 +1056,152 @@ class ItnIn extends AbstractModel
     {
         return $this->transferStatusDetails;
     }
+
+    /**
+     * @return string
+     */
+    public function getRemoteOutID()
+    {
+        return $this->remoteOutID;
+    }
+
+    /**
+     * @param string $remoteOutID
+     */
+    public function setRemoteOutID($remoteOutID)
+    {
+        $this->remoteOutID = $remoteOutID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getInvoiceNumber()
+    {
+        return $this->invoiceNumber;
+    }
+
+    /**
+     * @param string $invoiceNumber
+     */
+    public function setInvoiceNumber($invoiceNumber)
+    {
+        $this->invoiceNumber = $invoiceNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerNumber()
+    {
+        return $this->customerNumber;
+    }
+
+    /**
+     * @param string $customerNumber
+     */
+    public function setCustomerNumber($customerNumber)
+    {
+        $this->customerNumber = $customerNumber;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerEmail()
+    {
+        return $this->customerEmail;
+    }
+
+    /**
+     * @param string $customerEmail
+     */
+    public function setCustomerEmail($customerEmail)
+    {
+        $this->customerEmail = $customerEmail;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerPhone()
+    {
+        return $this->customerPhone;
+    }
+
+    /**
+     * @param string $customerPhone
+     */
+    public function setCustomerPhone($customerPhone)
+    {
+        $this->customerPhone = $customerPhone;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerDataSenderData()
+    {
+        return $this->customerDataSenderData;
+    }
+
+    /**
+     * @param string $customerDataSenderData
+     */
+    public function setCustomerDataSenderData($customerDataSenderData)
+    {
+        $this->customerDataSenderData = $customerDataSenderData;
+    }
+
+    /**
+     * @return string
+     */
+    public function getVerificationStatus()
+    {
+        return $this->verificationStatus;
+    }
+
+    /**
+     * @param string $verificationStatus
+     */
+    public function setVerificationStatus($verificationStatus)
+    {
+        $this->verificationStatus = $verificationStatus;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVerificationStatusReasons()
+    {
+        return $this->verificationStatusReasons;
+    }
+
+    /**
+     * @param array $verificationStatusReasons
+     */
+    public function setVerificationStatusReasons($verificationStatusReasons)
+    {
+        $this->verificationStatusReasons = $verificationStatusReasons;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStartAmount()
+    {
+        return $this->startAmount;
+    }
+
+    /**
+     * @param mixed $startAmount
+     */
+    public function setStartAmount($startAmount)
+    {
+        $this->startAmount = $startAmount;
+    }
+
+
 
     /**
      * Validates model.
@@ -999,7 +1231,6 @@ class ItnIn extends AbstractModel
         if (empty($this->paymentDate)) {
             throw new DomainException('PaymentDate cannot be empty');
         }
-
         if (empty($this->paymentStatus)) {
             throw new DomainException('PaymentStatus cannot be empty');
         }
@@ -1020,34 +1251,15 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * Return object data as array.
+     * Zwraca object data as array.
      *
-     * @api
+     * @deprecated Use Transformer::objectToArray()
      * @return array
      */
     public function toArray()
     {
-        $result = [];
-        $result['serviceID'] = $this->getServiceId();
-        $result['orderID'] = $this->getOrderId();
-        $result['remoteID'] = $this->getRemoteId();
-        $result['amount'] = $this->getAmount();
-        $result['currency'] = $this->getCurrency();
-
-        if (!empty($this->getGatewayId())) {
-            $result['gatewayID'] = $this->getGatewayId();
-        }
-        if ($this->getPaymentDate() instanceof DateTime) {
-            $result['paymentDate'] = $this->getPaymentDate()->format('YmdHis');
-        }
-        if (!empty($this->getPaymentStatus())) {
-            $result['paymentStatus'] = $this->getPaymentStatus();
-        }
-        if (!empty($this->getPaymentStatusDetails())) {
-            $result['paymentStatusDetails'] = $this->getPaymentStatusDetails();
-        }
-        $result['Hash'] = $this->getHash();
-
-        return $result;
+        return Transformer::modelToArray($this);
     }
+
+
 }

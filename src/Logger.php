@@ -16,7 +16,6 @@ use Psr\Log\LogLevel;
  */
 class Logger
 {
-
     const EMERGENCY = LogLevel::EMERGENCY;
     const ALERT     = LogLevel::ALERT;
     const CRITICAL  = LogLevel::CRITICAL;

@@ -1,5 +1,7 @@
 <?php
 
+$_GET['serviceId'] = '100660';
+
 require_once './.config.php';
 
 use BlueMedia\OnlinePayments\Gateway;
@@ -30,6 +32,8 @@ try {
     header('HTTP/1.1 400 Bad Request');
     printf('<!-- %s -->', $exception->getMessage());
 }
+
+printf('<!-- %s -->', var_export(configForm(), 1));
 
 /** @var LoggerExample $loggerExample */
 printf('<!-- %s -->', var_export($loggerExample->getLogStack(), 1));

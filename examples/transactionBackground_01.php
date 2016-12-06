@@ -13,19 +13,22 @@ require_once './.config.php';
 use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Model;
 
+//echo configForm();
+
 $transactionStandard = new Model\TransactionStandard();
 $transactionStandard->setOrderId((string) time())
     ->setAmount('9876.54')
     ->setDescription('Test transaction')
-    ->setGatewayId(71)
+    ->setGatewayId(106)
     ->setCurrency('PLN')
+    ->setTaxCountry('PL')
     ->setCustomerEmail('test@zuralski.net')
-    ->setCustomerNrb('50114020040000360275384788')
+    ->setCustomerNrb('39105017641000009217760264')
     ->setCustomerIp('192.168.0.34')
     ->setTitle(sprintf('Test transaction %s', $transactionStandard->getOrderId()))
     ->setReceiverName('Zuralski.net')
-    ->setValidityTime((new DateTime())->modify('+3days'))
-    ->setLinkValidityTime((new DateTime())->modify('+3days'))
+//    ->setValidityTime((new DateTime())->modify('+3days'))
+//    ->setLinkValidityTime((new DateTime())->modify('+3days'))
 ;
 
 /** @type Gateway $gateway */
