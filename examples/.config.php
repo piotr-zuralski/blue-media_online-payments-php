@@ -35,7 +35,7 @@ use BlueMedia\OnlinePayments\Gateway;
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 
 /** @var LoggerExample $loggerExample */
@@ -49,7 +49,6 @@ $hashingSeparator = ((!empty($_GET['hashingSeparator'])) ? (string)$_GET['hashin
 switch ($serviceId) {
     case '100006':
         $hashingSalt = '81532ad38b71944834059480537b324bd1ab2bd9';
-        $hashingSeparator = '|';
         break;
 
     case '100014':

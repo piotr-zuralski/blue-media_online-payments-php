@@ -8,7 +8,7 @@ use Psr\Log\AbstractLogger;
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2016 Blue Media
  * @since     2016-01-18
- * @version   2.3.2
+ * @version   2.3.3
  */
 class LoggerExample extends AbstractLogger
 {

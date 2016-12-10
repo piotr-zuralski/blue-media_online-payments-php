@@ -9,7 +9,7 @@ namespace BlueMedia\OnlinePayments;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 class Formatter
 {

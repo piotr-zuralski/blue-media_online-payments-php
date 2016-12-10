@@ -13,7 +13,7 @@ use BlueMedia\OnlinePayments\Model;
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 
 /* simulates incoming request */
@@ -32,8 +32,6 @@ try {
     header('HTTP/1.1 400 Bad Request');
     printf('<!-- %s -->', $exception->getMessage());
 }
-
-printf('<!-- %s -->', var_export(configForm(), 1));
 
 /** @var LoggerExample $loggerExample */
 printf('<!-- %s -->', var_export($loggerExample->getLogStack(), 1));

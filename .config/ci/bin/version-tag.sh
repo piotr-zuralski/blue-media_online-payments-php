@@ -56,5 +56,5 @@ fi
 message="Version: ${VERSION} at ${NOW} on build: ${CI_BUILD_REF}";
 echo "Creating "${message};
 
-git tag -a ${VERSION} -m ${message};
-git push origin ${VERSION}
+#git tag -a ${VERSION} -m ${message};
+#git push origin ${VERSION}

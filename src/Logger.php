@@ -12,7 +12,7 @@ use Psr\Log\LogLevel;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
  * @since     2016-01-10
- * @version   2.3.2
+ * @version   2.3.3
  */
 class Logger
 {

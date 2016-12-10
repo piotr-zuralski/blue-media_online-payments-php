@@ -15,7 +15,7 @@ use DomainException;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 class ItnIn extends AbstractModel
 {
@@ -326,7 +326,68 @@ class ItnIn extends AbstractModel
      */
     protected $verificationStatusReasons;
 
+    /**
+     * Kwota początkowa transakcji
+     *
+     * @var float
+     */
     protected $startAmount;
+
+    /**
+     * Akcja w procesie płatności automatycznej
+     *
+     * @var string
+     */
+    protected $recurringDataRecurringAction;
+
+    /**
+     * Identyfikator płatności automatycznej generowany przez BM
+     *
+     * @var string
+     */
+    protected $recurringDataClientHash;
+
+    /**
+     * Index karty
+     *
+     * @var string
+     */
+    protected $cardDataIndex;
+
+    /**
+     * Ważność karty w formacie YYYY
+     *
+     * @var integer
+     */
+    protected $cardDataValidityYear;
+
+    /**
+     * Ważność karty w formacie mm
+     *
+     * @var integer
+     */
+    protected $cardDataValidityMonth;
+
+    /**
+     * Typ karty
+     *
+     * @var string
+     */
+    protected $cardDataIssuer;
+
+    /**
+     * Pierwsze 6 cyfr numeru karty
+     *
+     * @var integer
+     */
+    protected $cardDataBin;
+
+    /**
+     * Ostatnie 4 cyfry numeru karty
+     *
+     * @var integer
+     */
+    protected $cardDataMask;
 
     /**
      * Ustawia addressIp.
@@ -1186,7 +1247,9 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * @return mixed
+     * Zwraca kwotę początkową transakcji
+     *
+     * @return float
      */
     public function getStartAmount()
     {
@@ -1194,14 +1257,142 @@ class ItnIn extends AbstractModel
     }
 
     /**
-     * @param mixed $startAmount
+     * Ustawia kwotę początkową transakcji
+     *
+     * @param float $startAmount
      */
     public function setStartAmount($startAmount)
     {
         $this->startAmount = $startAmount;
     }
 
+    /**
+     * @return string
+     */
+    public function getRecurringDataRecurringAction()
+    {
+        return $this->recurringDataRecurringAction;
+    }
 
+    /**
+     * @param string $recurringDataRecurringAction
+     */
+    public function setRecurringDataRecurringAction($recurringDataRecurringAction)
+    {
+        $this->recurringDataRecurringAction = $recurringDataRecurringAction;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRecurringDataClientHash()
+    {
+        return $this->recurringDataClientHash;
+    }
+
+    /**
+     * @param string $recurringDataClientHash
+     */
+    public function setRecurringDataClientHash($recurringDataClientHash)
+    {
+        $this->recurringDataClientHash = $recurringDataClientHash;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCardDataIndex()
+    {
+        return $this->cardDataIndex;
+    }
+
+    /**
+     * @param string $cardDataIndex
+     */
+    public function setCardDataIndex($cardDataIndex)
+    {
+        $this->cardDataIndex = $cardDataIndex;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCardDataValidityYear()
+    {
+        return $this->cardDataValidityYear;
+    }
+
+    /**
+     * @param int $cardDataValidityYear
+     */
+    public function setCardDataValidityYear($cardDataValidityYear)
+    {
+        $this->cardDataValidityYear = $cardDataValidityYear;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCardDataValidityMonth()
+    {
+        return $this->cardDataValidityMonth;
+    }
+
+    /**
+     * @param int $cardDataValidityMonth
+     */
+    public function setCardDataValidityMonth($cardDataValidityMonth)
+    {
+        $this->cardDataValidityMonth = $cardDataValidityMonth;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCardDataIssuer()
+    {
+        return $this->cardDataIssuer;
+    }
+
+    /**
+     * @param string $cardDataIssuer
+     */
+    public function setCardDataIssuer($cardDataIssuer)
+    {
+        $this->cardDataIssuer = $cardDataIssuer;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCardDataBin()
+    {
+        return $this->cardDataBin;
+    }
+
+    /**
+     * @param int $cardDataBin
+     */
+    public function setCardDataBin($cardDataBin)
+    {
+        $this->cardDataBin = $cardDataBin;
+    }
+
+    /**
+     * @return int
+     */
+    public function getCardDataMask()
+    {
+        return $this->cardDataMask;
+    }
+
+    /**
+     * @param int $cardDataMask
+     */
+    public function setCardDataMask($cardDataMask)
+    {
+        $this->cardDataMask = $cardDataMask;
+    }
 
     /**
      * Validates model.

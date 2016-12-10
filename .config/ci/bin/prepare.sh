@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-cat .config/auth.json > ~/auth.json
+mkdir -p ~/.config/composer;
+cat .config/.config/composer/auth.json > ~/.config/composer/auth.json

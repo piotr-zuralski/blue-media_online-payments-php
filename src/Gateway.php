@@ -16,22 +16,23 @@ use XMLWriter;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 class Gateway
 {
-    const MODE_SANDBOX              = 'sandbox';
-    const MODE_LIVE                 = 'live';
+    const MODE_SANDBOX = 'sandbox';
+    const MODE_LIVE = 'live';
 
-    const PAYMENT_DOMAIN_SANDBOX    = 'pay-accept.bm.pl';
-    const PAYMENT_DOMAIN_LIVE       = 'pay.bm.pl';
+    const PAYMENT_DOMAIN_SANDBOX = 'pay-accept.bm.pl';
+    const PAYMENT_DOMAIN_LIVE = 'pay.bm.pl';
 
     const PAYMENT_ACTON_PAYMENT     = '/payment';
 
-    const STATUS_CONFIRMED          = 'CONFIRMED';
-    const STATUS_NOT_CONFIRMED      = 'NOTCONFIRMED';
+    const STATUS_CONFIRMED = 'CONFIRMED';
+    const STATUS_NOT_CONFIRMED = 'NOTCONFIRMED';
 
     const DATETIME_FORMAT = 'YmdHis';
+    const DATETIME_FORMAT_LONGER = 'Y-m-d H:i:s';
 
     /** @type string */
     private $response = '';
@@ -71,7 +72,7 @@ class Gateway
     private function parseResponse()
     {
         $this->isErrorResponse();
-        if ($this->isPayWayFormResponse()) {
+        if ($this->isPaywayFormResponse()) {
             preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER);
 
             Logger::log(Logger::INFO, 'Got pay way form', ['data' => $data['1']['0'], 'full-response' => $this->response]);
@@ -93,16 +94,16 @@ class Gateway
 
         $transactionBackground = new Model\TransactionBackground();
         $transactionBackground
-            ->setReceiverNrb($xmlData['receiverNRB'])
-            ->setReceiverName($xmlData['receiverName'])
-            ->setReceiverAddress($xmlData['receiverAddress'])
-            ->setOrderId($xmlData['orderID'])
-            ->setAmount($xmlData['amount'])
-            ->setCurrency($xmlData['currency'])
-            ->setTitle($xmlData['title'])
-            ->setRemoteId($xmlData['remoteID'])
-            ->setBankHref($xmlData['bankHref'])
-            ->setHash($xmlData['hash']);
+            ->setReceiverNrb((string)$xmlData->receiverNRB)
+            ->setReceiverName((string)$xmlData->receiverName)
+            ->setReceiverAddress((string)$xmlData->receiverAddress)
+            ->setOrderId((string)$xmlData->orderID)
+            ->setAmount((string)$xmlData->amount)
+            ->setCurrency((string)$xmlData->currency)
+            ->setTitle((string)$xmlData->title)
+            ->setRemoteId((string)$xmlData->remoteID)
+            ->setBankHref((string)$xmlData->bankHref)
+            ->setHash((string)$xmlData->hash);
 
         $transactionBackgroundHash = self::generateHash($transactionBackground->toArray());
         if ($transactionBackgroundHash !== $transactionBackground->getHash()) {
@@ -132,10 +133,11 @@ class Gateway
             $xmlData = XMLParser::parse($this->response);
             Logger::log(
                 Logger::EMERGENCY,
-                sprintf('Got error: "%s", code: "%s"', $xmlData['name'], $xmlData['statusCode']),
+                sprintf('Got error: "%s", code: "%s"', $xmlData->name, $xmlData->statusCode),
                 ['data' => $xmlData, 'full-response' => $this->response]
             );
-            throw new RuntimeException($xmlData['name'], $xmlData['statusCode']);
+            var_dump($xmlData);
+            throw new RuntimeException($xmlData->name);
         }
     }
 
@@ -144,12 +146,10 @@ class Gateway
      *
      * @return int
      */
-    private function isPayWayFormResponse()
+    private function isPaywayFormResponse()
     {
         return (preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER));
     }
-
-
 
     /**
      * Checks PHP required environment.
@@ -244,9 +244,8 @@ class Gateway
             Logger::DEBUG,
             sprintf('Got "transactions" field in POST data'),
             [
-                'data-raw'          => $_POST['transactions'],
-                'data-xml'          => $transactionXml,
-                'data-xml-parsed'   => $transactionData,
+                'data-raw' => $_POST['transactions'],
+                'data-xml' => $transactionXml,
             ]
         );
 
@@ -401,10 +400,9 @@ class Gateway
                 break;
 
             default:
-                Logger::log(
-                    Logger::EMERGENCY,
-                    sprintf('Requested action "%s" not supported', $action)
-                );
+                $message = sprintf('Requested action "%s" not supported', $action);
+                Logger::log(Logger::EMERGENCY, $message);
+                throw new RuntimeException($message);
                 break;
         }
 
@@ -438,4 +436,5 @@ class Gateway
 
         return hash(self::$hashingAlgorithm, $result);
     }
+
 }

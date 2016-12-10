@@ -6,11 +6,11 @@
     @author    Piotr Żuralski <piotr@zuralski.net>
     @copyright 2015 Blue Media
     @since     2015-08-08
-    @version   2.3.2
+    @version   2.3.3
 -->
-<project name="Płatności Online BM" default="build:dev">
+<project name="Płatności Online BM" default="build:prod">
 
-    <property environment="env" file="build.properties"/>
+    <property environment="env"/>
     <property name="project.src_dir" value="${project.basedir}/src" override="true"/>
     <property name="project.build_dir" value="${project.basedir}/builds" override="true"/>
     <property name="project.bin_dir" value="${project.basedir}/bin" override="true"/>
@@ -27,13 +27,76 @@
         <mkdir dir="${project.build_dir}/logs/"/>
     </target>
 
+    <target name="composer:get" hidden="true" depends="initialize">
+        <available file="${project.bin_dir}/composer" property="composer:exists" value="true"/>
+        <if>
+            <not><equals arg1="${composer:exists}" arg2="true"/></not>
+            <then>
+                <httpget url="https://getcomposer.org/installer" dir="${project.build_dir}" filename="composer-installer.php"/>
+                <httpget url="https://composer.github.io/installer.sig" dir="${project.build_dir}" filename="composer-installer.php.sha384"/>
+
+                <!--<phpcpd>-->
+                <httpget url="https://phar.phpunit.de/phpcpd.phar" dir="${project.bin_dir}" filename="phpcpd" followRedirects="true"/>
+
+                <!--<phploc>-->
+                <httpget url="https://phar.phpunit.de/phploc.phar" dir="${project.bin_dir}" filename="phploc" followRedirects="true"/>
+
+                <!--<phpmd>-->
+                <httpget url="https://static.phpmd.org/php/latest/phpmd.phar" dir="${project.bin_dir}" filename="phpmd"/>
+
+                <!--<phpdepend>-->
+                <httpget url="https://static.pdepend.org/php/latest/pdepend.phar" dir="${project.bin_dir}" filename="pdepend"/>
+
+                <!--<phpdoc2>-->
+                <httpget url="https://phpdoc.org/phpDocumentor.phar" dir="${project.bin_dir}" filename="phpdoc"/>
+
+                <!--<phpunit>-->
+                <httpget url="https://phar.phpunit.de/phpunit.phar" dir="${project.bin_dir}" filename="phpunit" followRedirects="true"/>
+
+                <httpget url="https://codeception.github.io/codecept.phar" dir="${project.bin_dir}" filename="codecept" followRedirects="true"/>
+                <httpget url="https://phar.phpunit.de/phpdcd.phar" dir="${project.bin_dir}" filename="phpdcd" followRedirects="true"/>
+                <httpget url="https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar" dir="${project.bin_dir}" filename="phpmetrics" followRedirects="true"/>
+                <httpget url="https://github.com/phpmetrics/ComposerExtension/raw/master/composer-extension.phar" dir="${project.bin_dir}" filename="phpmetrics-composer-extension" followRedirects="true"/>
+                <httpget url="https://padraic.github.io/humbug/downloads/humbug.phar" dir="${project.bin_dir}" filename="humbug"/>
+                <httpget url="https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.0.0/php-cs-fixer.phar" dir="${project.bin_dir}" filename="php-cs-fixer" followRedirects="true"/>
+
+                <filehash file="${project.build_dir}/composer-installer.php" algorithm="sha384" propertyname="composer:actual_signature"/>
+                <loadfile file="${project.build_dir}/composer-installer.php.sha384" property="composer:expected_signature"/>
+                <chmod file="${project.build_dir}/composer-installer.php" mode="0700"/>
+                <condition property="composer:veryfied" value="true">
+                    <equals arg1="${composer:actual_signature}" arg2="${composer:expected_signature}" casesensitive="false" trim="true"/>
+                </condition>
+                <if>
+                    <not><equals arg1="${composer:veryfied}" arg2="true"/></not>
+                    <then>
+                        <delete file="${project.build_dir}/composer-installer.php"/>
+                        <delete file="${project.build_dir}/composer-installer.php.sha384"/>
+                        <fail message="Composer: Invalid installer signature (${composer:actual_signature}, ${composer:expected_signature})"/>
+                    </then>
+                    <else>
+                        <exec command="php ${project.build_dir}/composer-installer.php --install-dir=${project.bin_dir} --filename=composer" checkreturn="true" logoutput="true"/>
+                        <delete file="${project.build_dir}/composer-installer.php"/>
+                        <delete file="${project.build_dir}/composer-installer.php.sha384"/>
+                        <chmod file="${project.bin_dir}/composer" mode="0700"/>
+                    </else>
+                </if>
+            </then>
+        </if>
+
+        <composer composer="${project.bin_dir}/composer" command="self-update"/>
+        <composer composer="${project.bin_dir}/composer">
+            <arg line="--version"/>
+        </composer>
+    </target>
+
     <target name="vendors:dev" hidden="true">
-        <composer composer="${project.bin_dir}/composer" command="update">
+        <composer composer="${project.bin_dir}/composer" command="install">
             <arg value="--no-progress"/>
             <arg value="--no-interaction"/>
             <arg value="--no-suggest"/>
             <arg value="--prefer-stable"/>
             <arg value="--prefer-source"/>
+            <arg value="-vvv"/>
         </composer>
         <composer composer="${project.bin_dir}/composer" command="dump-autoload">
             <arg value="--optimize"/>
@@ -41,7 +104,7 @@
     </target>
 
     <target name="vendors:prod" hidden="true">
-        <composer composer="${project.bin_dir}/composer" command="update">
+        <composer composer="${project.bin_dir}/composer" command="install">
             <arg value="--no-dev"/>
             <arg value="--no-progress"/>
             <arg value="--no-interaction"/>
@@ -227,8 +290,8 @@
         </exec>
     </target>
 
-    <target name="build:prod"  description="Builds application for &quot;prod&quot; (production) enviroment" depends="initialize,vendors:prod"/>
-    <target name="build:dev" description="Builds application for &quot;dev&quot; (development) enviroment" depends="initialize,vendors:dev,qc"/>
+    <target name="build:prod"  description="Builds application for &quot;prod&quot; (production) enviroment" depends="composer:get,vendors:prod"/>
+    <target name="build:dev" description="Builds application for &quot;dev&quot; (development) enviroment" depends="composer:get,vendors:dev,qc"/>
 
     <target name="php-cs-fixer">
         <exec executable="${project.bin_dir}/php-cs-fixer" checkreturn="true" logoutput="true">

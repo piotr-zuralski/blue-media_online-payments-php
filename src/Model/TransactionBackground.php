@@ -13,7 +13,7 @@ use DomainException;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Model
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 class TransactionBackground extends AbstractModel
 {

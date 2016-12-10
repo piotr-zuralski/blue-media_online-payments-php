@@ -8,8 +8,23 @@ use BlueMedia\OnlinePayments\Model\ItnIn;
 use DateTime;
 use SimpleXMLElement;
 
+/**
+ * ITN Transformer
+ *
+ * @author    Piotr Żuralski <piotr@zuralski.net>
+ * @copyright 2016 Blue Media
+ * @package   BlueMedia\OnlinePayments\Action\ITN
+ * @since     2016-12-06
+ * @version   2.3.3
+ */
 class Transformer
 {
+    /**
+     * Is it clearance transaction
+     *
+     * @param SimpleXMLElement $transaction
+     * @return bool
+     */
     private static function isArrayClearanceTransaction(SimpleXMLElement $transaction)
     {
         return (
@@ -25,6 +40,12 @@ class Transformer
         );
     }
 
+    /**
+     * Is it clearance transaction
+     *
+     * @param ItnIn $itnModel
+     * @return bool
+     */
     private static function isObjectClearanceTransaction(ItnIn $itnModel)
     {
         return (
@@ -40,11 +61,20 @@ class Transformer
         );
     }
 
+    /**
+     * Transforms model into an array
+     *
+     * @param ItnIn $itnModel
+     * @return array
+     */
     public static function modelToArray(ItnIn $itnModel)
     {
         $isClearanceTransaction = self::isObjectClearanceTransaction($itnModel);
 
         $result = [];
+        $result['customerData'] = [];
+        $result['recurringData'] = [];
+        $result['cardData'] = [];
         /* 01 */$result['serviceID'] = $itnModel->getServiceId();
         /* 02 */$result['orderID'] = $itnModel->getOrderId();
         /* 03 */$result['remoteID'] = $itnModel->getRemoteId();
@@ -64,7 +94,6 @@ class Transformer
         /* 21 */if (!empty($itnModel->getTitle()) && !$isClearanceTransaction) {
             $result['title'] = $itnModel->getTitle();
         }
-        $result['customerData'] = [];
         /* 22 */$result['customerData']['fName'] = $itnModel->getCustomerDatafName();
         /* 23 */$result['customerData']['lName'] = $itnModel->getCustomerDatalName();
         /* 24 */$result['customerData']['streetName'] = $itnModel->getCustomerDataStreetName();
@@ -76,7 +105,6 @@ class Transformer
         /* 30 */$result['customerData']['nrb'] = $itnModel->getCustomerDataNrb();
         /* 31 */$result['customerData']['senderData'] = $itnModel->getCustomerDataSenderData();
         /* 32 */$result['verificationStatus'] = $itnModel->getVerificationStatus();
-
         /* 32 */$result['startAmount'] = $itnModel->getStartAmount();
 
         /* 40 */$result['transferDate'] = (($itnModel->getTransferDate() instanceof DateTime) ?
@@ -92,23 +120,26 @@ class Transformer
         /* 47 */$result['senderBank'] = $itnModel->getSenderBank();
         /* 48 */$result['senderNRB'] = $itnModel->getSenderNRB();
 
-        $result['recurringData'] = [];
-        /* 70 */$result['recurringData']['recurringAction'] = '';
-        /* 71 */$result['recurringData']['clientHash'] = '';
-
-        $result['cardData'] = [];
-        /* 72 */$result['cardData']['index'] = '';
-        /* 73 */$result['cardData']['validityYear'] = '';
-        /* 74 */$result['cardData']['validityMonth'] = '';
-        /* 75 */$result['cardData']['issuer'] = '';
-        /* 76 */$result['cardData']['bin'] = '';
-        /* 77 */$result['cardData']['mask'] = '';
+        /* 70 */$result['recurringData']['recurringAction'] = $itnModel->getRecurringDataRecurringAction();
+        /* 71 */$result['recurringData']['clientHash'] = $itnModel->getRecurringDataClientHash();
+        /* 72 */$result['cardData']['index'] = $itnModel->getCardDataIndex();
+        /* 73 */$result['cardData']['validityYear'] = $itnModel->getCardDataValidityYear();
+        /* 74 */$result['cardData']['validityMonth'] = $itnModel->getCardDataValidityMonth();
+        /* 75 */$result['cardData']['issuer'] = $itnModel->getCardDataIssuer();
+        /* 76 */$result['cardData']['bin'] = $itnModel->getCardDataBin();
+        /* 77 */$result['cardData']['mask'] = $itnModel->getCardDataMask();
 
         /* 99 */$result['Hash'] = $itnModel->getHash();
 
         return $result;
     }
 
+    /**
+     * Transforms ITN request into model
+     *
+     * @param SimpleXMLElement $itn
+     * @return ItnIn
+     */
     public static function toModel(SimpleXMLElement $itn)
     {
         $transaction = $itn->transactions->transaction;
@@ -326,20 +357,35 @@ class Transformer
             $itnModel->setSenderNRB((string)$transaction->senderNRB);
         }
 
-        /* 70 */$recurringData->recurringAction;
-        /* 71 */$recurringData->clientHash;
-
-        /* 72 */$cardData->index;
-        /* 73 */$cardData->validityYear;
-        /* 74 */$cardData->validityMonth;
-        /* 75 */$cardData->issuer;
-        /* 76 */$cardData->bin;
-        /* 77 */$cardData->mask;
-
-        /* 99 */if (isset($itn->hash)) {
-            $itnModel->setHash((string)$itn->hash);
+        /* 70 */if (isset($recurringData->recurringAction)) {
+            $itnModel->setRecurringDataRecurringAction((string)$recurringData->recurringAction);
+        }
+        /* 71 */if (isset($recurringData->clientHash)) {
+            $itnModel->setRecurringDataClientHash((string)$recurringData->clientHash);
+        }
+        /* 72 */if (isset($cardData->index)) {
+            $itnModel->setCardDataIndex((string)$cardData->index);
+        }
+        /* 73 */if (isset($cardData->validityYear)) {
+            $itnModel->setCardDataValidityYear((string)$cardData->validityYear);
+        }
+        /* 74 */if (isset($cardData->validityMonth)) {
+            $itnModel->setCardDataValidityMonth((string)$cardData->validityMonth);
+        }
+        /* 75 */if (isset($cardData->issuer)) {
+            $itnModel->setCardDataIssuer((string)$cardData->issuer);
+        }
+        /* 76 */if (isset($cardData->bin)) {
+            $itnModel->setCardDataBin((string)$cardData->bin);
+        }
+        /* 77 */if (isset($cardData->mask)) {
+            $itnModel->setCardDataMask((string)$cardData->mask);
         }
 
+        /* 99 */
+        if (isset($itn->hash)) {
+            $itnModel->setHash((string)$itn->hash);
+        }
 
         $itnModel->validate();
 

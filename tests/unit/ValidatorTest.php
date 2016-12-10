@@ -10,7 +10,7 @@ use BlueMedia\OnlinePayments\Validator;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Tests
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 class ValidatorTest extends \Codeception\Test\Unit
 {

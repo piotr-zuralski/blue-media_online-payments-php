@@ -1,8 +1,12 @@
-<?php
-
-printf('<a href="./">wstecz</a><br>');
-
-var_dump([
-    '_GET' => $_GET,
-    '_POST' => $_POST,
-]);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Back</title>
+</head>
+<body>
+    <p style="text-align: center;">
+        <a href="./">back</a>
+    </p>
+</body>
+</html>
