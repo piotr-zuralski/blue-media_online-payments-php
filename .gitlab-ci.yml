@@ -20,8 +20,8 @@ before_script:
 .test: &test_definition
   stage: test
   except:
-    - develop
-    - master
+#    - develop
+#    - master
     - tags
   only:
     - branches
