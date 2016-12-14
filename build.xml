@@ -94,7 +94,6 @@
             <arg value="--no-progress"/>
             <arg value="--no-interaction"/>
             <arg value="--no-suggest"/>
-            <arg value="--prefer-stable"/>
             <arg value="--prefer-source"/>
             <arg value="-vvv"/>
         </composer>
@@ -109,7 +108,6 @@
             <arg value="--no-progress"/>
             <arg value="--no-interaction"/>
             <arg value="--no-suggest"/>
-            <arg value="--prefer-stable"/>
             <arg value="--prefer-dist"/>
         </composer>
         <composer composer="${project.bin_dir}/composer" command="dump-autoload">

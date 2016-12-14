@@ -3,7 +3,7 @@
 set -e
 
 VERSION=`cat ./version.txt`
-NOW=`date +"%Y-%m-%d %H:%M:%S.%N%:z (%Z)"`
+NOW=`date -u +"%Y-%m-%dT%H:%M:%S%:z"`
 VERSION_SED=${VERSION} | sed -e 's/v//g' | sed -e 's/.//g' | sed -e 's/0//g'
 OVERRIDE_TAG=0;
 
@@ -24,28 +24,28 @@ fi
 ###########################################
 
 if [[ ! -z "${CI_BUILD_TAG}" ]]; then
-    echo -e 'Build on tag - softfail';
+    printf 'Build on tag - softfail\n';
     exit;
 fi
 
 if [[ ! -z "${CI_BUILD_REF}" ]]; then
-    echo -e 'Commit ref empty!';
+    printf 'Commit ref empty!\n';
     exit 1;
 fi
 
-echo '${VERSION}: "'${VERSION}'"';
-echo '${VERSION_SED}: "'${VERSION_SED}'"';
+printf 'VERSION: "%s"\n' ${VERSION};
+printf 'VERSION_SED: "%s"\n' ${VERSION_SED};
 
 if [[ -z "${VERSION_SED}" ]]; then
-    echo "Version empty!"
+    printf 'Version empty!';
     exit;
 fi
 
 if [[ `git tag -l | grep -q ${VERSION}` ]]; then
-    echo "Version: ${VERSION} already exists\n";
+    printf 'Version: %s already exists\n' ${VERSION};
 
     if [[ ${OVERRIDE_TAG} ]]; then
-        echo "Removing tag\n";
+        printf 'Removing tag\n';
         git tag -d ${VERSION};
         git push origin :${VERSION};
     else

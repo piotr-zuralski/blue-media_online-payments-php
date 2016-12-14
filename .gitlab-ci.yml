@@ -15,7 +15,7 @@ before_script:
   - ./.config/ci/bin/cleanup.sh
   - ./.config/ci/bin/prepare.sh
   - ./.config/ci/bin/php-check-version.sh
-  - ./.config/ci/bin/phing-get.sh
+  - ./.config/ci/bin/php-check-software.sh
 
 .test: &test_definition
   stage: test
