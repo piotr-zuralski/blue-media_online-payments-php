@@ -5,19 +5,16 @@ require_once './LoggerExample.php';
 
 error_reporting(-1);
 ini_set('display_errors', true);
-ini_set('xdebug.var_display_max_children', 128);
-ini_set('xdebug.var_display_max_data', 512);
-ini_set('xdebug.var_display_max_depth', 100);
 
-//if (class_exists('\Symfony\Component\VarDumper\VarDumper')) {
+if (class_exists('\Symfony\Component\VarDumper\VarDumper')) {
     $cloner = new \Symfony\Component\VarDumper\Cloner\VarCloner();
     $cloner->setMaxItems(-1);
     $cloner->setMaxString(-1);
 
     $dumper = new \Symfony\Component\VarDumper\Dumper\HtmlDumper();
     $dumper->setDisplayOptions([
-        'maxDepth' => ini_get('xdebug.var_display_max_depth'),
-        'maxStringLength' => ini_get('xdebug.var_display_max_data'),
+        'maxDepth' => 512,
+        'maxStringLength' => 128,
     ]);
 
     \Symfony\Component\VarDumper\VarDumper::setHandler(
@@ -25,7 +22,7 @@ ini_set('xdebug.var_display_max_depth', 100);
             $dumper->dump($cloner->cloneVar($var));
         }
     );
-//}
+}
 
 use BlueMedia\OnlinePayments\Gateway;
 

@@ -34,21 +34,9 @@
     "provide": {
         "psr/log-implementation": "1.0"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@github.com:phpmetrics/SymfonyExtension.git",
-            "no-api": true
-        }
-    ],
     "autoload": {
         "psr-4": {
             "BlueMedia\\OnlinePayments\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "BlueMedia\\OnlinePayments\\Tests\\": "tests/"
         }
     },
     "minimum-stability": "stable",
