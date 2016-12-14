@@ -1,9 +1,7 @@
 <?php
 
-namespace BlueMedia\OnlinePayments\tests;
-
-use BlueMedia\OnlinePayments\Validator;
 use InvalidArgumentException;
+use BlueMedia\OnlinePayments\Validator;
 
 /**
  * Validator test.
@@ -12,10 +10,19 @@ use InvalidArgumentException;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments\Tests
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
-class ValidatorTest extends \PHPUnit_Framework_TestCase
+class ValidatorTest extends \Codeception\Test\Unit
 {
+    protected function _before()
+    {
+    }
+
+    protected function _after()
+    {
+    }
+
+    // tests
     public function testValidInputValidateAmount()
     {
         $this->assertNull(Validator::validateAmount(123.00));
@@ -197,10 +204,4 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         Validator::validateTitle(str_repeat('A', 96));
     }
 
-//    public function testValidateTitle($value)
-//    {
-//        if (self::testValidateStringLength($value, 95)) {
-//            throw new InvalidArgumentException('Wrong Title format, requires max 95 characters');
-//        }
-//    }
 }

@@ -10,7 +10,7 @@
     },
     "timeout": 10,
     "logs": {
-        "text": "build/humbuglog.txt",
-        "json": "build/humbuglog.json"
+        "text": "builds/humbuglog.txt",
+        "json": "builds/humbuglog.json"
     }
 }

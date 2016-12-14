@@ -80,7 +80,6 @@ return Symfony\CS\Config\Config::create()
         'php_unit_strict',
         'short_array_syntax',
         'short_echo_tag',
-        'strict',
         'strict_param',
     ])
     ->finder($finder)

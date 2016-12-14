@@ -1,0 +1,26 @@
+#
+# http://codeception.com/docs/reference/Configuration
+#
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+settings:
+    bootstrap: _bootstrap.php
+    colors: true
+    memory_limit: 1024M
+    lint: true
+    shuffle: true
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+coverage:
+    enabled: true
+    remote: false
+    include:
+        - src/*
+
+error_level: -1

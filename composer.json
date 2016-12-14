@@ -12,7 +12,8 @@
     "authors": [
         {
             "name": "Piotr Żuralski",
-            "email": "piotr@zuralski.net"
+            "email": "piotr@zuralski.net",
+            "homepage": "http://zuralski.net"
         }
     ],
     "require": {
@@ -27,17 +28,7 @@
         "ext-hash": "*"
     },
     "require-dev": {
-        "phing/phing": "^2.15",
         "phpcq/all-tasks": "^1.1",
-        "phpmetrics/phpmetrics": "^1.10",
-        "phpmetrics/composer-extension": "dev-master|*",
-        "humbug/humbug": "dev-master|*",
-        "friendsofphp/php-cs-fixer": "^1.13",
-        "pdepend/pdepend": "^2.3",
-        "phpmd/phpmd": "^2.5",
-        "sebastian/phpcpd": ">1.4",
-        "sebastian/phpdcd": "^1.0",
-        "phpunit/phpunit": ">4.6",
         "symfony/var-dumper": "^3.2"
     },
     "provide": {

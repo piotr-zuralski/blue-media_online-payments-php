@@ -2,11 +2,11 @@
 
 namespace BlueMedia\OnlinePayments;
 
+use BlueMedia\OnlinePayments\Action\ITN\Transformer;
 use BlueMedia\OnlinePayments\Model\ItnIn;
-use DateTime;
+use BlueMedia\OnlinePayments\Util\XMLParser;
 use GuzzleHttp;
 use RuntimeException;
-use XMLReader;
 use XMLWriter;
 
 /**
@@ -16,23 +16,32 @@ use XMLWriter;
  * @copyright 2015 Blue Media
  * @package   BlueMedia\OnlinePayments
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 class Gateway
 {
-    const MODE_SANDBOX              = 'sandbox';
-    const MODE_LIVE                 = 'live';
+    const MODE_SANDBOX = 'sandbox';
+    const MODE_LIVE = 'live';
 
-    const PAYMENT_DOMAIN_SANDBOX    = 'pay-accept.bm.pl';
-    const PAYMENT_DOMAIN_LIVE       = 'pay.bm.pl';
+    const PAYMENT_DOMAIN_SANDBOX = 'pay-accept.bm.pl';
+    const PAYMENT_DOMAIN_LIVE = 'pay.bm.pl';
 
-    const PAYMENT_ACTON_PAYMENT     = '/payment?';
+    const PAYMENT_ACTON_PAYMENT     = '/payment';
 
-    const STATUS_CONFIRMED          = 'CONFIRMED';
-    const STATUS_NOT_CONFIRMED      = 'NOTCONFIRMED';
+    const STATUS_CONFIRMED = 'CONFIRMED';
+    const STATUS_NOT_CONFIRMED = 'NOTCONFIRMED';
+
+    const DATETIME_FORMAT = 'YmdHis';
+    const DATETIME_FORMAT_LONGER = 'Y-m-d H:i:s';
 
     /** @type string */
     private $response = '';
+
+    /** @type int */
+    protected static $serviceId = 0;
+
+    /** @type string */
+    protected static $hashingSalt = '';
 
     /** @type string */
     protected static $mode = self::MODE_SANDBOX;
@@ -41,13 +50,7 @@ class Gateway
     protected static $hashingAlgorithm = '';
 
     /** @type string */
-    protected static $hashingSalt = '';
-
-    /** @type string */
     protected static $hashingSeparator = '';
-
-    /** @type int */
-    protected static $serviceId = 0;
 
     /**
      * List of supported hashing algorithms.
@@ -69,7 +72,7 @@ class Gateway
     private function parseResponse()
     {
         $this->isErrorResponse();
-        if ($this->isPayWayFormResponse()) {
+        if ($this->isPaywayFormResponse()) {
             preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER);
 
             Logger::log(Logger::INFO, 'Got pay way form', ['data' => $data['1']['0'], 'full-response' => $this->response]);
@@ -87,27 +90,29 @@ class Gateway
      */
     private function parseTransferResponse()
     {
-        $xmlData = $this->parseXml($this->response);
+        $xmlData = XMLParser::parse($this->response);
 
         $transactionBackground = new Model\TransactionBackground();
         $transactionBackground
-            ->setReceiverNrb($xmlData['receiverNRB'])
-            ->setReceiverName($xmlData['receiverName'])
-            ->setReceiverAddress($xmlData['receiverAddress'])
-            ->setOrderId($xmlData['orderID'])
-            ->setAmount($xmlData['amount'])
-            ->setCurrency($xmlData['currency'])
-            ->setTitle($xmlData['title'])
-            ->setRemoteId($xmlData['remoteID'])
-            ->setBankHref($xmlData['bankHref'])
-            ->setHash($xmlData['hash']);
+            ->setReceiverNrb((string)$xmlData->receiverNRB)
+            ->setReceiverName((string)$xmlData->receiverName)
+            ->setReceiverAddress((string)$xmlData->receiverAddress)
+            ->setOrderId((string)$xmlData->orderID)
+            ->setAmount((string)$xmlData->amount)
+            ->setCurrency((string)$xmlData->currency)
+            ->setTitle((string)$xmlData->title)
+            ->setRemoteId((string)$xmlData->remoteID)
+            ->setBankHref((string)$xmlData->bankHref)
+            ->setHash((string)$xmlData->hash);
 
         $transactionBackgroundHash = self::generateHash($transactionBackground->toArray());
         if ($transactionBackgroundHash !== $transactionBackground->getHash()) {
             Logger::log(
                 Logger::EMERGENCY,
-                sprintf('Received wrong hash, calculated hash "%s", received hash "%s"',
-                    $transactionBackgroundHash, $transactionBackground->getHash()
+                sprintf(
+                    'Received wrong hash, calculated hash "%s", received hash "%s"',
+                    $transactionBackgroundHash,
+                    $transactionBackground->getHash()
                 ),
                 ['data' => $transactionBackground->toArray(), 'full-response' => $this->response]
             );
@@ -125,13 +130,14 @@ class Gateway
     private function isErrorResponse()
     {
         if (preg_match_all('@<error>(.*)</error>@Usi', $this->response, $data, PREG_PATTERN_ORDER)) {
-            $xmlData = $this->parseXml($this->response);
+            $xmlData = XMLParser::parse($this->response);
             Logger::log(
                 Logger::EMERGENCY,
-                sprintf('Got error: "%s", code: "%s"', $xmlData['name'], $xmlData['statusCode']),
+                sprintf('Got error: "%s", code: "%s"', $xmlData->name, $xmlData->statusCode),
                 ['data' => $xmlData, 'full-response' => $this->response]
             );
-            throw new RuntimeException($xmlData['name'], $xmlData['statusCode']);
+            var_dump($xmlData);
+            throw new RuntimeException($xmlData->name);
         }
     }
 
@@ -140,38 +146,9 @@ class Gateway
      *
      * @return int
      */
-    private function isPayWayFormResponse()
+    private function isPaywayFormResponse()
     {
         return (preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER));
-    }
-
-    /**
-     * Parses XML response.
-     *
-     * @param $xml
-     *
-     * @return array
-     */
-    private function parseXml($xml)
-    {
-        $data = [];
-        $xmlReader = new XMLReader();
-        $xmlReader->XML($xml, 'UTF-8', (LIBXML_NOERROR | LIBXML_NOWARNING));
-        while ($xmlReader->read()) {
-            switch ($xmlReader->nodeType) {
-                case XMLREADER::ELEMENT:
-                    $nodeName = $xmlReader->name;
-                    $xmlReader->read();
-                    $nodeValue = $xmlReader->value;
-                    if (!empty($nodeName) && !empty(trim($nodeValue))) {
-                        $data[$nodeName] = $nodeValue;
-                    }
-                    break;
-            }
-        }
-        $xmlReader->close();
-
-        return $data;
     }
 
     /**
@@ -241,7 +218,7 @@ class Gateway
     }
 
     /**
-     * Process ITN IN requests.
+     * Process ITN requests.
      *
      * @api
      *
@@ -261,67 +238,18 @@ class Gateway
 
         $transactionXml = $_POST['transactions'];
         $transactionXml = base64_decode($transactionXml, true);
-        $transactionData = $this->parseXml($transactionXml);
+        $transactionData = XMLParser::parse($transactionXml);
 
         Logger::log(
             Logger::DEBUG,
             sprintf('Got "transactions" field in POST data'),
             [
-                'data-raw'          => $_POST['transactions'],
-                'data-xml'          => $transactionXml,
-                'data-xml-parsed'   => $transactionData,
+                'data-raw' => $_POST['transactions'],
+                'data-xml' => $transactionXml,
             ]
         );
 
-        $itnIn = new Model\ItnIn();
-        if (isset($transactionData['serviceID'])) {
-            $itnIn->setServiceId($transactionData['serviceID']);
-        }
-        if (isset($transactionData['orderID'])) {
-            $itnIn->setOrderId($transactionData['orderID']);
-        }
-        if (isset($transactionData['remoteID'])) {
-            $itnIn->setRemoteId($transactionData['remoteID']);
-        }
-        if (isset($transactionData['amount'])) {
-            $itnIn->setAmount($transactionData['amount']);
-        }
-        if (isset($transactionData['currency'])) {
-            $itnIn->setCurrency($transactionData['currency']);
-        }
-        if (isset($transactionData['gatewayID'])) {
-            $itnIn->setGatewayId($transactionData['gatewayID']);
-        }
-        if (isset($transactionData['paymentDate'])) {
-            $paymentDate = DateTime::createFromFormat('YmdHis', $transactionData['paymentDate']);
-            $itnIn->setPaymentDate($paymentDate);
-            if ($paymentDate > (new DateTime())) {
-                Logger::log(Logger::WARNING, sprintf('Payment date "%s" is in future', $paymentDate->format($paymentDate::ATOM)), $transactionData);
-            }
-        }
-        if (isset($transactionData['paymentStatus'])) {
-            switch ($transactionData['paymentStatus']) {
-                case ItnIn::PAYMENT_STATUS_PENDING:
-                case ItnIn::PAYMENT_STATUS_SUCCESS:
-                case ItnIn::PAYMENT_STATUS_FAILURE:
-                    $itnIn->setPaymentStatus($transactionData['paymentStatus']);
-                    break;
-
-                default:
-                    Logger::log(Logger::EMERGENCY, sprintf('Not supported paymentStatus="%s"', $transactionData['paymentStatus']), $transactionData);
-                    break;
-            }
-        }
-        if (isset($transactionData['paymentStatusDetails'])) {
-            $itnIn->setPaymentStatusDetails($transactionData['paymentStatusDetails']);
-        }
-        if (isset($transactionData['hash'])) {
-            $itnIn->setHash($transactionData['hash']);
-        }
-
-        $itnIn->validate();
-
-        return $itnIn;
+        return Transformer::toModel($transactionData);
     }
 
     /**
@@ -336,7 +264,7 @@ class Gateway
      */
     public function doItnInResponse(Model\ItnIn $transaction, $transactionConfirmed = true)
     {
-        $transactionHash = self::generateHash($transaction->toArray());
+        $transactionHash = self::generateHash(Transformer::modelToArray($transaction));
         $confirmationStatus = self::STATUS_NOT_CONFIRMED;
 
         if ($transactionHash === $transaction->getHash()) {
@@ -472,10 +400,9 @@ class Gateway
                 break;
 
             default:
-                Logger::log(
-                    Logger::EMERGENCY,
-                    sprintf('Requested action "%s" not supported', $action)
-                );
+                $message = sprintf('Requested action "%s" not supported', $action);
+                Logger::log(Logger::EMERGENCY, $message);
+                throw new RuntimeException($message);
                 break;
         }
 
@@ -494,12 +421,20 @@ class Gateway
         $result = '';
         foreach ($data as $name => $value) {
             if (mb_strtolower($name) === 'hash' || empty($value)) {
+                unset($data[$name]);
                 continue;
             }
-            $result .= $value . self::$hashingSeparator;
+            if (is_array($value)) {
+                $value = array_filter($value, 'mb_strlen');
+                $value = join(self::$hashingSeparator, $value);
+            }
+            if (!empty($value)) {
+                $result .= $value . self::$hashingSeparator;
+            }
         }
         $result .= self::$hashingSalt;
 
         return hash(self::$hashingAlgorithm, $result);
     }
+
 }

@@ -18,6 +18,6 @@ echo "" > ${php_user_ini_path};
 echo "memory_limit = -1" >> ${php_user_ini_path};
 echo "date.timezone = UTC" >> ${php_user_ini_path};
 
+pear install HTTP_Request2;
+pear install PHP_CodeSniffer;
 
-#alias php_composer='php -d memory_limit=-1'
-#alias php='php -dzend_extension=xdebug.so'

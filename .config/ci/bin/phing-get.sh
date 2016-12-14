@@ -2,8 +2,7 @@
 
 set -e
 
-PHING_VERSION='2.15.0';
-
+PHING_VERSION='latest';
 if [[ ! -f './bin/phing' ]]; then
     printf '\a%s\n' 'Phing: not found, installing';
 
@@ -12,7 +11,7 @@ if [[ ! -f './bin/phing' ]]; then
     ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA512', './bin/phing');");
     ACTUAL_SIGNATURE=${ACTUAL_SIGNATURE}" phing-${PHING_VERSION}.phar";
 
-    if [[ "${EXPECTED_SIGNATURE}" = "${ACTUAL_SIGNATURE}" ]]; then
+    if [[ "${EXPECTED_SIGNATURE}" == "${ACTUAL_SIGNATURE}" ]]; then
         chmod +x ./bin/phing;
     else
         printf '\a%s\n' 'Phing: Invalid signature!';

@@ -11,7 +11,7 @@ use BlueMedia\OnlinePayments\Model;
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
  * @since     2015-08-08
- * @version   2.3.2
+ * @version   2.3.3
  */
 
 /* simulates incoming request */

@@ -9,13 +9,11 @@ phpmetrics:
     # report and violations files
     logging:
         report:
-            xml:    ./build/phpmetrics.xml
-            html:   ./build/phpmetrics.html
-            csv:    ./build/phpmetrics.csv
+            xml:    ./builds/phpmetrics.xml
+            html:   ./builds/phpmetrics.html
+            csv:    ./builds/phpmetrics.csv
         violations:
-            xml:    ./build/violations.xml
-#        chart:
-#            bubbles: ./build/bubbles.svg
+            xml:    ./builds/violations.xml
 
     # condition of failure
 #    failure: average.maintainabilityIndex < 50 or sum.loc > 10000

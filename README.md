@@ -1,4 +1,4 @@
-# Płatności Online BM
+# [Płatności Online BM](https://platnosci.bm.pl/)
 
 Biblioteka integracyjna do systemu Płatności online BM
 

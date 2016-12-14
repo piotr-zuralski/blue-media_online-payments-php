@@ -6,12 +6,11 @@ variables:
   GIT_STRATEGY: fetch
 
 before_script:
-  - ./.config/ci/bin/check-software.sh
+  - ./.config/ci/bin/os-check-software.sh
   - ./.config/ci/bin/cleanup.sh
   - ./.config/ci/bin/prepare.sh
   - ./.config/ci/bin/php-check-version.sh
   - ./.config/ci/bin/phing-get.sh
-  - ./.config/ci/bin/composer-get.sh
 
 .test: &test_definition
   stage: test
@@ -22,8 +21,8 @@ before_script:
   only:
     - branches
   script:
-    - ./bin/phing build:dev
-    - ./bin/phing build:prod
+    - ./bin/phing build:dev -verbose
+    - ./bin/phing build:prod -verbose
 
 #test:
 #  except:
@@ -86,7 +85,7 @@ test-7.1:
 #    untracked: true
 #    when: always
 #    paths:
-#    - build/
+#    - builds/
 #  script:
 #    - echo "ok"
 #
