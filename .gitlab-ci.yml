@@ -1,7 +1,12 @@
-# https://gitlab.com/help/ci/README.md
-# https://gitlab.com/help/ci/yaml/README.md
-# https://gitlab.com/help/ci/examples/php.md
-
+#    Gitlab CI build file
+#    Docs: https://gitlab.com/help/ci/examples/php.md
+#          https://gitlab.com/help/ci/yaml/README.md
+#          https://gitlab.com/help/ci/README.md
+#    @author    Piotr Żuralski <piotr@zuralski.net>
+#    @copyright 2016 Blue Media
+#    @since     2016-12-03
+#    @version   2.3.3
+#
 variables:
   GIT_STRATEGY: fetch
 
