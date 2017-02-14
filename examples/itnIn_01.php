@@ -21,8 +21,8 @@ if (empty($_POST['transactions'])) {
 
 header('Content-Type: application/xml; charset="utf-8"');
 try {
-    /** @type Gateway $gateway */
-    /** @type Model\ItnIn $itnIn */
+    /** @var Gateway $gateway */
+    /** @var Model\ItnIn $itnIn */
     $itnIn = $gateway->doItnIn();
 
     echo $gateway->doItnInResponse($itnIn);

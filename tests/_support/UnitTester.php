@@ -2,7 +2,7 @@
 
 
 /**
- * Inherited Methods
+ * Inherited Methods.
  * @method void wantToTest($text)
  * @method void wantTo($text)
  * @method void execute($callable)
@@ -21,6 +21,6 @@ class UnitTester extends \Codeception\Actor
     use _generated\UnitTesterActions;
 
    /**
-    * Define custom actions here
+    * Define custom actions here.
     */
 }

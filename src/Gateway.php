@@ -2,7 +2,8 @@
 
 namespace BlueMedia\OnlinePayments;
 
-use BlueMedia\OnlinePayments\Action\ITN\Transformer;
+use BlueMedia\OnlinePayments\Action\ITN;
+use BlueMedia\OnlinePayments\Action\PaywayList;
 use BlueMedia\OnlinePayments\Model\ItnIn;
 use BlueMedia\OnlinePayments\Util\XMLParser;
 use GuzzleHttp;
@@ -27,42 +28,44 @@ class Gateway
     const PAYMENT_DOMAIN_LIVE = 'pay.bm.pl';
 
     const PAYMENT_ACTON_PAYMENT     = '/payment';
+    const PAYMENT_ACTON_PAYWAY_LIST = '/paywayList';
 
     const STATUS_CONFIRMED = 'CONFIRMED';
     const STATUS_NOT_CONFIRMED = 'NOTCONFIRMED';
 
     const DATETIME_FORMAT = 'YmdHis';
     const DATETIME_FORMAT_LONGER = 'Y-m-d H:i:s';
+    const DATETIME_TIMEZONE = 'Europe/Warsaw';
 
-    /** @type string */
+    /** @var string */
     private $response = '';
 
-    /** @type int */
+    /** @var int */
     protected static $serviceId = 0;
 
-    /** @type string */
+    /** @var string */
     protected static $hashingSalt = '';
 
-    /** @type string */
+    /** @var string */
     protected static $mode = self::MODE_SANDBOX;
 
-    /** @type string */
+    /** @var string */
     protected static $hashingAlgorithm = '';
 
-    /** @type string */
+    /** @var string */
     protected static $hashingSeparator = '';
 
     /**
      * List of supported hashing algorithms.
      *
-     * @type array
+     * @var array
      */
-    protected $hashingAlgorithmSupported = [
+    protected $hashingAlgorithmSupported = array(
         'md5' => 1,
         'sha1' => 1,
         'sha256' => 1,
         'sha512' => 1,
-    ];
+    );
 
     /**
      * Parse response from Payment System.
@@ -75,7 +78,7 @@ class Gateway
         if ($this->isPaywayFormResponse()) {
             preg_match_all('@<!-- PAYWAY FORM BEGIN -->(.*)<!-- PAYWAY FORM END -->@Usi', $this->response, $data, PREG_PATTERN_ORDER);
 
-            Logger::log(Logger::INFO, 'Got pay way form', ['data' => $data['1']['0'], 'full-response' => $this->response]);
+            Logger::log(Logger::INFO, 'Got pay way form', array('data' => $data['1']['0'], 'full-response' => $this->response));
 
             return htmlspecialchars_decode($data['1']['0']);
         }
@@ -94,16 +97,16 @@ class Gateway
 
         $transactionBackground = new Model\TransactionBackground();
         $transactionBackground
-            ->setReceiverNrb((string)$xmlData->receiverNRB)
-            ->setReceiverName((string)$xmlData->receiverName)
-            ->setReceiverAddress((string)$xmlData->receiverAddress)
-            ->setOrderId((string)$xmlData->orderID)
-            ->setAmount((string)$xmlData->amount)
-            ->setCurrency((string)$xmlData->currency)
-            ->setTitle((string)$xmlData->title)
-            ->setRemoteId((string)$xmlData->remoteID)
-            ->setBankHref((string)$xmlData->bankHref)
-            ->setHash((string)$xmlData->hash);
+            ->setReceiverNrb((string) $xmlData->receiverNRB)
+            ->setReceiverName((string) $xmlData->receiverName)
+            ->setReceiverAddress((string) $xmlData->receiverAddress)
+            ->setOrderId((string) $xmlData->orderID)
+            ->setAmount((string) $xmlData->amount)
+            ->setCurrency((string) $xmlData->currency)
+            ->setTitle((string) $xmlData->title)
+            ->setRemoteId((string) $xmlData->remoteID)
+            ->setBankHref((string) $xmlData->bankHref)
+            ->setHash((string) $xmlData->hash);
 
         $transactionBackgroundHash = self::generateHash($transactionBackground->toArray());
         if ($transactionBackgroundHash !== $transactionBackground->getHash()) {
@@ -114,7 +117,7 @@ class Gateway
                     $transactionBackgroundHash,
                     $transactionBackground->getHash()
                 ),
-                ['data' => $transactionBackground->toArray(), 'full-response' => $this->response]
+                array('data' => $transactionBackground->toArray(), 'full-response' => $this->response)
             );
             throw new RuntimeException('Received wrong hash!');
         }
@@ -134,10 +137,11 @@ class Gateway
             Logger::log(
                 Logger::EMERGENCY,
                 sprintf('Got error: "%s", code: "%s"', $xmlData->name, $xmlData->statusCode),
-                ['data' => $xmlData, 'full-response' => $this->response]
+                array('data' => $xmlData, 'full-response' => $this->response)
             );
-            var_dump($xmlData);
-            throw new RuntimeException($xmlData->name);
+            throw new RuntimeException((string) $xmlData->name);
+        } elseif (preg_match_all('/error(.*)/si', $this->response, $data, PREG_PATTERN_ORDER)) {
+            throw new RuntimeException($this->response);
         }
     }
 
@@ -230,7 +234,7 @@ class Gateway
             Logger::log(
                 Logger::INFO,
                 sprintf('No "transactions" field in POST data'),
-                ['_POST' => $_POST]
+                array('_POST' => $_POST)
             );
 
             return;
@@ -243,13 +247,13 @@ class Gateway
         Logger::log(
             Logger::DEBUG,
             sprintf('Got "transactions" field in POST data'),
-            [
+            array(
                 'data-raw' => $_POST['transactions'],
                 'data-xml' => $transactionXml,
-            ]
+            )
         );
 
-        return Transformer::toModel($transactionData);
+        return ITN\Transformer::toModel($transactionData);
     }
 
     /**
@@ -264,7 +268,7 @@ class Gateway
      */
     public function doItnInResponse(Model\ItnIn $transaction, $transactionConfirmed = true)
     {
-        $transactionHash = self::generateHash(Transformer::modelToArray($transaction));
+        $transactionHash = self::generateHash(ITN\Transformer::modelToArray($transaction));
         $confirmationStatus = self::STATUS_NOT_CONFIRMED;
 
         if ($transactionHash === $transaction->getHash()) {
@@ -274,11 +278,11 @@ class Gateway
             $confirmationStatus = self::STATUS_NOT_CONFIRMED;
         }
 
-        $confirmationList = [
+        $confirmationList = array(
             'serviceID' => self::$serviceId,
             'orderID' => $transaction->getOrderId(),
             'confirmation' => $confirmationStatus,
-        ];
+        );
 
         $confirmationList['hash'] = self::generateHash($confirmationList);
 
@@ -315,14 +319,14 @@ class Gateway
         $transaction->validate();
 
         $url = self::getActionUrl(self::PAYMENT_ACTON_PAYMENT);
-        $request = new GuzzleHttp\Psr7\Request('POST', $url, ['BmHeader' => 'pay-bm']);
+        $request = new GuzzleHttp\Psr7\Request('POST', $url, array('BmHeader' => 'pay-bm'));
 
-        $client = new GuzzleHttp\Client([
+        $client = new GuzzleHttp\Client(array(
             GuzzleHttp\RequestOptions::VERIFY => true,
             'exceptions' => false,
-        ]);
+        ));
 
-        $responseObject = $client->send($request, [GuzzleHttp\RequestOptions::FORM_PARAMS => $transaction->toArray()]);
+        $responseObject = $client->send($request, array(GuzzleHttp\RequestOptions::FORM_PARAMS => $transaction->toArray()));
         $this->response = (string) $responseObject->getBody();
 
         return $this->parseResponse();
@@ -397,6 +401,7 @@ class Gateway
 
         switch ($action) {
             case self::PAYMENT_ACTON_PAYMENT:
+            case self::PAYMENT_ACTON_PAYWAY_LIST:
                 break;
 
             default:
@@ -426,7 +431,7 @@ class Gateway
             }
             if (is_array($value)) {
                 $value = array_filter($value, 'mb_strlen');
-                $value = join(self::$hashingSeparator, $value);
+                $value = implode(self::$hashingSeparator, $value);
             }
             if (!empty($value)) {
                 $result .= $value . self::$hashingSeparator;
@@ -437,4 +442,42 @@ class Gateway
         return hash(self::$hashingAlgorithm, $result);
     }
 
+    /**
+     * @api
+     * @return string
+     * @throws RuntimeException
+     */
+    final public function doPaywayList()
+    {
+        $fields = array(
+            'ServiceID' => self::$serviceId,
+            'MessageID' => md5(time()),
+        );
+        $fields['Hash'] = self::generateHash($fields);
+
+        $request = new GuzzleHttp\Psr7\Request('POST', self::getActionUrl(self::PAYMENT_ACTON_PAYWAY_LIST));
+
+        $client = new GuzzleHttp\Client(array(
+            GuzzleHttp\RequestOptions::VERIFY => true,
+            'exceptions' => false,
+        ));
+
+        $responseObject = $client->send($request, array(GuzzleHttp\RequestOptions::FORM_PARAMS => $fields));
+        $this->response = (string) $responseObject->getBody();
+        $this->isErrorResponse();
+
+        $responseParsed = XMLParser::parse($this->response);
+//        dump([$responseParsed, /*self::generateHash($responseParsed)*/]);
+
+        Logger::log(Logger::DEBUG, '', array(
+            'request' => array($request->getUri()->__toString(), $request->getBody()),
+            'response' => $this->response,
+            'fields' => $fields,
+        ));
+
+        $model = PaywayList\Transformer::toModel($responseParsed);
+        $model->validate((int) $fields['ServiceID'], (string) $fields['MessageID']);
+
+        return $model;
+    }
 }

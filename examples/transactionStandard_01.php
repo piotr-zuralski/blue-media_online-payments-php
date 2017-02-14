@@ -28,5 +28,5 @@ $transactionStandard->setOrderId((string) time())
     ->setLinkValidityTime((new DateTime())->modify('+3days'))
 ;
 
-/** @type Gateway $gateway */
+/** @var Gateway $gateway */
 echo $gateway->doTransactionStandard($transactionStandard);

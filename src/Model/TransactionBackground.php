@@ -21,7 +21,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $receiverNrb;
 
@@ -29,7 +29,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $receiverName;
 
@@ -37,7 +37,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $receiverAddress;
 
@@ -45,7 +45,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $orderId;
 
@@ -53,7 +53,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type float
+     * @var float
      */
     protected $amount;
 
@@ -61,7 +61,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $currency;
 
@@ -69,7 +69,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $title;
 
@@ -77,7 +77,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $remoteId;
 
@@ -85,7 +85,7 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $bankHref;
 
@@ -93,12 +93,12 @@ class TransactionBackground extends AbstractModel
      * (description).
      *
      * @required
-     * @type string
+     * @var string
      */
     protected $hash;
 
     /**
-     * Ustawia amount.
+     * Sets amount.
      *
      * @param float $amount
      *
@@ -113,7 +113,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca amount.
+     * Returns amount.
      *
      * @return float
      */
@@ -123,7 +123,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia bankHref.
+     * Sets bankHref.
      *
      * @param string $bankHref
      *
@@ -137,7 +137,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca bankHref.
+     * Returns bankHref.
      *
      * @return string
      */
@@ -147,7 +147,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia currency.
+     * Sets currency.
      *
      * @param string $currency
      *
@@ -162,7 +162,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca currency.
+     * Returns currency.
      *
      * @return string
      */
@@ -172,7 +172,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia hash.
+     * Sets hash.
      *
      * @param string $hash
      *
@@ -187,7 +187,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca hash.
+     * Returns hash.
      *
      * @return string
      */
@@ -197,7 +197,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia orderId.
+     * Sets orderId.
      *
      * @param string $orderId
      *
@@ -212,7 +212,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca orderId.
+     * Returns orderId.
      *
      * @return string
      */
@@ -222,7 +222,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia receiverAddress.
+     * Sets receiverAddress.
      *
      * @param string $receiverAddress
      *
@@ -236,7 +236,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca receiverAddress.
+     * Returns receiverAddress.
      *
      * @return string
      */
@@ -246,7 +246,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia receiverName.
+     * Sets receiverName.
      *
      * @param string $receiverName
      *
@@ -261,7 +261,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca receiverName.
+     * Returns receiverName.
      *
      * @return string
      */
@@ -271,7 +271,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia receiverNrb.
+     * Sets receiverNrb.
      *
      * @param string $receiverNrb
      *
@@ -286,7 +286,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca receiverNrb.
+     * Returns receiverNrb.
      *
      * @return string
      */
@@ -296,7 +296,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia remoteId.
+     * Sets remoteId.
      *
      * @param string $remoteId
      *
@@ -310,7 +310,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca remoteId.
+     * Returns remoteId.
      *
      * @return string
      */
@@ -320,7 +320,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Ustawia title.
+     * Sets title.
      *
      * @param string $title
      *
@@ -335,7 +335,7 @@ class TransactionBackground extends AbstractModel
     }
 
     /**
-     * Zwraca title.
+     * Returns title.
      *
      * @return string
      */
@@ -380,7 +380,7 @@ class TransactionBackground extends AbstractModel
 
     public function toArray()
     {
-        $result = [];
+        $result = array();
         $result['receiverNRB'] = $this->getReceiverNrb();
         $result['receiverName'] = $this->getReceiverName();
         $result['receiverAddress'] = $this->getReceiverAddress();

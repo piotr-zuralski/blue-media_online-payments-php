@@ -4,7 +4,7 @@ require_once './.config.php';
 
 ini_set('default_charset', 'UTF-8');
 
-$data = [
+$data = array(
     'url'                   => (!empty($_GET['url']) ? $_GET['url'] : ''),
     'sendRequest'           => (!empty($_GET['sendRequest']) ? $_GET['sendRequest'] : 0),
     'serviceID'             => (!empty($_GET['serviceID']) ? $_GET['serviceID'] : $serviceId),
@@ -19,7 +19,7 @@ $data = [
     'hashingAlgorithm'      => (!empty($_GET['hashingAlgorithm']) ? $_GET['hashingAlgorithm'] : 'sha256'),
     'hashingSalt'           => (!empty($_GET['hashingSalt']) ? $_GET['hashingSalt'] : $hashingSalt),
     'hashingSeparator'      => (!empty($_GET['hashingSeparator']) ? $_GET['hashingSeparator'] : $hashingSeparator),
-];
+);
 
 function page_header()
 {
@@ -74,7 +74,7 @@ function make_input_text($fieldName, $fieldValue)
     return sprintf('<div class="form-group"><label for="%1$s" class="control-label">%1$s</label><input name="%1$s" id="%1$s" type="text" class="form-control" value="%2$s"></div>', $fieldName, $fieldValue);
 }
 
-function make_select($fieldName, array $fieldSelects = [], $fieldValue, array $fieldOptions = [])
+function make_select($fieldName, array $fieldSelects = array(), $fieldValue, array $fieldOptions = array())
 {
     $result = sprintf('<div class="form-group"><label for="%1$s" class="control-label">%1$s</label><select name="%1$s" id="%1$s" class="form-control">', $fieldName);
     if (is_array($fieldSelects) && !empty($fieldSelects)) {
@@ -88,7 +88,7 @@ function make_select($fieldName, array $fieldSelects = [], $fieldValue, array $f
     return $result;
 }
 
-function page_form(array $data = [])
+function page_form(array $data = array())
 {
     printf('<form method="GET" action="" class="form-horizontal">');
 
@@ -102,17 +102,17 @@ function page_form(array $data = [])
 
     printf('<div class="form-group"><label for="%1$s" class="control-label">%1$s</label><input name="%1$s" id="%1$s" type="number" class="form-control" min="0.05" max="100000.00" step="0.05" value="%2$01.2f"></div>', 'amount', $data['amount']);
 
-    echo make_select('currency', ['PLN', 'EUR'], $data['currency']);
+    echo make_select('currency', array('PLN', 'EUR'), $data['currency']);
 
     echo make_input_number('gatewayID', $data['gatewayID']);
 
     printf('<div class="form-group"><label for="%1$s" class="control-label">%1$s</label><input name="%1$s" id="%1$s" type="datetime-local" class="form-control" value="%2$s"></div>', 'paymentDate', $data['paymentDate']);
 
-    echo make_select('paymentStatus', ['PENDING', 'SUCCESS', 'FAILURE'], $data['paymentStatus']);
+    echo make_select('paymentStatus', array('PENDING', 'SUCCESS', 'FAILURE'), $data['paymentStatus']);
 
-    echo make_select('paymentStatusDetails', ['AUTHORIZED', 'ACCEPTED', 'INCORRECT_AMOUNT', 'EXPIRED', 'CANCELLED', 'ANOTHER_ERROR'], $data['paymentStatusDetails']);
+    echo make_select('paymentStatusDetails', array('AUTHORIZED', 'ACCEPTED', 'INCORRECT_AMOUNT', 'EXPIRED', 'CANCELLED', 'ANOTHER_ERROR'), $data['paymentStatusDetails']);
 
-    echo make_select('hashingAlgorithm', ['md5', 'sha1', 'sha256', 'sha512'], $data['hashingAlgorithm']);
+    echo make_select('hashingAlgorithm', array('md5', 'sha1', 'sha256', 'sha512'), $data['hashingAlgorithm']);
 
     echo make_input_text('hashingSalt', $data['hashingSalt']);
 
@@ -132,7 +132,7 @@ function page_form(array $data = [])
     printf('</form>');
 }
 
-function page_itn_make(array $data = [])
+function page_itn_make(array $data = array())
 {
     $dataIn = $data;
 
@@ -206,7 +206,7 @@ function page_itn_display($itnXml, $showAdd = false)
         printf('<pre><strong>XML FORMATED:</strong> %s</pre>', PHP_EOL . htmlspecialchars($itnXmlFormated, ENT_SUBSTITUTE));
 
         if ($showAdd) {
-            $itnXmlData = [];
+            $itnXmlData = array();
             $xmlReader = new XMLReader();
             $xmlReader->XML($itnXml, 'UTF-8', (LIBXML_NONET));
             while ($xmlReader->read()) {
@@ -234,17 +234,17 @@ function page_itn_send($itnXml, $data)
     }
 
     $requestUrl = $data['url'];
-    $requestData = [
+    $requestData = array(
         'transactions' => base64_encode($itnXml),
-    ];
-    $requestOptions = [
+    );
+    $requestOptions = array(
         'form_params'       => $requestData,
         'allow_redirects'   => false,
         'http_errors'       => false,
-        'headers'           => [
-            'Cookie'        => 'XDEBUG_SESSION=XDEBUG_ECLIPSE',
-        ],
-    ];
+        'headers'           => array(
+            'Cookie'        => 'XDEBUG_SESSION=PHPSTORM',
+        ),
+    );
 
     $client = new GuzzleHttp\Client();
     $result = $client->post($requestUrl, $requestOptions)->getBody();
@@ -259,9 +259,9 @@ function page_itn_show_helper($itnXml, $data)
     }
 
     $requestUrl = $data['url'];
-    $requestData = [
+    $requestData = array(
         'transactions' => base64_encode($itnXml),
-    ];
+    );
 
     $requestDataString = implode(', ', array_map(
         function ($v, $k) {

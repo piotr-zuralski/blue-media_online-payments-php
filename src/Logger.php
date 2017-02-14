@@ -25,7 +25,7 @@ class Logger
     const INFO      = LogLevel::INFO;
     const DEBUG     = LogLevel::DEBUG;
 
-    /** @type LoggerInterface */
+    /** @var LoggerInterface */
     protected static $logger;
 
     /**
@@ -51,7 +51,7 @@ class Logger
      *
      * @return bool|null
      */
-    public static function log($level, $message, array $context = [])
+    public static function log($level, $message, array $context = array())
     {
         if (is_object(self::$logger) && self::$logger instanceof LoggerInterface) {
             return self::$logger->log($level, $message, $context);

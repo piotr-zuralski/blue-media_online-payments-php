@@ -27,8 +27,7 @@ $transactionStandard
     ->setLinkValidityTime((new DateTime())->modify('+3days'))
 ;
 
-/** @type Gateway $gateway */
-/** @type Model\TransactionBackground $transactionBackground */
-
+/** @var Gateway $gateway */
+/** @var Model\TransactionBackground $transactionBackground */
 $transactionBackground = $gateway->doTransactionBackground($transactionStandard);
 var_export($transactionBackground);

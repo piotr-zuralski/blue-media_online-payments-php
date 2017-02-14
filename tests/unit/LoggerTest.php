@@ -19,6 +19,5 @@ class LoggerTest extends \Codeception\Test\Unit
     // tests
     public function testMe()
     {
-
     }
 }

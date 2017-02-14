@@ -1,7 +1,7 @@
 <?php
 
-use InvalidArgumentException;
 use BlueMedia\OnlinePayments\Validator;
+use InvalidArgumentException;
 
 /**
  * Validator test.
@@ -203,5 +203,4 @@ class ValidatorTest extends \Codeception\Test\Unit
     {
         Validator::validateTitle(str_repeat('A', 96));
     }
-
 }

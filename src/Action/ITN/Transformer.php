@@ -6,10 +6,11 @@ use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Logger;
 use BlueMedia\OnlinePayments\Model\ItnIn;
 use DateTime;
+use DateTimeZone;
 use SimpleXMLElement;
 
 /**
- * ITN Transformer
+ * ITN Transformer.
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2016 Blue Media
@@ -20,9 +21,9 @@ use SimpleXMLElement;
 class Transformer
 {
     /**
-     * Is it clearance transaction
+     * Is it clearance transaction.
      *
-     * @param SimpleXMLElement $transaction
+     * @param  SimpleXMLElement $transaction
      * @return bool
      */
     private static function isArrayClearanceTransaction(SimpleXMLElement $transaction)
@@ -41,9 +42,9 @@ class Transformer
     }
 
     /**
-     * Is it clearance transaction
+     * Is it clearance transaction.
      *
-     * @param ItnIn $itnModel
+     * @param  ItnIn $itnModel
      * @return bool
      */
     private static function isObjectClearanceTransaction(ItnIn $itnModel)
@@ -62,146 +63,150 @@ class Transformer
     }
 
     /**
-     * Transforms model into an array
+     * Transforms model into an array.
      *
-     * @param ItnIn $itnModel
+     * @param  ItnIn $model
      * @return array
      */
-    public static function modelToArray(ItnIn $itnModel)
+    public static function modelToArray(ItnIn $model)
     {
-        $isClearanceTransaction = self::isObjectClearanceTransaction($itnModel);
+        $isClearanceTransaction = self::isObjectClearanceTransaction($model);
 
-        $result = [];
-        $result['customerData'] = [];
-        $result['recurringData'] = [];
-        $result['cardData'] = [];
-        /* 01 */$result['serviceID'] = $itnModel->getServiceId();
-        /* 02 */$result['orderID'] = $itnModel->getOrderId();
-        /* 03 */$result['remoteID'] = $itnModel->getRemoteId();
-        /* 05 */$result['amount'] = $itnModel->getAmount();
-        /* 06 */$result['currency'] = $itnModel->getCurrency();
-        /* 07 */$result['gatewayID'] = $itnModel->getGatewayId();
-        /* 08 */$result['paymentDate'] = (($itnModel->getPaymentDate() instanceof DateTime) ?
-            $itnModel->getPaymentDate()->format(Gateway::DATETIME_FORMAT) : ''
+        $result = array();
+        $result['customerData'] = array();
+        $result['recurringData'] = array();
+        $result['cardData'] = array();
+        /* 01 */$result['serviceID'] = $model->getServiceId();
+        /* 02 */$result['orderID'] = $model->getOrderId();
+        /* 03 */$result['remoteID'] = $model->getRemoteId();
+        /* 05 */$result['amount'] = $model->getAmount();
+        /* 06 */$result['currency'] = $model->getCurrency();
+        /* 07 */$result['gatewayID'] = $model->getGatewayId();
+        /* 08 */$result['paymentDate'] = (($model->getPaymentDate() instanceof DateTime) ?
+            $model->getPaymentDate()->format(Gateway::DATETIME_FORMAT) : ''
         );
-        /* 09 */$result['paymentStatus'] = $itnModel->getPaymentStatus();
-        /* 10 */$result['paymentStatusDetails'] = $itnModel->getPaymentStatusDetails();
-        /* 12 */$result['invoiceNumber'] = $itnModel->getInvoiceNumber();
-        /* 13 */$result['customerNumber'] = $itnModel->getCustomerNumber();
-        /* 14 */$result['customerEmail'] = $itnModel->getCustomerEmail();
+        /* 09 */$result['paymentStatus'] = $model->getPaymentStatus();
+        /* 10 */$result['paymentStatusDetails'] = $model->getPaymentStatusDetails();
+        /* 12 */$result['invoiceNumber'] = $model->getInvoiceNumber();
+        /* 13 */$result['customerNumber'] = $model->getCustomerNumber();
+        /* 14 */$result['customerEmail'] = $model->getCustomerEmail();
 
-        /* 20 */$result['addressIP'] = $itnModel->getAddressIp();
-        /* 21 */if (!empty($itnModel->getTitle()) && !$isClearanceTransaction) {
-            $result['title'] = $itnModel->getTitle();
+        /* 20 */$result['addressIP'] = $model->getAddressIp();
+        /* 21 */if (!empty($model->getTitle()) && !$isClearanceTransaction) {
+            $result['title'] = $model->getTitle();
         }
-        /* 22 */$result['customerData']['fName'] = $itnModel->getCustomerDatafName();
-        /* 23 */$result['customerData']['lName'] = $itnModel->getCustomerDatalName();
-        /* 24 */$result['customerData']['streetName'] = $itnModel->getCustomerDataStreetName();
-        /* 25 */$result['customerData']['streetHouseNo'] = $itnModel->getCustomerDataStreetHouseNo();
-        /* 26 */$result['customerData']['streetStaircaseNo'] = $itnModel->getCustomerDataStreetStaircaseNo();
-        /* 27 */$result['customerData']['streetPremiseNo'] = $itnModel->getCustomerDataStreetPremiseNo();
-        /* 28 */$result['customerData']['postalCode'] = $itnModel->getCustomerDataPostalCode();
-        /* 29 */$result['customerData']['city'] = $itnModel->getCustomerDataCity();
-        /* 30 */$result['customerData']['nrb'] = $itnModel->getCustomerDataNrb();
-        /* 31 */$result['customerData']['senderData'] = $itnModel->getCustomerDataSenderData();
-        /* 32 */$result['verificationStatus'] = $itnModel->getVerificationStatus();
-        /* 32 */$result['startAmount'] = $itnModel->getStartAmount();
+        /* 22 */$result['customerData']['fName'] = $model->getCustomerDatafName();
+        /* 23 */$result['customerData']['lName'] = $model->getCustomerDatalName();
+        /* 24 */$result['customerData']['streetName'] = $model->getCustomerDataStreetName();
+        /* 25 */$result['customerData']['streetHouseNo'] = $model->getCustomerDataStreetHouseNo();
+        /* 26 */$result['customerData']['streetStaircaseNo'] = $model->getCustomerDataStreetStaircaseNo();
+        /* 27 */$result['customerData']['streetPremiseNo'] = $model->getCustomerDataStreetPremiseNo();
+        /* 28 */$result['customerData']['postalCode'] = $model->getCustomerDataPostalCode();
+        /* 29 */$result['customerData']['city'] = $model->getCustomerDataCity();
+        /* 30 */$result['customerData']['nrb'] = $model->getCustomerDataNrb();
+        /* 31 */$result['customerData']['senderData'] = $model->getCustomerDataSenderData();
+        /* 32 */$result['verificationStatus'] = $model->getVerificationStatus();
+        /* 32 */$result['startAmount'] = $model->getStartAmount();
 
-        /* 40 */$result['transferDate'] = (($itnModel->getTransferDate() instanceof DateTime) ?
-            $itnModel->getTransferDate()->format(Gateway::DATETIME_FORMAT) : ''
+        /* 40 */$result['transferDate'] = (($model->getTransferDate() instanceof DateTime) ?
+            $model->getTransferDate()->format(Gateway::DATETIME_FORMAT) : ''
         );
-        /* 41 */$result['transferStatus'] = $itnModel->getTransferStatus();
-        /* 42 */$result['transferStatusDetails'] = $itnModel->getTransferStatusDetails();
-        /* 43 */$result['title'] = $itnModel->getTitle();
-        /* 44 */$result['receiverBank'] = $itnModel->getReceiverBank();
-        /* 44 */$result['receiverNRB'] = $itnModel->getReceiverNRB();
-        /* 45 */$result['receiverName'] = $itnModel->getReceiverName();
-        /* 46 */$result['receiverAddress'] = $itnModel->getReceiverAddress();
-        /* 47 */$result['senderBank'] = $itnModel->getSenderBank();
-        /* 48 */$result['senderNRB'] = $itnModel->getSenderNRB();
+        /* 41 */$result['transferStatus'] = $model->getTransferStatus();
+        /* 42 */$result['transferStatusDetails'] = $model->getTransferStatusDetails();
+        /* 43 */$result['title'] = $model->getTitle();
+        /* 44 */$result['receiverBank'] = $model->getReceiverBank();
+        /* 44 */$result['receiverNRB'] = $model->getReceiverNRB();
+        /* 45 */$result['receiverName'] = $model->getReceiverName();
+        /* 46 */$result['receiverAddress'] = $model->getReceiverAddress();
+        /* 47 */$result['senderBank'] = $model->getSenderBank();
+        /* 48 */$result['senderNRB'] = $model->getSenderNRB();
 
-        /* 70 */$result['recurringData']['recurringAction'] = $itnModel->getRecurringDataRecurringAction();
-        /* 71 */$result['recurringData']['clientHash'] = $itnModel->getRecurringDataClientHash();
-        /* 72 */$result['cardData']['index'] = $itnModel->getCardDataIndex();
-        /* 73 */$result['cardData']['validityYear'] = $itnModel->getCardDataValidityYear();
-        /* 74 */$result['cardData']['validityMonth'] = $itnModel->getCardDataValidityMonth();
-        /* 75 */$result['cardData']['issuer'] = $itnModel->getCardDataIssuer();
-        /* 76 */$result['cardData']['bin'] = $itnModel->getCardDataBin();
-        /* 77 */$result['cardData']['mask'] = $itnModel->getCardDataMask();
+        /* 70 */$result['recurringData']['recurringAction'] = $model->getRecurringDataRecurringAction();
+        /* 71 */$result['recurringData']['clientHash'] = $model->getRecurringDataClientHash();
+        /* 72 */$result['cardData']['index'] = $model->getCardDataIndex();
+        /* 73 */$result['cardData']['validityYear'] = $model->getCardDataValidityYear();
+        /* 74 */$result['cardData']['validityMonth'] = $model->getCardDataValidityMonth();
+        /* 75 */$result['cardData']['issuer'] = $model->getCardDataIssuer();
+        /* 76 */$result['cardData']['bin'] = $model->getCardDataBin();
+        /* 77 */$result['cardData']['mask'] = $model->getCardDataMask();
 
-        /* 99 */$result['Hash'] = $itnModel->getHash();
+        /* 99 */$result['Hash'] = $model->getHash();
 
         return $result;
     }
 
     /**
-     * Transforms ITN request into model
+     * Transforms ITN request into model.
      *
-     * @param SimpleXMLElement $itn
+     * @param  SimpleXMLElement $xml
      * @return ItnIn
      */
-    public static function toModel(SimpleXMLElement $itn)
+    public static function toModel(SimpleXMLElement $xml)
     {
-        $transaction = $itn->transactions->transaction;
+        $transaction = $xml->transactions->transaction;
         $customerData = $transaction->customerData;
         $recurringData = $transaction->recurringData;
         $cardData = $transaction->cardData;
         $isClearanceTransaction = self::isArrayClearanceTransaction($transaction);
 
-        $itnModel = new ItnIn();
-        /* 01 */if ($itn->serviceID) {
-            $itnModel->setServiceId((string)$itn->serviceID);
+        $model = new ItnIn();
+        /* 01 */if (isset($xml->serviceID)) {
+            $model->setServiceId((string) $xml->serviceID);
         }
 
         /* 02 */if (isset($transaction->orderID)) {
-            $itnModel->setOrderId((string)$transaction->orderID);
+            $model->setOrderId((string) $transaction->orderID);
         }
         /* 03 */if (isset($transaction->remoteID)) {
-            $itnModel->setRemoteId((string)$transaction->remoteID);
+            $model->setRemoteId((string) $transaction->remoteID);
         }
         /* 03 */if (isset($transaction->remoteOutID)) {
-            $itnModel->setRemoteOutID((string)$transaction->remoteOutID);
+            $model->setRemoteOutID((string) $transaction->remoteOutID);
         }
 
         /* 05 */if (isset($transaction->amount)) {
-            $itnModel->setAmount((string)$transaction->amount);
+            $model->setAmount((string) $transaction->amount);
         }
         /* 06 */if (isset($transaction->currency)) {
-            $itnModel->setCurrency((string)$transaction->currency);
+            $model->setCurrency((string) $transaction->currency);
         }
         /* 07 */if (isset($transaction->gatewayID)) {
-            $itnModel->setGatewayId((string)$transaction->gatewayID);
+            $model->setGatewayId((string) $transaction->gatewayID);
         }
         /* 08 */if (isset($transaction->paymentDate)) {
-            $paymentDate = DateTime::createFromFormat(Gateway::DATETIME_FORMAT, (string)$transaction->paymentDate);
-            $itnModel->setPaymentDate($paymentDate);
-            if ($paymentDate > (new DateTime())) {
+            $paymentDate = DateTime::createFromFormat(
+                Gateway::DATETIME_FORMAT,
+                (string) $transaction->paymentDate,
+                new DateTimeZone(Gateway::DATETIME_TIMEZONE)
+            );
+            $model->setPaymentDate($paymentDate);
+            if ($paymentDate > (new DateTime('now', new DateTimeZone(Gateway::DATETIME_TIMEZONE)))) {
                 Logger::log(
                     Logger::WARNING,
                     sprintf('paymentDate "%s" is in future', $paymentDate->format($paymentDate::ATOM)),
-                    ['itn' => $itn]
+                    array('itn' => $xml)
                 );
             }
         }
         /* 09 */if (isset($transaction->paymentStatus)) {
-            switch ((string)$transaction->paymentStatus) {
+            switch ((string) $transaction->paymentStatus) {
                 case ItnIn::PAYMENT_STATUS_PENDING:
                 case ItnIn::PAYMENT_STATUS_SUCCESS:
                 case ItnIn::PAYMENT_STATUS_FAILURE:
-                    $itnModel->setPaymentStatus((string)$transaction->paymentStatus);
+                    $model->setPaymentStatus((string) $transaction->paymentStatus);
                     break;
 
                 default:
                     Logger::log(
                         Logger::EMERGENCY,
-                        sprintf('Not supported paymentStatus="%s"', (string)$transaction->paymentStatus),
-                        ['itn' => $itn]
+                        sprintf('Not supported paymentStatus="%s"', (string) $transaction->paymentStatus),
+                        array('itn' => $xml)
                     );
                     break;
             }
         }
         /* 10 */if (isset($transaction->paymentStatusDetails)) {
-            switch ((string)$transaction->paymentStatusDetails) {
+            switch ((string) $transaction->paymentStatusDetails) {
                 case ItnIn::PAYMENT_STATUS_DETAILS_AUTHORIZED:
                 case ItnIn::PAYMENT_STATUS_DETAILS_ACCEPTED:
                 case ItnIn::PAYMENT_STATUS_DETAILS_REJECTED:
@@ -210,185 +215,189 @@ class Transformer
                 case ItnIn::PAYMENT_STATUS_DETAILS_CANCELLED:
                 case ItnIn::PAYMENT_STATUS_DETAILS_ANOTHER_ERROR:
                 case ItnIn::PAYMENT_STATUS_DETAILS_REJECTED_BY_USER:
-                    $itnModel->setPaymentStatusDetails((string)$transaction->paymentStatusDetails);
+                    $model->setPaymentStatusDetails((string) $transaction->paymentStatusDetails);
                     break;
 
                 default:
                     Logger::log(
                         Logger::EMERGENCY,
-                        sprintf('Not supported paymentStatusDetails="%s"', (string)$transaction->paymentStatusDetails),
-                        ['itn' => $itn]
+                        sprintf('Not supported paymentStatusDetails="%s"', (string) $transaction->paymentStatusDetails),
+                        array('itn' => $xml)
                     );
                     break;
             }
         }
         /* 12 */if (isset($transaction->invoiceNumber)) {
-            $itnModel->setInvoiceNumber((string)$transaction->invoiceNumber);
+            $model->setInvoiceNumber((string) $transaction->invoiceNumber);
         }
         /* 13 */if (isset($transaction->customerNumber)) {
-            $itnModel->setCustomerNumber((string)$transaction->customerNumber);
+            $model->setCustomerNumber((string) $transaction->customerNumber);
         }
         /* 14 */if (isset($transaction->customerEmail)) {
-            $itnModel->setCustomerEmail((string)$transaction->customerEmail);
+            $model->setCustomerEmail((string) $transaction->customerEmail);
         }
 
         /* 20 */if (isset($transaction->addressIP)) {
-            $itnModel->setAddressIp((string)$transaction->addressIP);
+            $model->setAddressIp((string) $transaction->addressIP);
         }
         /* 21 */if (isset($transaction->title) && !$isClearanceTransaction) {
-            $itnModel->setTitle((string)$transaction->title);
+            $model->setTitle((string) $transaction->title);
         }
         /* 22 */if (isset($customerData->fName)) {
-            $itnModel->setCustomerDatafName((string)$customerData->fName);
+            $model->setCustomerDatafName((string) $customerData->fName);
         }
         /* 23 */if (isset($customerData->lName)) {
-            $itnModel->setCustomerDatalName((string)$customerData->lName);
+            $model->setCustomerDatalName((string) $customerData->lName);
         }
         /* 24 */if (isset($customerData->streetName)) {
-            $itnModel->setCustomerDataStreetName((string)$customerData->streetName);
+            $model->setCustomerDataStreetName((string) $customerData->streetName);
         }
         /* 25 */if (isset($customerData->streetHouseNo)) {
-            $itnModel->setCustomerDataStreetHouseNo((string)$customerData->streetHouseNo);
+            $model->setCustomerDataStreetHouseNo((string) $customerData->streetHouseNo);
         }
         /* 26 */if (isset($customerData->streetStaircaseNo)) {
-            $itnModel->setCustomerDataStreetStaircaseNo((string)$customerData->streetStaircaseNo);
+            $model->setCustomerDataStreetStaircaseNo((string) $customerData->streetStaircaseNo);
         }
         /* 27 */if (isset($customerData->streetPremiseNo)) {
-            $itnModel->setCustomerDataStreetPremiseNo((string)$customerData->streetPremiseNo);
+            $model->setCustomerDataStreetPremiseNo((string) $customerData->streetPremiseNo);
         }
         /* 28 */if (isset($customerData->postalCode)) {
-            $itnModel->setCustomerDataPostalCode((string)$customerData->postalCode);
+            $model->setCustomerDataPostalCode((string) $customerData->postalCode);
         }
         /* 29 */if (isset($customerData->city)) {
-            $itnModel->setCustomerDataCity((string)$customerData->city);
+            $model->setCustomerDataCity((string) $customerData->city);
         }
         /* 30 */if (isset($customerData->nrb)) {
-            $itnModel->setCustomerDataNrb((string)$customerData->nrb);
+            $model->setCustomerDataNrb((string) $customerData->nrb);
         }
         /* 31 */if (isset($customerData->senderData)) {
-            $itnModel->setCustomerDataSenderData((string)$customerData->senderData);
+            $model->setCustomerDataSenderData((string) $customerData->senderData);
         }
         /* 32 */if (isset($transaction->verificationStatus)) {
-            switch ((string)$transaction->verificationStatus) {
+            switch ((string) $transaction->verificationStatus) {
                 case ItnIn::VERIFICATION_STATUS_NEGATIVE:
                 case ItnIn::VERIFICATION_STATUS_PENDING:
                 case ItnIn::VERIFICATION_STATUS_POSITIVE:
-                    $itnModel->setVerificationStatus((string)$transaction->verificationStatus);
+                    $model->setVerificationStatus((string) $transaction->verificationStatus);
                     break;
 
                 default:
                     Logger::log(
                         Logger::EMERGENCY,
-                        sprintf('Not supported verificationStatus="%s"', (string)$transaction->verificationStatus),
-                        ['itn' => $itn]
+                        sprintf('Not supported verificationStatus="%s"', (string) $transaction->verificationStatus),
+                        array('itn' => $xml)
                     );
                     break;
             }
         }
         /* 32 */if (isset($transaction->startAmount)) {
-            $itnModel->setStartAmount((string)$transaction->startAmount);
+            $model->setStartAmount((string) $transaction->startAmount);
         }
 
         /* 40 */if (isset($transaction->transferDate)) {
-            $transferDate = DateTime::createFromFormat(Gateway::DATETIME_FORMAT, (string)$transaction->transferDate);
-            $itnModel->setTransferDate($transferDate);
-            if ($transferDate > (new DateTime())) {
+            $transferDate = DateTime::createFromFormat(
+                Gateway::DATETIME_FORMAT,
+                (string) $transaction->transferDate,
+                new DateTimeZone(Gateway::DATETIME_TIMEZONE)
+            );
+            $model->setTransferDate($transferDate);
+            if ($transferDate > (new DateTime('now', new DateTimeZone(Gateway::DATETIME_TIMEZONE)))) {
                 Logger::log(
                     Logger::WARNING,
                     sprintf('transferDate "%s" is in future', $transferDate->format($transferDate::ATOM)),
-                    ['itn' => $itn]
+                    array('itn' => $xml)
                 );
             }
         }
         /* 41 */if (isset($transaction->transferStatus)) {
-            switch ((string)$transaction->transferStatus) {
+            switch ((string) $transaction->transferStatus) {
                 case ItnIn::PAYMENT_STATUS_PENDING:
                 case ItnIn::PAYMENT_STATUS_SUCCESS:
                 case ItnIn::PAYMENT_STATUS_FAILURE:
-                    $itnModel->setTransferStatus((string)$transaction->transferStatus);
+                    $model->setTransferStatus((string) $transaction->transferStatus);
                     break;
 
                 default:
                     Logger::log(
                         Logger::EMERGENCY,
-                        sprintf('Not supported transferStatus="%s"', (string)$transaction->transferStatus),
-                        ['itn' => $itn]
+                        sprintf('Not supported transferStatus="%s"', (string) $transaction->transferStatus),
+                        array('itn' => $xml)
                     );
                     break;
             }
         }
         /* 42 */if (isset($transaction->transferStatusDetails)) {
-            switch ((string)$transaction->transferStatusDetails) {
+            switch ((string) $transaction->transferStatusDetails) {
                 case ItnIn::PAYMENT_STATUS_DETAILS_AUTHORIZED:
                 case ItnIn::PAYMENT_STATUS_DETAILS_CANCELLED:
                 case ItnIn::PAYMENT_STATUS_DETAILS_CONFIRMED:
                 case ItnIn::PAYMENT_STATUS_DETAILS_ANOTHER_ERROR:
-                    $itnModel->setTransferStatusDetails((string)$transaction->transferStatusDetails);
+                    $model->setTransferStatusDetails((string) $transaction->transferStatusDetails);
                     break;
 
                 default:
                     Logger::log(
                         Logger::EMERGENCY,
-                        sprintf('Not supported transferStatusDetails="%s"', (string)$transaction->transferStatusDetails),
-                        ['itn' => $itn]
+                        sprintf('Not supported transferStatusDetails="%s"', (string) $transaction->transferStatusDetails),
+                        array('itn' => $xml)
                     );
                     break;
             }
         }
         /* 43 */if (isset($transaction->title) && $isClearanceTransaction) {
-            $itnModel->setTitle((string)$transaction->title);
+            $model->setTitle((string) $transaction->title);
         }
         /* 44 */if (isset($transaction->receiverBank)) {
-            $itnModel->setReceiverBank((string)$transaction->receiverBank);
+            $model->setReceiverBank((string) $transaction->receiverBank);
         }
         /* 44 */if (isset($transaction->receiverNRB)) {
-            $itnModel->setReceiverNRB((string)$transaction->receiverNRB);
+            $model->setReceiverNRB((string) $transaction->receiverNRB);
         }
         /* 45 */if (isset($transaction->receiverName)) {
-            $itnModel->setReceiverName((string)$transaction->receiverName);
+            $model->setReceiverName((string) $transaction->receiverName);
         }
         /* 46 */if (isset($transaction->receiverAddress)) {
-            $itnModel->setReceiverAddress((string)$transaction->receiverAddress);
+            $model->setReceiverAddress((string) $transaction->receiverAddress);
         }
         /* 47 */if (isset($transaction->senderBank)) {
-            $itnModel->setSenderBank((string)$transaction->senderBank);
+            $model->setSenderBank((string) $transaction->senderBank);
         }
         /* 48 */if (isset($transaction->senderNRB)) {
-            $itnModel->setSenderNRB((string)$transaction->senderNRB);
+            $model->setSenderNRB((string) $transaction->senderNRB);
         }
 
         /* 70 */if (isset($recurringData->recurringAction)) {
-            $itnModel->setRecurringDataRecurringAction((string)$recurringData->recurringAction);
+            $model->setRecurringDataRecurringAction((string) $recurringData->recurringAction);
         }
         /* 71 */if (isset($recurringData->clientHash)) {
-            $itnModel->setRecurringDataClientHash((string)$recurringData->clientHash);
+            $model->setRecurringDataClientHash((string) $recurringData->clientHash);
         }
         /* 72 */if (isset($cardData->index)) {
-            $itnModel->setCardDataIndex((string)$cardData->index);
+            $model->setCardDataIndex((string) $cardData->index);
         }
         /* 73 */if (isset($cardData->validityYear)) {
-            $itnModel->setCardDataValidityYear((string)$cardData->validityYear);
+            $model->setCardDataValidityYear((string) $cardData->validityYear);
         }
         /* 74 */if (isset($cardData->validityMonth)) {
-            $itnModel->setCardDataValidityMonth((string)$cardData->validityMonth);
+            $model->setCardDataValidityMonth((string) $cardData->validityMonth);
         }
         /* 75 */if (isset($cardData->issuer)) {
-            $itnModel->setCardDataIssuer((string)$cardData->issuer);
+            $model->setCardDataIssuer((string) $cardData->issuer);
         }
         /* 76 */if (isset($cardData->bin)) {
-            $itnModel->setCardDataBin((string)$cardData->bin);
+            $model->setCardDataBin((string) $cardData->bin);
         }
         /* 77 */if (isset($cardData->mask)) {
-            $itnModel->setCardDataMask((string)$cardData->mask);
+            $model->setCardDataMask((string) $cardData->mask);
         }
 
         /* 99 */
-        if (isset($itn->hash)) {
-            $itnModel->setHash((string)$itn->hash);
+        if (isset($xml->hash)) {
+            $model->setHash((string) $xml->hash);
         }
 
-        $itnModel->validate();
+        $model->validate();
 
-        return $itnModel;
+        return $model;
     }
 }

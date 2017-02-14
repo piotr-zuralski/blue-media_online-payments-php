@@ -12,7 +12,7 @@ use Psr\Log\AbstractLogger;
  */
 class LoggerExample extends AbstractLogger
 {
-    private $logStack = [];
+    private $logStack = array();
 
     /**
      * Logs with an arbitrary level.
@@ -22,14 +22,14 @@ class LoggerExample extends AbstractLogger
      * @param  array  $context
      * @return null
      */
-    public function log($level, $message, array $context = [])
+    public function log($level, $message, array $context = array())
     {
-        $data = [
+        $data = array(
             'datetime'  => date(DateTime::ATOM),
             'level'     => $level,
             'message'   => $message,
             'context'   => $context,
-        ];
+        );
 
         array_push($this->logStack, $data);
         file_put_contents(

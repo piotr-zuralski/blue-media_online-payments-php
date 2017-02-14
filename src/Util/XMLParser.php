@@ -3,12 +3,12 @@
 namespace BlueMedia\OnlinePayments\Util;
 
 use BlueMedia\OnlinePayments\Logger;
-use SimpleXMLElement;
-use RuntimeException;
 use Exception;
+use RuntimeException;
+use SimpleXMLElement;
 
 /**
- * XMLParser
+ * XMLParser.
  *
  * @package BlueMedia\OnlinePayments\Util
  */
@@ -18,7 +18,7 @@ class XMLParser
     /**
      * Parses XML response.
      *
-     * @param string $xml
+     * @param  string           $xml
      * @return SimpleXMLElement
      */
     public static function parse($xml)
@@ -29,7 +29,7 @@ class XMLParser
             Logger::log(
                 Logger::ERROR,
                 $exception->getMessage(),
-                ['exception' => $exception, 'xml' => $xml]
+                array('exception' => $exception, 'xml' => $xml)
             );
             throw new RuntimeException($exception->getMessage(), $exception->getCode(), $exception);
         }

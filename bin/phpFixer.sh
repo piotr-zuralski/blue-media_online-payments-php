@@ -9,7 +9,12 @@ if [[ ${_pwd} == */bin ]]; then
     _pwd=$(pwd -P);
 fi
 
-source ${_pwd}/bin/build.sh;
+#source ${_pwd}/bin/build.sh;
+
+if [ ! -f "./bin/php-cs-fixer" ]; then
+    wget https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.1.0/php-cs-fixer.phar -o /dev/null -O bin/php-cs-fixer;
+    chmod +x bin/php-cs-fixer;
+fi
 
 if [ -f "./bin/php-cs-fixer" ]; then
     ./bin/php-cs-fixer fix . --verbose

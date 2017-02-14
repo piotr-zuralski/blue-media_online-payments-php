@@ -22,107 +22,114 @@ class TransactionStandard extends AbstractModel
     /**
      * Service id.
      *
-     * @type int
+     * @var int
      */
     protected $serviceId;
 
     /**
      * Transaction order id.
      *
-     * @type string
+     * @var string
      */
     protected $orderId;
 
     /**
      * Transaction amount.
      *
-     * @type float
+     * @var float
      */
     protected $amount;
 
     /**
      * Transaction description.
      *
-     * @type string
+     * @var string
      */
     protected $description;
 
     /**
      * Transaction gateway id.
      *
-     * @type int
+     * @var int
      */
     protected $gatewayId;
 
     /**
      * Transaction currency.
      *
-     * @type string
+     * @var string
      */
     protected $currency;
 
     /**
      * Transaction customer e-mail address.
      *
-     * @type string
+     * @var string
      */
     protected $customerEmail;
 
     /**
      * Transaction customer bank account number.
      *
-     * @type string
+     * @var string
      */
     protected $customerNrb;
 
     /**
      * Transaction tax country.
      *
-     * @type string
+     * @var string
      */
     protected $taxCountry;
 
     /**
      * Customer IP address.
      *
-     * @type string
+     * @var string
      */
     protected $customerIp;
 
     /**
      * Transaction title.
      *
-     * @type string
+     * @var string
      */
     protected $title;
 
     /**
      * Transaction receiver name.
      *
-     * @type string
+     * @var string
      */
     protected $receiverName;
 
     /**
      * Transaction validity time.
      *
-     * @type DateTime
+     * @var DateTime
      */
     protected $validityTime;
 
     /**
      * Transaction link validity time.
      *
-     * @type DateTime
+     * @var DateTime
      */
     protected $linkValidityTime;
 
     /**
      * Hash.
      *
-     * @type string
+     * @var string
      */
     protected $hash;
+
+    /**
+     * Products.
+     *
+     * @var ProductList
+     */
+    private $products;
 
     /**
      * Set amount.
@@ -499,6 +506,18 @@ class TransactionStandard extends AbstractModel
         return $this->validityTime;
     }
 
+    public function setProducts(ProductList $products)
+    {
+        $this->products = $products;
+
+        return $this;
+    }
+
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
     /**
      * Validates model.
      *
@@ -528,10 +547,10 @@ class TransactionStandard extends AbstractModel
      */
     public function toArray()
     {
-        $result = [];
-        $result['ServiceID'] = $this->getServiceId();
-        $result['OrderID'] = $this->getOrderId();
-        $result['Amount'] = $this->getAmount();
+        $result = array();
+        /* 01 */$result['ServiceID'] = $this->getServiceId();
+        /* 02 */$result['OrderID'] = $this->getOrderId();
+        /* 03 */$result['Amount'] = $this->getAmount();
 
         if (!empty($this->getDescription())) {
             $result['Description'] = $this->getDescription();
@@ -546,20 +565,24 @@ class TransactionStandard extends AbstractModel
             $result['CustomerEmail'] = $this->getCustomerEmail();
         }
         if (!empty($this->getCustomerNrb())) {
-            $result['CustomerNRB'] = $this->getCustomerNrb();
+            /* 08 */$result['CustomerNRB'] = $this->getCustomerNrb();
         }
         if (!empty($this->getTaxCountry())) {
-            $result['TaxCountry'] = $this->getTaxCountry();
+            /* 09 */$result['TaxCountry'] = $this->getTaxCountry();
         }
         if (!empty($this->getCustomerIp())) {
-            $result['CustomerIP'] = $this->getCustomerIp();
+            /* 10 */$result['CustomerIP'] = $this->getCustomerIp();
         }
         if (!empty($this->getTitle())) {
-            $result['Title'] = $this->getTitle();
+            /* 11 */$result['Title'] = $this->getTitle();
         }
         if (!empty($this->getReceiverName())) {
-            $result['ReceiverName'] = $this->getReceiverName();
+            /* 12 */$result['ReceiverName'] = $this->getReceiverName();
         }
+        if (!empty($this->getReceiverName())) {
+            /* 15 */$result['Products'] = base64_encode($this->getReceiverName());
+        }
+
         if ($this->getValidityTime() instanceof DateTime) {
             $result['ValidityTime'] = $this->getValidityTime()->format('Y-m-d H:i:s');
         }
