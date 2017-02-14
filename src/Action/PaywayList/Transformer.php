@@ -3,8 +3,6 @@
 namespace BlueMedia\OnlinePayments\Action\PaywayList;
 
 use BlueMedia\OnlinePayments\Gateway;
-use BlueMedia\OnlinePayments\PaywayList\GatewayModel;
-use BlueMedia\OnlinePayments\PaywayList\Model;
 use DateTime;
 use DateTimeZone;
 use SimpleXMLElement;
@@ -78,9 +76,9 @@ class Transformer
                     }
                     if (isset($gateway->statusDate)) {
                         $gatewayModel->setStatusDate(DateTime::createFromFormat(
-                            \BlueMedia\OnlinePayments\Gateway::DATETIME_FORMAT_LONGER,
+                            Gateway::DATETIME_FORMAT_LONGER,
                             (string) $gateway->statusDate,
-                            new DateTimeZone(\BlueMedia\OnlinePayments\Gateway::DATETIME_TIMEZONE)
+                            new DateTimeZone(Gateway::DATETIME_TIMEZONE)
                         ));
                     }
 

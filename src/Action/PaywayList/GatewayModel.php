@@ -150,6 +150,8 @@ class GatewayModel extends AbstractModel
     private $statusDate;
 
     /**
+     * Returns gateway id.
+     *
      * @return int
      */
     public function getGatewayId()
@@ -158,6 +160,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Sets gateway id.
+     *
      * @param  int   $gatewayId
      * @return $this
      */
@@ -169,6 +173,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Returns gateway name.
+     *
      * @return string
      */
     public function getGatewayName()
@@ -177,6 +183,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Sets gateway name.
+     *
      * @param  string $gatewayName
      * @return $this
      */
@@ -188,6 +196,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Returns gateway type.
+     *
      * @return string
      */
     public function getGatewayType()
@@ -196,6 +206,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Sets gateway type.
+     *
      * @param  string $gatewayType
      * @return $this
      */
@@ -207,6 +219,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Returns bank name.
+     *
      * @return string
      */
     public function getBankName()
@@ -215,6 +229,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Sets bank name.
+     *
      * @param  string $bankName
      * @return $this
      */
@@ -226,6 +242,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Returns icon URL.
+     *
      * @return string
      */
     public function getIconUrl()
@@ -234,6 +252,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Sets icon URL.
+     *
      * @param  string $iconUrl
      * @return $this
      */
@@ -245,6 +265,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Returns status date.
+     *
      * @return DateTime
      */
     public function getStatusDate()
@@ -253,6 +275,8 @@ class GatewayModel extends AbstractModel
     }
 
     /**
+     * Sets status date.
+     *
      * @param  DateTime $statusDate
      * @return $this
      */
@@ -264,7 +288,7 @@ class GatewayModel extends AbstractModel
     }
 
     /**
-     * Is card.
+     * Is gateway a card.
      *
      * @return bool
      */
@@ -274,7 +298,7 @@ class GatewayModel extends AbstractModel
     }
 
     /**
-     * Is PBL.
+     * Is gateway an PBL.
      *
      * @return bool
      */
@@ -284,7 +308,7 @@ class GatewayModel extends AbstractModel
     }
 
     /**
-     * Is Transfer.
+     * Is gateway a transfer.
      *
      * @return bool
      */
@@ -294,14 +318,14 @@ class GatewayModel extends AbstractModel
     }
 
     /**
-     * Returns.
+     * Returns information if gateway is given gateway id.
      *
      * @param  int  $gatewayId
      * @return bool
      */
     public function isGateway($gatewayId)
     {
-        return $this>$gatewayId === $gatewayId;
+        return $this->gatewayId === $gatewayId;
     }
 
     /**

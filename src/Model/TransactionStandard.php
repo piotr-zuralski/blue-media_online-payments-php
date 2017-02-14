@@ -125,13 +125,6 @@ class TransactionStandard extends AbstractModel
     protected $hash;
 
     /**
-     * Products.
-     *
-     * @var ProductList
-     */
-    private $products;
-
-    /**
      * Set amount.
      *
      * @param float $amount
@@ -506,18 +499,6 @@ class TransactionStandard extends AbstractModel
         return $this->validityTime;
     }
 
-    public function setProducts(ProductList $products)
-    {
-        $this->products = $products;
-
-        return $this;
-    }
-
-    public function getProducts()
-    {
-        return $this->products;
-    }
-
     /**
      * Validates model.
      *
@@ -579,9 +560,6 @@ class TransactionStandard extends AbstractModel
         if (!empty($this->getReceiverName())) {
             /* 12 */$result['ReceiverName'] = $this->getReceiverName();
         }
-        if (!empty($this->getReceiverName())) {
-            /* 15 */$result['Products'] = base64_encode($this->getReceiverName());
-        }
 
         if ($this->getValidityTime() instanceof DateTime) {
             $result['ValidityTime'] = $this->getValidityTime()->format('Y-m-d H:i:s');
@@ -604,9 +582,8 @@ class TransactionStandard extends AbstractModel
     {
         $result  = '<p>Trwa przekierowanie do Bramki P&#322;atniczej Blue Media...</p>' . PHP_EOL;
         $result .= sprintf(
-            '<form action="%s" method="post" id="%2$s" name="%2$s">',
-            Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT),
-            'BlueMediaPaymentForm'
+            '<form action="%s" method="post" id="BlueMediaPaymentForm" name="BlueMediaPaymentForm">',
+            Gateway::getActionUrl(Gateway::PAYMENT_ACTON_PAYMENT)
         ) . PHP_EOL;
         foreach ($this->toArray() as $fieldName => $fieldValue) {
             if (empty($fieldValue)) {

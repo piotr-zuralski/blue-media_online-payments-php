@@ -467,13 +467,6 @@ class Gateway
         $this->isErrorResponse();
 
         $responseParsed = XMLParser::parse($this->response);
-//        dump([$responseParsed, /*self::generateHash($responseParsed)*/]);
-
-        Logger::log(Logger::DEBUG, '', array(
-            'request' => array($request->getUri()->__toString(), $request->getBody()),
-            'response' => $this->response,
-            'fields' => $fields,
-        ));
 
         $model = PaywayList\Transformer::toModel($responseParsed);
         $model->validate((int) $fields['ServiceID'], (string) $fields['MessageID']);
