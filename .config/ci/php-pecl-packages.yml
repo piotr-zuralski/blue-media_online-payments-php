@@ -1,0 +1,8 @@
+pecl:
+#  - xdebug
+#  - imagick
+#  - memcached
+#  - redis
+#  - zmq-beta
+#  - amqp
+#  - gnupg

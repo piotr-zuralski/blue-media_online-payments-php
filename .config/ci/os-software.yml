@@ -1,0 +1,42 @@
+os:
+  - bzip2
+  - git
+  - gnupg2
+  - gpgv
+  - libaspell-dev
+  - libbz2-dev          # php bzip2
+#  - libc-client-dev     # php imap
+  - libcurl4-gnutls-dev # openssl, php ext curl, php ext openssl
+#  - libexpat1-dev       # php ext xmlrpc
+#  - libfreetype6-dev    # php ext gd
+#  - libgeoip-dev        # php pecl geoip
+  - libgmp3-dev         # php
+#  - libgpgme11          # php pecl gnupg
+#  - libgpgme11-dev      # php pecl gnupg
+  - libicu-dev          # php ext intl
+#  - libjpeg-dev         # php ext gd
+#  - libkrb5-dev         # php ext kerberos
+#  - libldap2-dev        # php ext ldap
+#  - libmemcached-dev    # php pecl memcached
+  - libmcrypt-dev       # php ext mcrypt
+  - libpcre3-dev        # php ext spl
+#  - libpng-dev          # php ext gd
+#  - libpng12-dev        # php ext gd
+#  - libpq-dev           # php ext pdo_psql
+  - libsnmp-dev
+#  - libsqlite3-dev      # php ext pdo_sqlite
+  - libssl-dev          # openssl, php ext curl, php ext openssl
+#  - libtidy-dev         # php ext tidy
+#  - librabbitmq-dev     # php pecl rabbitmq
+#  - libvpx-dev          # php ext gd
+  - libxml2-dev         # php ext xml, php ext xmlreader, php ext xmlwriter
+#  - libxpm-dev          # php ext gd
+#  - libxslt-dev         # php ext xsl
+#  - libmagickwand-dev   # php pecl imagick
+#  - libzmq3-dev         # php pecl zmq-beta
+  - openssh-client      # openssl, php ext openssl
+  - openssl             # openssl, php ext openssl
+  - unixodbc-dev
+  - wget
+  - zlib1g-dev
+  - zip

@@ -1,8 +1,27 @@
 {
     "name": "blue-media/online-payments-php",
     "type": "library",
-    "description": "PHP SDK for Blue Media Online Payments",
-    "keywords": [],
+    "description": "System Płatności Online Blue Media | Online Payment System Blue Media",
+    "keywords": [
+        "transakcje",
+        "transactions",
+        "płatności",
+        "payment",
+        "payments",
+        "pbl",
+        "pay by link",
+        "karta",
+        "card",
+        "credit card",
+        "debit card",
+        "karty",
+        "mastercard",
+        "visa",
+        "przelew",
+        "przelewy",
+        "szybki przelew",
+        "szybkie przelewy"
+    ],
     "homepage": "https://platnosci.bm.pl/",
     "license": "GPL-3.0",
     "config": {
@@ -19,7 +38,7 @@
     "require": {
         "php": ">=5.5",
         "guzzlehttp/guzzle": "6.0.2",
-        "symfony/polyfill": "^1.3",
+        "symfony/polyfill": "1.3.*",
         "psr/log": "~1.0",
         "ext-xmlwriter": "*",
         "ext-xmlreader": "*",
@@ -28,7 +47,7 @@
         "ext-hash": "*"
     },
     "require-dev": {
-        "symfony/var-dumper": "^3.2"
+        "symfony/var-dumper": "3.2.*"
     },
     "provide": {
         "psr/log-implementation": "1.0"
