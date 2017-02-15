@@ -1,5 +1,5 @@
 {
-    "name": "blue-media/online-payments",
+    "name": "blue-media/online-payments-php",
     "type": "library",
     "description": "PHP SDK for Blue Media Online Payments",
     "keywords": [],
