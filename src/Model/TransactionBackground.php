@@ -115,7 +115,7 @@ class TransactionBackground extends AbstractModel
     /**
      * Returns amount.
      *
-     * @return float
+     * @return string
      */
     public function getAmount()
     {
@@ -344,6 +344,10 @@ class TransactionBackground extends AbstractModel
         return $this->title;
     }
 
+    /**
+    * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+    * @SuppressWarnings(PHPMD.NPathComplexity)
+    */
     public function validate()
     {
         if (empty($this->receiverNrb)) {

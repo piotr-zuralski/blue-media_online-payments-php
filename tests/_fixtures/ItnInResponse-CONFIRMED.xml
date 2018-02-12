@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<confirmationList><serviceID>123456</serviceID><transactionsConfirmations><transactionConfirmed><orderID>148104586</orderID><confirmation>CONFIRMED</confirmation></transactionConfirmed></transactionsConfirmations><hash>48f25c4ee1baf9ccc39da479b0ac93a51debadf815aee53711fdd0ab1c227b0a</hash></confirmationList>

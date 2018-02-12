@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 # Piotr Żuralski <piotr@zuralski.net>
 # copyright 2015 zuralski.net
@@ -11,6 +11,8 @@ fi
 
 projectHooksDir=${_pwd}/.config/git/hooks/;
 gitHooksDir=${_pwd}/.git/hooks/;
+
+mkdir -p builds/
 
 function makeHookSymlink {
     if [ "$1" ]; then
@@ -55,9 +57,10 @@ do
     fi
 done
 
-composer="./bin/composer";
+composer=`command -v composer`;
 if [[ ! ${composer} || ! -f ${composer} ]]; then
     curl -sS https://getcomposer.org/installer | php -- --install-dir=`pwd`/bin --filename=composer;
+    composer="./bin/composer.phar";
 fi
 
 if [ ${composer} ]; then
@@ -65,5 +68,7 @@ if [ ${composer} ]; then
     ${composer} install;
 fi
 
-./bin/phing -k;
+${composer} outdated -D
+
+./bin/phing -k > builds/build.log 2>&1;
 echo -e 'done build';

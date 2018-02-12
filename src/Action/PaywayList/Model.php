@@ -88,7 +88,7 @@ class Model extends AbstractModel
     /**
      * Returns messageID.
      *
-     * @return int
+     * @return string
      */
     public function getMessageId()
     {
@@ -151,10 +151,10 @@ class Model extends AbstractModel
             throw new DomainException('Hash cannot be empty');
         }
         if ($this->serviceId !== $serviceId) {
-            throw new DomainException('Not equal ServiceId');
+            throw new DomainException(sprintf('Not equal ServiceId, $this->serviceId: "%s", $serviceId: "%s"', $this->serviceId, $serviceId));
         }
         if ($this->messageId !== $messageId) {
-            throw new DomainException('Not equal MessageId');
+            throw new DomainException('Not equal MessageId ' . $this->messageId . ' ' . $messageId);
         }
     }
 }

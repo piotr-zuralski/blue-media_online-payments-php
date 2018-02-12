@@ -1,3 +1,8 @@
+phing
+phive
+phing-latest.phar
+phing-latest.phar.sha512
+
 # Created by https://www.gitignore.io
 
 ### Composer ###

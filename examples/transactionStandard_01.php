@@ -15,9 +15,8 @@ use BlueMedia\OnlinePayments\Model;
 
 $transactionStandard = new Model\TransactionStandard();
 $transactionStandard->setOrderId((string) time())
-    ->setAmount('9876.54')
+    ->setAmount('12.95')
     ->setDescription('Test transaction')
-//    ->setGatewayId(106)
     ->setCurrency('PLN')
     ->setCustomerEmail('test@example.net')
     ->setCustomerNrb('39105017641000009217760264')
@@ -28,5 +27,15 @@ $transactionStandard->setOrderId((string) time())
     ->setLinkValidityTime((new DateTime())->modify('+3days'))
 ;
 
+if (!empty($gatewayId)) {
+    $model->setGatewayId($gatewayId);
+}
+
 /** @var Gateway $gateway */
-echo $gateway->doTransactionStandard($transactionStandard);
+echo configForm();
+try {
+    $response = $gateway->doTransactionStandard($transactionStandard);
+    dump($response);
+} catch (\Exception $exception) {
+    dump($exception);
+}

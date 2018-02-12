@@ -49,14 +49,12 @@ class Logger
      * @param string $message
      * @param array  $context
      *
-     * @return bool|null
+     * @return void
      */
     public static function log($level, $message, array $context = array())
     {
-        if (is_object(self::$logger) && self::$logger instanceof LoggerInterface) {
-            return self::$logger->log($level, $message, $context);
+        if (self::$logger instanceof LoggerInterface) {
+            self::$logger->log($level, $message, $context);
         }
-
-        return false;
     }
 }

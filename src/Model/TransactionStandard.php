@@ -10,6 +10,7 @@ use DomainException;
 
 /**
  * Model for transaction standard.
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
@@ -143,7 +144,7 @@ class TransactionStandard extends AbstractModel
     /**
      * Return amount.
      *
-     * @return float
+     * @return string
      */
     public function getAmount()
     {
@@ -522,6 +523,8 @@ class TransactionStandard extends AbstractModel
 
     /**
      * Return object data as array.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @api
      * @return array

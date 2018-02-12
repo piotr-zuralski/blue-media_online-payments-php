@@ -1,0 +1,38 @@
+<?php
+
+$model = new \BlueMedia\OnlinePayments\Model\ItnIn();
+$model->setServiceId(100660)
+    ->setOrderId('1481064927')
+    ->setRemoteId('96JMSU8K')
+    ->setAmount('9877.54')
+    ->setCurrency('PLN')
+    ->setGatewayId(106)
+    ->setPaymentDate(\DateTime::createFromFormat(\DateTime::ATOM, '2016-12-06T23:55:39+01:00'))
+    ->setPaymentStatus('SUCCESS')
+    ->setPaymentStatusDetails('AUTHORIZED')
+    ->setAddressIp('192.168.0.34')
+    ->setTitle('BPID:96JMSU8K Test transaction')
+    ->setCustomerDatafName('Jan')
+    ->setCustomerDatalName('Kowalski')
+    ->setCustomerDataStreetName('Jasna')
+    ->setCustomerDataStreetHouseNo('6')
+    ->setCustomerDataStreetStaircaseNo('A')
+    ->setCustomerDataStreetPremiseNo('3')
+    ->setCustomerDataPostalCode('10-234')
+    ->setCustomerDataCity('Warszawa')
+    ->setCustomerDataNrb('26105014451000002276470461')
+    ->setTransferDate(\DateTime::createFromFormat(\DateTime::ATOM, '2016-01-10T08:00:00+01:00'))
+    ->setTransferStatus('SUCCESS')
+    ->setTransferStatusDetails('CONFIRMED')
+    ->setReceiverNRB('PL40114020040000350276811499')
+    ->setReceiverName('Zuralski.net')
+    ->setReceiverAddress('Gdańsk')
+    ->setReceiverBank('mBank S.A.')
+    ->setSenderNRB('57114020040000300234463178')
+    ->setHash('fc787a482e9bd0f707223de3c687a96f3f9a3ed8922d8291a5dfc061a997fb20')
+    ->setRemoteOutID('OUT 454545')
+    ->setInvoiceNumber('FV 2016/12/5/454677789')
+    ->setCustomerDataSenderData('Jan Kowalski Jasna 6/A/3 10-234 Warszawa')
+    ->setStartAmount(9876.54);
+
+return $model;

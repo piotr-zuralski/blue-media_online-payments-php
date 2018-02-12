@@ -2,6 +2,8 @@
 
 namespace BlueMedia\OnlinePayments;
 
+use BlueMedia\OnlinePayments\Util\EnvironmentRequirements;
+
 /**
  * Formatter class.
  *
@@ -13,6 +15,7 @@ namespace BlueMedia\OnlinePayments;
  */
 class Formatter
 {
+
     /**
      * Format amount.
      *
@@ -38,8 +41,25 @@ class Formatter
     public static function formatDescription($value)
     {
         $value = trim($value);
-        if (extension_loaded('iconv')) {
-            return iconv('UTF-8', 'ASCII//translit', $value);
+
+        if (EnvironmentRequirements::hasPhpExtension('mbstring')) {
+            $tmp = ini_get('mbstring.substitute_character');
+            @ini_set('mbstring.substitute_character', 'none');
+
+            $return = mb_convert_encoding($value, 'ASCII', 'UTF-8');
+            @ini_set('mbstring.substitute_character', $tmp);
+
+            return $return;
+        }
+
+        if (EnvironmentRequirements::hasPhpExtension('iconv')) {
+            $tmp = setlocale(LC_CTYPE, 0);
+            @setlocale(LC_CTYPE, 'POSIX');
+
+            $return = iconv('UTF-8', 'ASCII//TRANSLIT', $value);
+            @setlocale(LC_CTYPE, $tmp);
+
+            return $return;
         }
 
         return $value;

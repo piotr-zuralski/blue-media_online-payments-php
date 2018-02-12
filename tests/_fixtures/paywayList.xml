@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<list>
+    <serviceID>123456</serviceID>
+    <messageID>88d5d66ac8579d344154156f286e4da3</messageID>
+    <gateway>
+        <gatewayID>106</gatewayID>
+        <gatewayName>PG płatność testowa</gatewayName>
+        <gatewayType>PBL</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/106.gif</iconURL>
+        <statusDate>2017-08-29 11:42:05</statusDate>
+    </gateway>
+    <gateway>
+        <gatewayID>21</gatewayID>
+        <gatewayName>Przelew Volkswagen Bank</gatewayName>
+        <gatewayType>Szybki przelew</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/21.gif</iconURL>
+        <statusDate>2017-08-29 11:42:05</statusDate>
+    </gateway>
+    <gateway>
+        <gatewayID>35</gatewayID>
+        <gatewayName>Spółdzielcza Grupa Bankowa</gatewayName>
+        <gatewayType>Szybki przelew</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/35.gif</iconURL>
+        <statusDate>2017-08-29 11:42:05</statusDate>
+    </gateway>
+    <gateway>
+        <gatewayID>50</gatewayID>
+        <gatewayName>Przelew Getin Bank</gatewayName>
+        <gatewayType>Szybki przelew</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/50.gif</iconURL>
+        <statusDate>2017-08-29 11:43:37</statusDate>
+    </gateway>
+    <gateway>
+        <gatewayID>71</gatewayID>
+        <gatewayName>Przelew BGŻ</gatewayName>
+        <gatewayType>Szybki przelew</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/71.gif</iconURL>
+        <statusDate>2017-08-29 11:42:05</statusDate>
+    </gateway>
+    <gateway>
+        <gatewayID>1017</gatewayID>
+        <gatewayName>Przelew Bank Pocztowy</gatewayName>
+        <gatewayType>Szybki przelew</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/1017.gif</iconURL>
+        <statusDate>2017-08-29 11:42:05</statusDate>
+    </gateway>
+    <gateway>
+        <gatewayID>9</gatewayID>
+        <gatewayName>Przelew z innego banku</gatewayName>
+        <gatewayType>Szybki przelew</gatewayType>
+        <bankName>NONE</bankName>
+        <iconURL>https://platnosci.bm.pl/pomoc/grafika/9.gif</iconURL>
+        <statusDate>2017-08-29 11:42:05</statusDate>
+    </gateway>
+    <hash>4d4132bb905a40af78914a32ad70f8c9b217d05a045c5ceb6b25db0fc9e49607</hash>
+</list>

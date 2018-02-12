@@ -8,57 +8,89 @@
     @since     2015-08-08
     @version   2.3.3
 -->
-<project name="Płatności Online BM" default="build:prod">
+<project name="Płatności Online BM" default="build:dev">
 
     <property environment="env"/>
     <property name="project.src_dir" value="${project.basedir}/src" override="true"/>
     <property name="project.build_dir" value="${project.basedir}/builds" override="true"/>
     <property name="project.bin_dir" value="${project.basedir}/bin" override="true"/>
+    <property name="composer:exists" value="0" override="true"/>
+    <property name="composer:path" value="${project.bin_dir}/composer.phar" override="true"/>
 
     <!--<target name="build" depends="verify, analyze"/>-->
     <!--<target name="verify" depends="phplint,composer-validate,autoload-validation,author-validation"/>-->
     <!--<target name="analyze" depends="phploc,pdepend,phpmd,phpcs,phpcpd,phpunit,branch-alias-validation,travis-configuration-check"/>-->
     <!--<target name="docs" depends="phpdoc, phpcb, htaccess, copysvg, copybuild"/>-->
 
-    <target name="qc" description="Quality check" depends="qc:lint,qc:pdepend,qc:phpmetrics,qc:phpunit,qc:humbug,qc:sensio-security,qc:phpcb,qc:phpcpd,qc:phpcs,qc:phpcbf,qc:php-cs-fixer,qc:phpdcd,qc:phploc,qc:phpmd"/>
+    <target name="qc" description="Quality check" depends="qc:lint,qc:pdepend,qc:phpmetrics,qc:codeception,qc:phpunit,qc:humbug,qc:sensio-security,qc:phpcb,qc:phpcpd,qc:php-cs-fixer,qc:phpcs,qc:phpcbf,qc:phpdcd,qc:phploc,qc:phpmd,qc:phpstan,qc:phpstan-verbose"/>
 
     <target name="initialize" hidden="true">
         <delete dir="${project.build_dir}"/>
         <mkdir dir="${project.build_dir}/logs/"/>
+        <mkdir dir="${project.build_dir}/logs/phpmetrics/"/>
     </target>
 
     <target name="composer:get" hidden="true" depends="initialize">
-        <available file="${project.bin_dir}/composer" property="composer:exists" value="true"/>
+        <available file="${composer:path}" property="composer:exists" value="1"/>
+        <echo message="composer:exists ${composer:exists}"/>
         <if>
-            <not><equals arg1="${composer:exists}" arg2="true"/></not>
+            <not><equals arg1="${composer:exists}" arg2="1"/></not>
             <then>
-                <httpget url="https://getcomposer.org/installer" dir="${project.build_dir}" filename="composer-installer.php"/>
-                <httpget url="https://composer.github.io/installer.sig" dir="${project.build_dir}" filename="composer-installer.php.sha384"/>
+                <echo message="Composer: file ${composer:path} does not exists"/>
+
+                <!--<httpget url="https://getcomposer.org/installer" dir="${project.build_dir}" filename="composer-installer.php"/>-->
+                <!--<httpget url="https://composer.github.io/installer.sig" dir="${project.build_dir}" filename="composer-installer.php.sha384"/>-->
 
                 <!--<phpcpd>-->
-                <httpget url="https://phar.phpunit.de/phpcpd.phar" dir="${project.bin_dir}" filename="phpcpd" followRedirects="true"/>
+                <!--<httpget url="https://phar.phpunit.de/phpcpd.phar" dir="${project.bin_dir}" filename="phpcpd.phar" followRedirects="true"/>-->
+                <!--<chmod file="${project.bin_dir}/phpcpd.phar" mode="0700"/>-->
 
                 <!--<phploc>-->
-                <httpget url="https://phar.phpunit.de/phploc.phar" dir="${project.bin_dir}" filename="phploc" followRedirects="true"/>
+                <!--<httpget url="https://phar.phpunit.de/phploc.phar" dir="${project.bin_dir}" filename="phploc.phar" followRedirects="true"/>-->
+                <!--<chmod file="${project.bin_dir}/phploc.phar" mode="0700"/>-->
 
                 <!--<phpmd>-->
-                <httpget url="https://static.phpmd.org/php/latest/phpmd.phar" dir="${project.bin_dir}" filename="phpmd"/>
+                 <httpget url="https://static.phpmd.org/php/latest/phpmd.phar" dir="${project.bin_dir}" filename="phpmd.phar"/>
+                 <chmod file="${project.bin_dir}/phpmd.phar" mode="0700"/>
 
                 <!--<phpdepend>-->
-                <httpget url="https://static.pdepend.org/php/latest/pdepend.phar" dir="${project.bin_dir}" filename="pdepend"/>
+                <!-- <httpget url="https://static.pdepend.org/php/latest/pdepend.phar" dir="${project.bin_dir}" filename="pdepend.phar"/> -->
+                <!-- <chmod file="${project.bin_dir}/pdepend.phar" mode="0700"/> -->
 
                 <!--<phpdoc2>-->
-                <httpget url="https://phpdoc.org/phpDocumentor.phar" dir="${project.bin_dir}" filename="phpdoc"/>
+                <httpget url="https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar" dir="${project.bin_dir}" filename="phpdoc.phar" followRedirects="true"/>
+                <chmod file="${project.bin_dir}/phpdoc.phar" mode="0700"/>
 
                 <!--<phpunit>-->
-                <httpget url="https://phar.phpunit.de/phpunit.phar" dir="${project.bin_dir}" filename="phpunit" followRedirects="true"/>
+                <httpget url="https://phar.phpunit.de/phpunit-5.phar" dir="${project.bin_dir}" filename="phpunit.phar" followRedirects="true"/>
+                <chmod file="${project.bin_dir}/phpunit.phar" mode="0700"/>
 
-                <httpget url="https://codeception.github.io/codecept.phar" dir="${project.bin_dir}" filename="codecept" followRedirects="true"/>
-                <httpget url="https://phar.phpunit.de/phpdcd.phar" dir="${project.bin_dir}" filename="phpdcd" followRedirects="true"/>
-                <httpget url="https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar" dir="${project.bin_dir}" filename="phpmetrics" followRedirects="true"/>
-                <httpget url="https://github.com/phpmetrics/ComposerExtension/raw/master/composer-extension.phar" dir="${project.bin_dir}" filename="phpmetrics-composer-extension" followRedirects="true"/>
-                <httpget url="https://padraic.github.io/humbug/downloads/humbug.phar" dir="${project.bin_dir}" filename="humbug"/>
-                <httpget url="https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.0.0/php-cs-fixer.phar" dir="${project.bin_dir}" filename="php-cs-fixer" followRedirects="true"/>
+                <!--<httpget url="https://codeception.github.io/codecept.phar" dir="${project.bin_dir}" filename="codecept.phar" followRedirects="true" />-->
+                <!--<chmod file="${project.bin_dir}/codecept.phar" mode="0700"/>-->
+
+                <httpget url="https://phar.phpunit.de/phpdcd.phar" dir="${project.bin_dir}" filename="phpdcd.phar" followRedirects="true"/>
+                <chmod file="${project.bin_dir}/phpdcd.phar" mode="0700"/>
+
+                <httpget url="https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar" dir="${project.bin_dir}" filename="phpmetrics.phar" followRedirects="true"/>
+                <chmod file="${project.bin_dir}/phpmetrics.phar" mode="0700"/>
+
+                <httpget url="https://github.com/phpmetrics/ComposerExtension/raw/master/composer-extension.phar" dir="${project.bin_dir}" filename="phpmetrics-composer-extension.phar" followRedirects="true" />
+                <chmod file="${project.bin_dir}/phpmetrics-composer-extension.phar" mode="0700"/>
+
+                <httpget url="https://github.com/humbug/humbug/releases/download/1.0.0-alpha2/humbug.phar" dir="${project.bin_dir}" filename="humbug.phar" followRedirects="true"/>
+                <httpget url="https://github.com/humbug/humbug/releases/download/1.0.0-alpha2/humbug.phar.pubkey" dir="${project.bin_dir}" filename="humbug.phar.pubkey" followRedirects="true"/>
+                <chmod file="${project.bin_dir}/humbug.phar" mode="0700"/>
+
+                <!--<httpget url="https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.13.1/php-cs-fixer.phar" dir="${project.bin_dir}" filename="php-cs-fixer.phar" followRedirects="true"/>-->
+                <!--<chmod file="${project.bin_dir}/php-cs-fixer.phar" mode="0700"/>-->
+
+                <!--<httpget url="https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar" dir="${project.bin_dir}" filename="phpcs.phar" followRedirects="true"/>-->
+                <!--<chmod file="${project.bin_dir}/phpcs.phar" mode="0700"/>-->
+
+                <!--<httpget url="https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar" dir="${project.bin_dir}" filename="phpcbf.phar" followRedirects="true"/>-->
+                <!--<chmod file="${project.bin_dir}/phpcbf.phar" mode="0700"/>-->
+
+
 
                 <filehash file="${project.build_dir}/composer-installer.php" algorithm="sha384" propertyname="composer:actual_signature"/>
                 <loadfile file="${project.build_dir}/composer-installer.php.sha384" property="composer:expected_signature"/>
@@ -74,43 +106,44 @@
                         <fail message="Composer: Invalid installer signature (${composer:actual_signature}, ${composer:expected_signature})"/>
                     </then>
                     <else>
-                        <exec command="php ${project.build_dir}/composer-installer.php --install-dir=${project.bin_dir} --filename=composer" checkreturn="true" logoutput="true"/>
+                        <exec command="php ${project.build_dir}/composer-installer.php --install-dir=${project.bin_dir} --filename=composer.phar" checkreturn="true" logoutput="true"/>
                         <delete file="${project.build_dir}/composer-installer.php"/>
                         <delete file="${project.build_dir}/composer-installer.php.sha384"/>
-                        <chmod file="${project.bin_dir}/composer" mode="0700"/>
+                        <chmod file="${composer:path}" mode="0700"/>
                     </else>
                 </if>
             </then>
         </if>
 
-        <composer composer="${project.bin_dir}/composer" command="self-update"/>
-        <composer composer="${project.bin_dir}/composer">
+        <composer composer="${composer:path}" command="self-update"/>
+        <composer composer="${composer:path}">
             <arg line="--version"/>
         </composer>
+        <composer composer="${composer:path}" command="validate"/>
     </target>
 
     <target name="vendors:dev" hidden="true">
-        <composer composer="${project.bin_dir}/composer" command="install">
+        <composer composer="${composer:path}" command="install">
             <arg value="--no-progress"/>
             <arg value="--no-interaction"/>
             <arg value="--no-suggest"/>
             <arg value="--prefer-source"/>
-            <arg value="-vvv"/>
+            <!--<arg value="-vvv"/>-->
         </composer>
-        <composer composer="${project.bin_dir}/composer" command="dump-autoload">
+        <composer composer="${composer:path}" command="dump-autoload">
             <arg value="--optimize"/>
         </composer>
     </target>
 
     <target name="vendors:prod" hidden="true">
-        <composer composer="${project.bin_dir}/composer" command="install">
+        <composer composer="${composer:path}" command="install">
             <arg value="--no-dev"/>
             <arg value="--no-progress"/>
             <arg value="--no-interaction"/>
             <arg value="--no-suggest"/>
             <arg value="--prefer-dist"/>
         </composer>
-        <composer composer="${project.bin_dir}/composer" command="dump-autoload">
+        <composer composer="${composer:path}" command="dump-autoload">
             <arg value="--no-dev"/>
             <arg value="--optimize"/>
         </composer>
@@ -132,9 +165,9 @@
 
     <target name="qc:pdepend" description="QC: pDepend">
         <if>
-            <available file="${project.bin_dir}/pdepend" type="file" property="qc.pdepend.file"/>
+            <available file="${project.bin_dir}/pdepend.phar" type="file" property="qc.pdepend.file"/>
             <then>
-                <exec executable="${project.bin_dir}/pdepend" checkreturn="true" logoutput="true">
+                <exec executable="${project.bin_dir}/pdepend.phar" checkreturn="true" logoutput="true">
                     <arg value="--jdepend-xml=${project.build_dir}/logs/jdepend.xml"/>
                     <arg value="--dependency-xml=${project.build_dir}/logs/dependency.xml"/>
                     <arg value="--summary-xml=${project.build_dir}/logs/pdepend-summary.xml"/>
@@ -143,15 +176,13 @@
             </then>
             <else>
                 <echo message="Skipping qc:pdepend" level="warning"/>
-                <fail status="0"/>
             </else>
         </if>
     </target>
 
     <target name="qc:phpcb" description="QC: Code browser">
         <echo message="Skipping qc:phpcb" level="warning"/>
-        <!--<fail status="0"/>-->
-        <!--<exec executable="${project.bin_dir}/phpcb" checkreturn="true" logoutput="true">-->
+        <!--<exec executable="${project.bin_dir}/phpcb.phar" checkreturn="true" logoutput="true">-->
             <!--<arg value="&#45;&#45;log"/>-->
             <!--<arg path="${project.build_dir}/logs/"/>-->
 
@@ -164,7 +195,7 @@
     </target>
 
     <target name="qc:phpcpd" description="QC: PHP Copy/Paste Detector">
-        <exec executable="${project.bin_dir}/phpcpd" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phpcpd.phar" checkreturn="true" logoutput="true">
             <arg value="--log-pmd"/>
             <arg path="${project.build_dir}/logs/pmd-cpd.xml"/>
             <arg path="${project.src_dir}"/>
@@ -172,36 +203,36 @@
     </target>
 
     <target name="qc:phpcs" description="QC: Code Sniffer">
-        <!--<echo message="Skipping qc:phpcs" level="warning"/>-->
-        <exec executable="${project.bin_dir}/phpcs" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phpcs.phar" checkreturn="false" logoutput="true">
             <arg path="${project.src_dir}"/>
             <arg path="${project.basedir}/tests/"/>
-            <arg value="--standard=PSR2"/>
+            <arg value="--standard=${project.basedir}/phpcs.xml"/>
             <arg value="--extensions=php"/>
         </exec>
     </target>
 
     <target name="qc:phpcbf">
-        <exec executable="${project.bin_dir}/phpcbf" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phpcbf.phar" checkreturn="false" logoutput="true">
             <arg path="${project.src_dir}"/>
-            <arg value="--standard=PSR2"/>
+            <arg path="${project.basedir}/tests/"/>
+            <arg value="--standard=${project.basedir}/phpcs.xml"/>
             <arg value="--extensions=php"/>
         </exec>
     </target>
 
     <target name="qc:php-cs-fixer" description="QC: Coding File fixer (dry-run)">
-        <exec executable="${project.bin_dir}/php-cs-fixer" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/php-cs-fixer.phar" checkreturn="true" logoutput="true">
             <arg value="fix"/>
             <arg path="${project.src_dir}"/>
             <arg value="--config"/>
-            <arg path=".php_cs"/>
+            <arg path=".php_cs.dist"/>
             <arg value="--dry-run"/>
             <arg value="-vvv"/>
         </exec>
     </target>
 
     <target name="qc:phpdcd" description="QC: Dead Code Detector">
-        <exec executable="${project.bin_dir}/phpdcd" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phpdcd.phar" checkreturn="true" logoutput="true">
             <arg line="--no-interaction"/>
 
             <arg path="${project.src_dir}/"/>
@@ -210,7 +241,7 @@
     </target>
 
     <target name="qc:phploc" description="QC: measure the size and analyzing the structure of a project">
-        <exec executable="${project.bin_dir}/phploc" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phploc.phar" checkreturn="true" logoutput="true">
             <arg value="--no-interaction"/>
             <arg value="--count-tests"/>
             <arg path="${project.basedir}/tests/"/>
@@ -224,7 +255,7 @@
 
     <target name="qc:phpmd" description="QC: PHP Mess Detector">
         <!--<echo message="Skipping qc:phpmd" level="warning"/>-->
-        <exec executable="${project.bin_dir}/phpmd" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phpmd.phar" checkreturn="true" logoutput="true">
             <arg path="${project.src_dir}"/>
             <arg value="text"/>
             <arg value="codesize"/>
@@ -236,15 +267,15 @@
         <if>
             <available file="${project.basedir}/.phpmetrics.yml" type="file" property="qc.phpmetrics.file"/>
             <then>
-                <exec executable="${project.bin_dir}/phpmetrics" checkreturn="true" logoutput="true">
+                <exec executable="${project.bin_dir}/phpmetrics.phar" checkreturn="true" logoutput="true">
                     <arg value="--no-interaction"/>
-                    <arg value="--config"/>
-                    <arg path="./.phpmetrics.yml"/>
+                    <arg path="./src/"/>
+                    <arg value="--report-html=${project.build_dir}/logs/phpmetrics/"/>
+                    <arg value="--report-violations=${project.build_dir}/logs/phpmetrics-violations.xml"/>
                 </exec>
             </then>
             <else>
                 <echo message="Skipping qc:phpmetrics" level="warning"/>
-                <fail status="0"/>
             </else>
         </if>
     </target>
@@ -253,23 +284,22 @@
         <if>
             <available file="${project.basedir}/phpunit.xml" type="file" property="qc.phpunit.file"/>
             <then>
-                <exec executable="${project.bin_dir}/phpunit" checkreturn="true" logoutput="true">
+                <exec executable="${project.bin_dir}/phpunit.phar" checkreturn="true" logoutput="true">
                     <arg value="-c"/>
                     <arg value="phpunit.xml"/>
                 </exec>
             </then>
             <else>
                 <echo message="Skipping qc:phpunit" level="warning"/>
-                <fail status="0"/>
             </else>
         </if>
     </target>
 
     <target name="qc:humbug" description="QC: Runs Humbug - a Mutation Testing framework">
         <if>
-            <available file="${project.basedir}/humbug.json.dist" type="file" property="qc.humbug.file"/>
+            <available file="${project.basedir}/humbug.json" type="file" property="qc.humbug.file"/>
             <then>
-                <exec executable="${project.bin_dir}/humbug" checkreturn="true" logoutput="true">
+                <exec executable="${project.bin_dir}/humbug.phar" checkreturn="true" logoutput="true">
                     <arg value="--no-progress-bar"/>
                     <arg value="--no-interaction"/>
                     <arg value="-vvv"/>
@@ -277,14 +307,58 @@
             </then>
             <else>
                 <echo message="Skipping qc:humbug" level="warning"/>
-                <fail status="0"/>
             </else>
         </if>
     </target>
 
     <target name="qc:sensio-security" description="QC: Checks security issues with project dependencies">
         <exec executable="curl" checkreturn="true" logoutput="true">
-            <arg line='-H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock'/>
+            <arg line='-sS --insecure -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock'/>
+        </exec>
+    </target>
+
+    <target name="qc:codeception">
+        <if>
+            <available file="${project.basedir}/codeception.yml" type="file" property="qc.codeception.file"/>
+            <then>
+                <exec executable="${project.bin_dir}/codecept" checkreturn="true" logoutput="true">
+                    <arg value="run"/>
+                    <!--<arg value="&#45;&#45;report"/>-->
+                    <arg value="--html=report.html"/>
+                    <arg value="--coverage"/>
+                    <!--<arg value="&#45;&#45;coverage-html"/>-->
+                    <arg value="--coverage-text"/>
+                    <arg value="--coverage-xml"/>
+                    <arg value="--no-interaction"/>
+                    <arg value="--no-ansi"/>
+                    <arg value="-v"/>
+                </exec>
+            </then>
+            <else>
+                <echo message="Skipping qc:codeception" level="warning"/>
+            </else>
+        </if>
+    </target>
+
+    <target name="qc:phpstan">
+        <exec executable="${project.bin_dir}/phpstan.phar" checkreturn="false" logoutput="true">
+            <arg value="analyse"/>
+            <arg path="${project.src_dir}"/>
+            <arg value="--level=3"/>
+            <arg value="--no-progress"/>
+            <arg value="--no-ansi"/>
+            <arg value="--no-interaction"/>
+        </exec>
+    </target>
+
+    <target name="qc:phpstan-verbose">
+        <exec executable="${project.bin_dir}/phpstan.phar" checkreturn="false" logoutput="true">
+            <arg value="analyse"/>
+            <arg path="${project.src_dir}"/>
+            <arg value="--level=7"/>
+            <arg value="--no-progress"/>
+            <arg value="--no-ansi"/>
+            <arg value="--no-interaction"/>
         </exec>
     </target>
 
@@ -292,11 +366,12 @@
     <target name="build:dev" description="Builds application for &quot;dev&quot; (development) enviroment" depends="composer:get,vendors:dev,qc"/>
 
     <target name="php-cs-fixer">
-        <exec executable="${project.bin_dir}/php-cs-fixer" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/php-cs-fixer.phar" checkreturn="true" logoutput="true">
             <arg value="fix"/>
             <arg path="${project.src_dir}"/>
+            <arg path="./tests"/>
             <arg value="--config"/>
-            <arg path=".php_cs"/>
+            <arg path=".php_cs.dist"/>
             <arg value="-vvv"/>
         </exec>
     </target>

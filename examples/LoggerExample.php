@@ -33,8 +33,8 @@ class LoggerExample extends AbstractLogger
 
         array_push($this->logStack, $data);
         file_put_contents(
-            sprintf('./log-%s.log', date('Y-m-d')),
-            json_encode($data) . PHP_EOL,
+            sprintf('%s/log-%s.log', dirname(__FILE__), date('Y-m-d')),
+            json_encode(var_export($data, true)) . PHP_EOL,
             FILE_APPEND
         );
     }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    PHP Code Sniffer
+    Docs: https://github.com/squizlabs/PHP_CodeSniffer/wiki
+-->
+<ruleset
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    name="custom"
+    xsi:noNamespaceSchemaLocation="https://github.com/squizlabs/PHP_CodeSniffer/raw/master/phpcs.xsd">
+    <rule ref="PSR2"/>
+</ruleset>

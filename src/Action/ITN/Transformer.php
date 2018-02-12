@@ -11,6 +11,7 @@ use SimpleXMLElement;
 
 /**
  * ITN Transformer.
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2016 Blue Media
@@ -70,6 +71,7 @@ class Transformer
      */
     public static function modelToArray(ItnIn $model)
     {
+        $model->validate();
         $isClearanceTransaction = self::isObjectClearanceTransaction($model);
 
         $result = array();
@@ -137,6 +139,9 @@ class Transformer
 
     /**
      * Transforms ITN request into model.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
      * @param  SimpleXMLElement $xml
      * @return ItnIn
@@ -291,7 +296,7 @@ class Transformer
             }
         }
         /* 32 */if (isset($transaction->startAmount)) {
-            $model->setStartAmount((string) $transaction->startAmount);
+            $model->setStartAmount((float) $transaction->startAmount);
         }
 
         /* 40 */if (isset($transaction->transferDate)) {
@@ -338,7 +343,10 @@ class Transformer
                 default:
                     Logger::log(
                         Logger::EMERGENCY,
-                        sprintf('Not supported transferStatusDetails="%s"', (string) $transaction->transferStatusDetails),
+                        sprintf(
+                            'Not supported transferStatusDetails="%s"',
+                            (string) $transaction->transferStatusDetails
+                        ),
                         array('itn' => $xml)
                     );
                     break;

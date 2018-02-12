@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transaction>
+    <receiverNRB>83213000042001031174540004</receiverNRB>
+    <receiverName>Blue Media SA</receiverName>
+    <receiverAddress>81-717 Sopot, Haffnera 6</receiverAddress>
+    <orderID>1507138953</orderID>
+    <amount>125000.99</amount>
+    <currency>PLN</currency>
+    <title>97Y2BSR9 Transaction no. 5522</title>
+    <remoteID>97Y2BSH9</remoteID>
+    <bankHref>https://vlogin.vwbankdirect.pl/</bankHref>
+    <hash>76cc9bb6bbd382e69456182d1bb684fadb907af7cf8900767c8a0d8c2001f70a</hash>
+</transaction>

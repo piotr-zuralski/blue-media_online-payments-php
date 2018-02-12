@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transactionList>
+    <serviceID>100660</serviceID>
+    <transactions>
+        <transaction>
+            <orderID>1481064927</orderID>
+            <remoteID>96JMSU8K</remoteID>
+            <amount>9877.54</amount>
+            <currency>PLN</currency>
+            <gatewayID>106</gatewayID>
+            <paymentDate>20161206235539</paymentDate>
+            <paymentStatus>SUCCESS</paymentStatus>
+            <paymentStatusDetails>AUTHORIZED</paymentStatusDetails>
+            <addressIP>192.168.0.34</addressIP>
+            <title>BPID:96JMSU8K Test transaction</title>
+            <customerData>
+                <fName>Jan</fName>
+                <lName>Kowalski</lName>
+                <streetName>Jasna</streetName>
+                <streetHouseNo>6</streetHouseNo>
+                <streetStaircaseNo>A</streetStaircaseNo>
+                <streetPremiseNo>3</streetPremiseNo>
+                <postalCode>10-234</postalCode>
+                <city>Warszawa</city>
+                <nrb>26105014451000002276470461</nrb>
+                <senderData>Jan Kowalski Jasna 6/A/3 10-234 Warszawa</senderData>
+            </customerData>
+            <startAmount>9876.54</startAmount>
+        </transaction>
+    </transactions>
+    <hash>fc787a482e9bd0f707223de3c687a96f3f9a3ed8922d8291a5dfc061a997fb20</hash>
+</transactionList>

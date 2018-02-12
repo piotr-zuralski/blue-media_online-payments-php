@@ -10,11 +10,21 @@ require_once './.config.php';
  * @since     2016-11-30
  * @version   2.3.2
  */
-echo configForm();
 
 /** @var BlueMedia\OnlinePayments\Gateway $gateway */
-$response = $gateway->doPaywayList();
-dump($response);
+echo configForm();
+try {
+    $response = $gateway->doPaywayList();
+
+    /**
+     * @var \BlueMedia\OnlinePayments\Action\PaywayList\GatewayModel $paymentGateway
+     */
+    foreach ($response->getGateways() as $key => $paymentGateway) {
+        dump(array($paymentGateway->getGatewayId(), $paymentGateway->getGatewayType(), $paymentGateway->getGatewayName()));
+    }
+} catch (\Exception $exception) {
+    dump($exception);
+}
 
 echo '<br>';
 

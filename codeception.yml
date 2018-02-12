@@ -10,10 +10,13 @@ paths:
     envs: tests/_envs
 settings:
     bootstrap: _bootstrap.php
+    memory_limit: 128M
     colors: true
-    memory_limit: 1024M
     lint: true
     shuffle: true
+    report_useless_tests: true
+    disallow_test_output: true
+    log_incomplete_skipped: true
 extensions:
     enabled:
         - Codeception\Extension\RunFailed
@@ -22,5 +25,6 @@ coverage:
     remote: false
     include:
         - src/*
-
+    low_limit: 60
+    high_limit: 90
 error_level: -1

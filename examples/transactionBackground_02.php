@@ -16,9 +16,8 @@ use BlueMedia\OnlinePayments\Model;
 $transactionStandard = new Model\TransactionStandard();
 $transactionStandard
     ->setOrderId((string) time())
-    ->setAmount('9876.54')
+    ->setAmount('12.95')
     ->setDescription('Test transaction')
-    ->setGatewayId(1500)
     ->setCurrency('PLN')
     ->setCustomerEmail('test@example.net')
     ->setCustomerIp('192.168.0.34')
@@ -28,7 +27,16 @@ $transactionStandard
     ->setReceiverName('Zuralski.net')
 ;
 
+if (!empty($gatewayId)) {
+    $model->setGatewayId($gatewayId);
+}
+
 /** @var Gateway $gateway */
-/** @var Model\TransactionBackground $transactionBackground */
-$transactionBackground = $gateway->doTransactionBackground($transactionStandard);
-var_export($transactionBackground);
+/** @var Model\TransactionBackground $response */
+echo configForm();
+try {
+    $response = $gateway->doTransactionBackground($transactionStandard);
+    dump($response);
+} catch (\Exception $exception) {
+    dump($exception);
+}

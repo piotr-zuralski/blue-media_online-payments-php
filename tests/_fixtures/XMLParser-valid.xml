@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transactionList>
+    <serviceID>100660</serviceID>
+    <transactions>
+        <transaction>
+            <title>BPID:96JMSU8K Test transaction</title>
+            <customerData>
+                <senderData>Jan Kowalski Jasna 6/A/3 10-234 Warszawa</senderData>
+            </customerData>
+            <startAmount>9876.54</startAmount>
+        </transaction>
+    </transactions>
+    <hash>fc787a482e9bd0f707223de3c687a96f3f9a3ed8922d8291a5dfc061a997fb20</hash>
+</transactionList>

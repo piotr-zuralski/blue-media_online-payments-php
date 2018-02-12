@@ -112,42 +112,42 @@ class GatewayModel extends AbstractModel
      *
      * @var int
      */
-    private $gatewayId;
+    private $gatewayId = 0;
 
     /**
      * Gateway name.
      *
      * @var string
      */
-    private $gatewayName;
+    private $gatewayName = '';
 
     /**
      * Gateway type.
      *
      * @var string
      */
-    private $gatewayType;
+    private $gatewayType = '';
 
     /**
      * Bank name.
      *
      * @var string
      */
-    private $bankName;
+    private $bankName = '';
 
     /**
      * Icon URL.
      *
      * @var string
      */
-    private $iconUrl;
+    private $iconUrl = '';
 
     /**
      * Status date.
      *
      * @var DateTime
      */
-    private $statusDate;
+    private $statusDate = null;
 
     /**
      * Returns gateway id.

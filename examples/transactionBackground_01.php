@@ -13,21 +13,34 @@ require_once './.config.php';
 use BlueMedia\OnlinePayments\Gateway;
 use BlueMedia\OnlinePayments\Model;
 
-$transactionStandard = new Model\TransactionStandard();
-$transactionStandard
+$model = new Model\TransactionStandard();
+$model
     ->setOrderId((string) time())
-    ->setAmount('9876.54')
+    ->setAmount('12.95')
     ->setDescription('Test transaction')
-    ->setGatewayId(35)
     ->setCurrency('PLN')
     ->setCustomerEmail('test@example.net')
     ->setCustomerIp('192.168.0.34')
-    ->setTitle(sprintf('Zamówienie nr %s', $transactionStandard->getOrderId()))
+    ->setTitle(sprintf('Zamówienie nr %s', $model->getOrderId()))
+    ->setCustomerNrb('39105017641000009217760264')
+    ->setReceiverName('Zuralski.net')
     ->setValidityTime((new DateTime())->modify('+3days'))
     ->setLinkValidityTime((new DateTime())->modify('+3days'))
 ;
+if (!empty($gatewayId)) {
+    $model->setGatewayId($gatewayId);
+}
+
+if ($serviceId !== 100006 && $serviceId !== 100014) {
+    $model->setTaxCountry('PL');
+}
 
 /** @var Gateway $gateway */
 /** @var Model\TransactionBackground $transactionBackground */
-$transactionBackground = $gateway->doTransactionBackground($transactionStandard);
-var_export($transactionBackground);
+echo configForm();
+try {
+    $response = $gateway->doTransactionBackground($model);
+    dump($response);
+} catch (\Exception $exception) {
+    dump($exception);
+}

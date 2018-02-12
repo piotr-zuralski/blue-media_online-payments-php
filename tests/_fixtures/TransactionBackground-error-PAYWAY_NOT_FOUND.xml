@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<error>
+    <statusCode>-172</statusCode>
+    <name>PAYWAY_NOT_FOUND</name>
+    <description>paywayID(gatewayID) 71 not found</description>
+</error>

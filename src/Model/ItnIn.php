@@ -10,6 +10,10 @@ use DomainException;
 
 /**
  * Model for ITN IN.
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
@@ -424,7 +428,7 @@ class ItnIn extends AbstractModel
     public function setAmount($amount)
     {
         Validator::validateAmount($amount);
-        $this->amount = (float) $amount;
+        $this->amount = $amount;
 
         return $this;
     }
@@ -432,7 +436,7 @@ class ItnIn extends AbstractModel
     /**
      * Returns amount.
      *
-     * @return float
+     * @return string
      */
     public function getAmount()
     {
@@ -1132,6 +1136,8 @@ class ItnIn extends AbstractModel
     public function setRemoteOutID($remoteOutID)
     {
         $this->remoteOutID = $remoteOutID;
+
+        return $this;
     }
 
     /**
@@ -1148,6 +1154,8 @@ class ItnIn extends AbstractModel
     public function setInvoiceNumber($invoiceNumber)
     {
         $this->invoiceNumber = $invoiceNumber;
+
+        return $this;
     }
 
     /**
@@ -1164,6 +1172,8 @@ class ItnIn extends AbstractModel
     public function setCustomerNumber($customerNumber)
     {
         $this->customerNumber = $customerNumber;
+
+        return $this;
     }
 
     /**
@@ -1180,6 +1190,8 @@ class ItnIn extends AbstractModel
     public function setCustomerEmail($customerEmail)
     {
         $this->customerEmail = $customerEmail;
+
+        return $this;
     }
 
     /**
@@ -1196,6 +1208,8 @@ class ItnIn extends AbstractModel
     public function setCustomerPhone($customerPhone)
     {
         $this->customerPhone = $customerPhone;
+
+        return $this;
     }
 
     /**
@@ -1212,6 +1226,8 @@ class ItnIn extends AbstractModel
     public function setCustomerDataSenderData($customerDataSenderData)
     {
         $this->customerDataSenderData = $customerDataSenderData;
+
+        return $this;
     }
 
     /**
@@ -1228,6 +1244,8 @@ class ItnIn extends AbstractModel
     public function setVerificationStatus($verificationStatus)
     {
         $this->verificationStatus = $verificationStatus;
+
+        return $this;
     }
 
     /**
@@ -1244,6 +1262,8 @@ class ItnIn extends AbstractModel
     public function setVerificationStatusReasons($verificationStatusReasons)
     {
         $this->verificationStatusReasons = $verificationStatusReasons;
+
+        return $this;
     }
 
     /**
@@ -1264,6 +1284,8 @@ class ItnIn extends AbstractModel
     public function setStartAmount($startAmount)
     {
         $this->startAmount = $startAmount;
+
+        return $this;
     }
 
     /**
@@ -1280,6 +1302,8 @@ class ItnIn extends AbstractModel
     public function setRecurringDataRecurringAction($recurringDataRecurringAction)
     {
         $this->recurringDataRecurringAction = $recurringDataRecurringAction;
+
+        return $this;
     }
 
     /**
@@ -1296,6 +1320,8 @@ class ItnIn extends AbstractModel
     public function setRecurringDataClientHash($recurringDataClientHash)
     {
         $this->recurringDataClientHash = $recurringDataClientHash;
+
+        return $this;
     }
 
     /**
@@ -1312,6 +1338,8 @@ class ItnIn extends AbstractModel
     public function setCardDataIndex($cardDataIndex)
     {
         $this->cardDataIndex = $cardDataIndex;
+
+        return $this;
     }
 
     /**
@@ -1328,6 +1356,8 @@ class ItnIn extends AbstractModel
     public function setCardDataValidityYear($cardDataValidityYear)
     {
         $this->cardDataValidityYear = $cardDataValidityYear;
+
+        return $this;
     }
 
     /**
@@ -1344,6 +1374,8 @@ class ItnIn extends AbstractModel
     public function setCardDataValidityMonth($cardDataValidityMonth)
     {
         $this->cardDataValidityMonth = $cardDataValidityMonth;
+
+        return $this;
     }
 
     /**
@@ -1360,6 +1392,8 @@ class ItnIn extends AbstractModel
     public function setCardDataIssuer($cardDataIssuer)
     {
         $this->cardDataIssuer = $cardDataIssuer;
+
+        return $this;
     }
 
     /**
@@ -1376,6 +1410,8 @@ class ItnIn extends AbstractModel
     public function setCardDataBin($cardDataBin)
     {
         $this->cardDataBin = $cardDataBin;
+
+        return $this;
     }
 
     /**
@@ -1392,10 +1428,14 @@ class ItnIn extends AbstractModel
     public function setCardDataMask($cardDataMask)
     {
         $this->cardDataMask = $cardDataMask;
+
+        return $this;
     }
 
     /**
      * Validates model.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      *
      * @return void
      */
@@ -1448,6 +1488,11 @@ class ItnIn extends AbstractModel
      */
     public function toArray()
     {
+        trigger_error(
+            __METHOD__ . '() is deprecated. Use Transformer::objectToArray() instead.',
+            E_USER_DEPRECATED
+        );
+
         return Transformer::modelToArray($this);
     }
 }

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -e
 
@@ -9,26 +9,26 @@ OVERRIDE_TAG=0;
 
 ###########################################
 
-if [[ ${BITBUCKET_TAG} ]]; then
+if [ ${BITBUCKET_TAG} ]; then
     CI_BUILD_TAG=${BITBUCKET_TAG};
 fi
 
-if [[ ${BITBUCKET_COMMIT} ]]; then
+if [ ${BITBUCKET_COMMIT} ]; then
     CI_BUILD_REF=${BITBUCKET_COMMIT};
 fi
 
-if [[ ${BITBUCKET_BRANCH} ]]; then
+if [ ${BITBUCKET_BRANCH} ]; then
     CI_BUILD_REF_NAME=${BITBUCKET_BRANCH};
 fi
 
 ###########################################
 
-if [[ ! -z "${CI_BUILD_TAG}" ]]; then
+if [ ! -z "${CI_BUILD_TAG}" ]; then
     printf 'Build on tag - softfail\n';
     exit;
 fi
 
-if [[ ! -z "${CI_BUILD_REF}" ]]; then
+if [ ! -z "${CI_BUILD_REF}" ]; then
     printf 'Commit ref empty!\n';
     exit 1;
 fi
@@ -36,15 +36,15 @@ fi
 printf 'VERSION: "%s"\n' ${VERSION};
 printf 'VERSION_SED: "%s"\n' ${VERSION_SED};
 
-if [[ -z "${VERSION_SED}" ]]; then
+if [ -z "${VERSION_SED}" ]; then
     printf 'Version empty!';
     exit;
 fi
 
-if [[ `git tag -l | grep -q ${VERSION}` ]]; then
+if [ `git tag -l | grep -q ${VERSION}` ]; then
     printf 'Version: %s already exists\n' ${VERSION};
 
-    if [[ ${OVERRIDE_TAG} ]]; then
+    if [ ${OVERRIDE_TAG} ]; then
         printf 'Removing tag\n';
         git tag -d ${VERSION};
         git push origin :${VERSION};

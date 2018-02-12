@@ -1,5 +1,5 @@
 <?php
- //[STAMP] 4ad1f6048bc450bfb254abdd872ccb7e
+ //[STAMP] 4e7425964d5c83f0ad91654445db3472
 
 namespace _generated;
 
@@ -17,14 +17,29 @@ trait UnitTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Checks that two variables are equal.
+     * Checks that two variables are equal. If you're comparing floating-point values,
+     * you can specify the optional "delta" parameter which dictates how great of a precision
+     * error are you willing to tolerate in order to consider the two values equal.
+     *
+     * Regular example:
+     * ```php
+     * <?php
+     * $I->assertEquals(5, $element->getChildrenCount());
+     * ```
+     *
+     * Floating-point example:
+     * ```php
+     * <?php
+     * $I->assertEquals(0.3, $calculator->add(0.1, 0.2), 'Calculator should add the two numbers correctly.', 0.01);
+     * ```
      *
      * @param        $expected
      * @param        $actual
      * @param string $message
+     * @param float  $delta
      * @see \Codeception\Module\Asserts::assertEquals()
      */
-    public function assertEquals($expected, $actual, $message = null)
+    public function assertEquals($expected, $actual, $message = null, $delta = null)
     {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertEquals', func_get_args()));
     }
@@ -32,14 +47,29 @@ trait UnitTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     * Checks that two variables are not equal
+     * Checks that two variables are not equal. If you're comparing floating-point values,
+     * you can specify the optional "delta" parameter which dictates how great of a precision
+     * error are you willing to tolerate in order to consider the two values not equal.
+     *
+     * Regular example:
+     * ```php
+     * <?php
+     * $I->assertNotEquals(0, $element->getChildrenCount());
+     * ```
+     *
+     * Floating-point example:
+     * ```php
+     * <?php
+     * $I->assertNotEquals(0.4, $calculator->add(0.1, 0.2), 'Calculator should add the two numbers correctly.', 0.01);
+     * ```
      *
      * @param        $expected
      * @param        $actual
      * @param string $message
+     * @param float  $delta
      * @see \Codeception\Module\Asserts::assertNotEquals()
      */
-    public function assertNotEquals($expected, $actual, $message = null)
+    public function assertNotEquals($expected, $actual, $message = null, $delta = null)
     {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotEquals', func_get_args()));
     }
@@ -49,10 +79,9 @@ trait UnitTesterActions
      *
      * Checks that two variables are same
      *
-     * @param             $expected
-     * @param             $actual
-     * @param  string     $message
-     * @return mixed|void
+     * @param        $expected
+     * @param        $actual
+     * @param string $message
      * @see \Codeception\Module\Asserts::assertSame()
      */
     public function assertSame($expected, $actual, $message = null)
@@ -198,6 +227,36 @@ trait UnitTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
+     * Checks that a string starts with the given prefix.
+     *
+     * @param string $prefix
+     * @param string $string
+     * @param string $message
+     * @see \Codeception\Module\Asserts::assertStringStartsWith()
+     */
+    public function assertStringStartsWith($prefix, $string, $message = null)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringStartsWith', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Checks that a string doesn't start with the given prefix.
+     *
+     * @param string $prefix
+     * @param string $string
+     * @param string $message
+     * @see \Codeception\Module\Asserts::assertStringStartsNotWith()
+     */
+    public function assertStringStartsNotWith($prefix, $string, $message = null)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertStringStartsNotWith', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
      * Checks that variable is empty.
      *
      * @param        $actual
@@ -268,6 +327,20 @@ trait UnitTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
+     * Checks that the condition is NOT true (everything but true)
+     *
+     * @param        $condition
+     * @param string $message
+     * @see \Codeception\Module\Asserts::assertNotTrue()
+     */
+    public function assertNotTrue($condition, $message = null)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotTrue', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
      * Checks that condition is negative.
      *
      * @param        $condition
@@ -277,6 +350,20 @@ trait UnitTesterActions
     public function assertFalse($condition, $message = null)
     {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('assertFalse', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Checks that the condition is NOT false (everything but false)
+     *
+     * @param        $condition
+     * @param string $message
+     * @see \Codeception\Module\Asserts::assertNotFalse()
+     */
+    public function assertNotFalse($condition, $message = null)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertNotFalse', func_get_args()));
     }
 
     /**
@@ -374,6 +461,22 @@ trait UnitTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
+     * Checks that array contains subset.
+     *
+     * @param array  $subset
+     * @param array  $array
+     * @param bool   $strict
+     * @param string $message
+     * @see \Codeception\Module\Asserts::assertArraySubset()
+     */
+    public function assertArraySubset($subset, $array, $strict = null, $message = null)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('assertArraySubset', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
      * @param $expectedCount
      * @param $actual
      * @param $description
@@ -463,10 +566,87 @@ trait UnitTesterActions
      *
      * @param $exception string or \Exception
      * @param $callback
+     *
+     * @deprecated Use expectThrowable instead
      * @see \Codeception\Module\Asserts::expectException()
      */
     public function expectException($exception, $callback)
     {
         return $this->getScenario()->runStep(new \Codeception\Step\Action('expectException', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Handles and checks throwables (Exceptions/Errors) called inside the callback function.
+     * Either throwable class name or throwable instance should be provided.
+     *
+     * ```php
+     * <?php
+     * $I->expectThrowable(MyThrowable::class, function() {
+     *     $this->doSomethingBad();
+     * });
+     *
+     * $I->expectThrowable(new MyException(), function() {
+     *     $this->doSomethingBad();
+     * });
+     * ```
+     * If you want to check message or throwable code, you can pass them with throwable instance:
+     * ```php
+     * <?php
+     * // will check that throwable MyError is thrown with "Don't do bad things" message
+     * $I->expectThrowable(new MyError("Don't do bad things"), function() {
+     *     $this->doSomethingBad();
+     * });
+     * ```
+     *
+     * @param $throwable string or \Throwable
+     * @param $callback
+     * @see \Codeception\Module\Asserts::expectThrowable()
+     */
+    public function expectThrowable($throwable, $callback)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('expectThrowable', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Returns Faker
+     *
+     * @return \Faker\Generator
+     * @see \Helper\Unit::faker()
+     */
+    public function faker()
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('faker', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Returns PHP file contents
+     *
+     * @param  string $file
+     * @return mixed
+     * @see \Helper\Unit::returnPhpFileFromFixture()
+     */
+    public function returnPhpFileFromFixture($file)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('returnPhpFileFromFixture', func_get_args()));
+    }
+
+    /**
+     * [!] Method is generated. Documentation taken from corresponding module.
+     *
+     * Returns static file contents
+     *
+     * @param  string $file
+     * @return string
+     * @see \Helper\Unit::returnStaticFileFromFixture()
+     */
+    public function returnStaticFileFromFixture($file)
+    {
+        return $this->getScenario()->runStep(new \Codeception\Step\Action('returnStaticFileFromFixture', func_get_args()));
     }
 }

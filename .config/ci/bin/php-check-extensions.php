@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__ ) . '/php-version.php';
+require_once dirname(__FILE__) . '/php-version.php';
 
 echo "\n";
 
@@ -38,8 +38,8 @@ $extensions = array(
     'xmlwriter',
     // 'xsl',
     // 'zend opcache',
-    // 'zip',
-    // 'xdebug',
+     'zip',
+     'xdebug',
     // 'zmq',
     // 'amqp',
     // 'gnupg',
@@ -55,6 +55,6 @@ foreach ($extensions as $extension) {
     printf("%s: %d\n", $extension, $hasExtension);
 }
 
-if (!$success) {
-    throw new RuntimeException('Not all extensions available');
-}
+//if (!$success) {
+//    throw new RuntimeException('Not all extensions available');
+//}

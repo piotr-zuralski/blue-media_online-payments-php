@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
-rm -rf ~/.bash_history > /dev/null 2>&1;
 rm -rf ./vendor > /dev/null 2>&1;

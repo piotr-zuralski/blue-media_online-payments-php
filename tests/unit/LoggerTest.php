@@ -1,23 +1,22 @@
 <?php
 
+namespace BlueMedia\OnlinePayments\Tests\Unit;
+
+use BlueMedia\OnlinePayments\Logger;
+use Codeception\Util\Stub;
+use Psr\Log\NullLogger;
 
 class LoggerTest extends \Codeception\Test\Unit
 {
-    /**
-     * @var \UnitTester
-     */
-    protected $tester;
-
-    protected function _before()
+    public function testLogShouldReturnNothingWhenLoggerHandlerIsPresent()
     {
+        Logger::setLogger(new NullLogger());
+        $this->tester->assertNull(Logger::log(Logger::ALERT, 'test message'));
     }
 
-    protected function _after()
+    public function testLogShouldReturnNullWhenNoLogger()
     {
-    }
-
-    // tests
-    public function testMe()
-    {
+        $logger = Stub::make(Logger::class, array('logger' => null));
+        $this->tester->assertNull($logger::log(Logger::ALERT, 'test message'));
     }
 }

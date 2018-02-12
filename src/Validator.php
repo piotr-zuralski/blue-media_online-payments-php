@@ -6,6 +6,7 @@ use InvalidArgumentException;
 
 /**
  * Validator.
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  *
  * @author    Piotr Żuralski <piotr@zuralski.net>
  * @copyright 2015 Blue Media
@@ -41,6 +42,11 @@ class Validator
     {
         if (mb_strlen(mb_substr($value, mb_strrpos($value, '.'))) > 14) {
             throw new InvalidArgumentException('Wrong Amount format, requires max 14 numbers before ".", only numbers');
+        }
+
+        $exploded = explode('.', $value);
+        if (count($exploded) > 2) {
+            throw new InvalidArgumentException('Wrong Amount format, only one "." is possible');
         }
     }
 

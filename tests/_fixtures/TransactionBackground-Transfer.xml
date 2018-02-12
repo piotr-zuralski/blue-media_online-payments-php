@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transaction>
+    <receiverNRB>83213000042001031174540004</receiverNRB>
+    <receiverName>Blue Media S.A.</receiverName>
+    <receiverAddress>81-717 Sopot, Haffnera 6</receiverAddress>
+    <orderID>1507132335</orderID>
+    <amount>12.95</amount>
+    <currency>PLN</currency>
+    <title>97Y2BSR9 Test transaction</title>
+    <remoteID>97Y2BSR9</remoteID>
+    <bankHref>https://login.vwbankdirect.pl/</bankHref>
+    <hash>05d0a689a7021faab3827a08e7cf7f465a553d53423c372ff980766e92536b78</hash>
+</transaction>

@@ -1,8 +1,9 @@
 os:
   - bzip2
   - git
-  - gnupg2
-  - gpgv
+  - gnupg2              # gnupg
+  - dirmngr             # gnupg
+  - gpgv                # gnupg
   - libaspell-dev
   - libbz2-dev          # php bzip2
 #  - libc-client-dev     # php imap

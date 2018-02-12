@@ -46,6 +46,7 @@ class Transformer
 
     /**
      * Transforms XML to model.
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      *
      * @param  SimpleXMLElement $xml
      * @return Model

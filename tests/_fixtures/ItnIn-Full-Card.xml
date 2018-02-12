@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transactionList>
+    <serviceID>100660</serviceID>
+    <transactions>
+        <transaction>
+            <customerData>
+                <fName>Jan</fName>
+                <lName>Kowalski</lName>
+                <streetName>Jasna</streetName>
+                <streetHouseNo>6</streetHouseNo>
+                <streetStaircaseNo>A</streetStaircaseNo>
+                <streetPremiseNo>3</streetPremiseNo>
+                <postalCode>10-234</postalCode>
+                <city>Warszawa</city>
+                <nrb>26105014451000002276470461</nrb>
+                <senderData>Jan Kowalski Jasna 6/A/3 10-234 Warszawa</senderData>
+            </customerData>
+            <recurringData>
+                <recurringAction>INIT_WITH_PAYMENT</recurringAction>
+                <clientHash>2SVrtcq1o10CI8bUSlBAZq2QlXZDT27C63c6XOg0j70UqyyH5nlkWt30LeDnSDgw</clientHash>
+            </recurringData>
+            <cardData>
+                <index>EYmvH7VTeJti5Y70qqZw83OKtnb8tGmU72rUw8gWRU0dP2ZSTWiNnTD3OyJrUSwC</index>
+                <validityYear>2024</validityYear>
+                <validityMonth>06</validityMonth>
+                <issuer>MASTERCARD</issuer>
+                <bin>510010</bin>
+                <mask>0000</mask>
+            </cardData>
+            <serviceID>100660</serviceID>
+            <orderID>1481064927</orderID>
+            <remoteID>96JMSU8K</remoteID>
+            <amount>9877.54</amount>
+            <currency>PLN</currency>
+            <gatewayID>1500</gatewayID>
+            <paymentDate>20161206235539</paymentDate>
+            <paymentStatus>SUCCESS</paymentStatus>
+            <paymentStatusDetails>AUTHORIZED</paymentStatusDetails>
+            <invoiceNumber>FV 2016/12/5/454677789</invoiceNumber>
+            <customerNumber>12</customerNumber>
+            <customerEmail>piotr@zuralski.net</customerEmail>
+            <addressIP>192.168.0.34</addressIP>
+            <verificationStatus>POSITIVE</verificationStatus>
+            <startAmount>9876.54</startAmount>
+            <transferDate>20160110080000</transferDate>
+            <transferStatus>SUCCESS</transferStatus>
+            <transferStatusDetails>CONFIRMED</transferStatusDetails>
+            <title>BPID:96JMSU8K Test transaction</title>
+            <receiverBank>mBank S.A.</receiverBank>
+            <receiverNRB>PL40114020040000350276811499</receiverNRB>
+            <receiverName>Zuralski.net</receiverName>
+            <receiverAddress>Gda&#x144;sk</receiverAddress>
+            <remoteOutID>OUT 454545</remoteOutID>
+            <senderBank>mBank S.A.</senderBank>
+            <senderNRB>57114020040000300234463178</senderNRB>
+        </transaction>
+    </transactions>
+    <hash>fc787a482e9bd0f707223de3c687a96f3f9a3ed8922d8291a5dfc061a997fb20</hash>
+</transactionList>

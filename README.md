@@ -41,5 +41,5 @@ composer.phar update blue-media/online-payments
 ## Dokumentacja
 
 1. Strona informacyjna [Płatności Online BM](https://platnosci.bm.pl/)
-2. [Przykłady użycia](examples)
-2. [Specyfikacja](docs/System_platnosci_online_obsluga_transakcji_2.3.2.pdf)
+2. [Przykłady użycia](https://gitlab.com/blue-media/online-payments-php/tree/master/examples)
+2. [Specyfikacja](https://gitlab.com/blue-media/online-payments-php/tree/master/docs/)

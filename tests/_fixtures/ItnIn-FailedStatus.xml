@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transactionList>
+    <serviceID>100014</serviceID>
+    <transactions>
+        <transaction>
+            <orderID>1438950364</orderID>
+            <remoteID>96LQJ7F2</remoteID>
+            <amount>123.00</amount>
+            <currency>PLN</currency>
+            <gatewayID>106</gatewayID>
+            <paymentDate>20150807142649</paymentDate>
+            <paymentStatus>FAILURE</paymentStatus>
+            <paymentStatusDetails>REJECTED</paymentStatusDetails>
+        </transaction>
+    </transactions>
+    <hash>c6106d230cf1a94e0081765de2df3271a4327bb7e0fcd8d76ca634a121b9a5b1</hash>
+</transactionList>

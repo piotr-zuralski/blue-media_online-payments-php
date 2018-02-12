@@ -3,22 +3,21 @@ phpmetrics:
 #        - ./vendor/phpmetrics/composer-extension/ComposerExtension.php
 # paths to explore
     path:
-        directory: src
         extensions: php
         exclude: features|tests
     # report and violations files
     logging:
         report:
-            xml:    ./builds/phpmetrics.xml
-            html:   ./builds/phpmetrics.html
-            csv:    ./builds/phpmetrics.csv
+            xml:    builds/phpmetrics.xml
+            html:   builds/phpmetrics.html
+            csv:    builds/phpmetrics.csv
         violations:
-            xml:    ./builds/violations.xml
+            xml:    builds/violations.xml
 
     # condition of failure
-#    failure: average.maintainabilityIndex < 50 or sum.loc > 10000
+    failure: average.maintainabilityIndex < 50 or sum.loc > 10000
 
     # rules used for color ([ critical, warning, good ])
-#    rules:
-#      cyclomaticComplexity: [ 10, 6, 2 ]
-#      maintainabilityIndex: [ 0, 69, 85 ]
+    rules:
+      cyclomaticComplexity: [ 10, 6, 2 ]
+      maintainabilityIndex: [ 0, 69, 85 ]

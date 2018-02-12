@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<transactionList>
+    <serviceID>100660</serviceID>
+    <transactions>
+        <transaction>
+            <orderID>1481064980</orderID>
+            <remoteID>96JMT7QG</remoteID>
+            <amount>9877.54</amount>
+            <currency>PLN</currency>
+            <gatewayID>106</gatewayID>
+            <paymentDate>20161206235611</paymentDate>
+            <paymentStatus>PENDING</paymentStatus>
+            <addressIP>192.168.0.34</addressIP>
+            <startAmount>9876.54</startAmount>
+        </transaction>
+    </transactions>
+    <hash>2f006dd1ed8c242ac960213cbafd6679ff9f1095805e04eb56f96cc67e51e5f4</hash>
+</transactionList>

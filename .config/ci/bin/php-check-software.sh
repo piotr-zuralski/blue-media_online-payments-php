@@ -1,13 +1,42 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 set -e
+
+php_extension_install() {
+    local extension=$1;
+    local extension_loaded=$(php -r "echo (int)extension_loaded('${extension}');");
+    if [ ${extension_loaded} == 0 ]; then
+        printf "☐ Installing ${extension}\n";
+        docker-php-ext-install ${extension};
+    else
+        printf "☑ Installed ${extension}\n";
+    fi
+}
+
+pecl_extension_install() {
+    local pecl_extension=$1;
+    local extension="${pecl_extension/-beta/""}";
+    local extension_loaded=$(php -r "echo (int)extension_loaded('${extension}');");
+    if [ ${extension_loaded} == 0 ]; then
+        printf "☐ Installing ${extension}\n";
+        pecl install ${pecl_extension};
+        docker-php-ext-enable ${extension};
+    else
+        printf "☑ Installed ${extension}\n";
+    fi
+}
+
+php_extension_install "zip";
+pecl_extension_install "xdebug";
+
+php -m;
 
 if [[ ! -f './bin/phive' ]]; then
     wget --quiet --output-document ./bin/phive https://phar.io/releases/phive.phar;
     wget --quiet https://phar.io/releases/phive.phar.asc;
-    gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 0x9B2D5D79 > /dev/null;
-    gpg --batch --verify phive.phar.asc ./bin/phive > /dev/null;
-    if [[ $? -ne 0 ]]; then
+    gpg --keyserver hkps.pool.sks-keyservers.net --recv-keys 0x9B2D5D79;
+    gpg --batch --verify phive.phar.asc ./bin/phive;
+    if [ $? -ne 0 ]; then
         printf '\a%s\n' 'Phive: Invalid signature!';
         rm -rf ./bin/phive phive.phar*
         exit 1
@@ -21,29 +50,29 @@ else
     ./bin/phive version
 fi
 
+./bin/phive install --no-progress --force-accept-unsigned composer/composer
+./bin/phive install --no-progress --trust-gpg-keys 4AA394086372C20A,31C7E470E2138192,2A8299CE842DD38C,8E730BA25823D8B5,2420BAE0A3BE25C6
+
 PHING_VERSION='latest';
 if [[ ! -f './bin/phing' ]]; then
     printf "\a%s\n" "Phing: not found, installing";
 
-    EXPECTED_SIGNATURE=$(wget https://www.phing.info/get/phing-${PHING_VERSION}.phar.sha512 -O - --quiet);
-    EXPECTED_SIGNATURE="${EXPECTED_SIGNATURE/ phing-${PHING_VERSION}.phar/""}";
-    EXPECTED_SIGNATURE="${EXPECTED_SIGNATURE/ /""}";
-    wget --quiet --output-document ./bin/phing https://www.phing.info/get/phing-${PHING_VERSION}.phar;
-    ACTUAL_SIGNATURE=$(sha512sum ./bin/phing);
-    ACTUAL_SIGNATURE="${ACTUAL_SIGNATURE/ .\/bin\/phing/""}";
-    ACTUAL_SIGNATURE="${ACTUAL_SIGNATURE/ /""}";
+    wget --quiet --output-document phing-${PHING_VERSION}.phar https://www.phing.info/get/phing-${PHING_VERSION}.phar;
+    wget --quiet --output-document phing-${PHING_VERSION}.phar.sha512 https://www.phing.info/get/phing-${PHING_VERSION}.phar.sha512;
+    sed -i "s/ /  /g" phing-${PHING_VERSION}.phar.sha512
 
-    if [[ "${EXPECTED_SIGNATURE}" == "${ACTUAL_SIGNATURE}" ]]; then
-        chmod +x ./bin/phing;
-    else
+    $(sha512sum -sc phing-${PHING_VERSION}.phar.sha512);
+    PHING_STATUS=$?
+    printf "%s %d\n" "Phing validate status:" ${PHING_STATUS};
+
+    if [ ${PHING_STATUS} -ne 0 ]; then
         printf "\a%s\n" "[Warning!] Phing: Invalid signature!";
-        printf "  ACTUAL: %s\n" ${ACTUAL_SIGNATURE};
-        printf " ACTUAL2: %s\n" $(php -r "echo hash_file('SHA512', './bin/phing');");
-        printf "EXPECTED: %s\n" ${EXPECTED_SIGNATURE};
+        rm -rf phing-*;
+        exit 1
+    else
+        printf "\a%s\n" "Phing: Valid signature";
+        mv phing-${PHING_VERSION}.phar ./bin/phing;
         chmod +x ./bin/phing;
-
-        # rm -rf ./bin/phing* phing* > /dev/null 2>&1
-        # exit 1
     fi
 else
     printf "%s\n" "Phing: found";
