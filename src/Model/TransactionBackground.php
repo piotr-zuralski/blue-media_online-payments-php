@@ -18,7 +18,7 @@ use DomainException;
 class TransactionBackground extends AbstractModel
 {
     /**
-     * (description).
+     * Receiver bank account number.
      *
      * @required
      * @var string
@@ -26,7 +26,7 @@ class TransactionBackground extends AbstractModel
     protected $receiverNrb;
 
     /**
-     * (description).
+     * Receiver name.
      *
      * @required
      * @var string
@@ -34,7 +34,7 @@ class TransactionBackground extends AbstractModel
     protected $receiverName;
 
     /**
-     * (description).
+     * Receiver address.
      *
      * @required
      * @var string
@@ -42,7 +42,7 @@ class TransactionBackground extends AbstractModel
     protected $receiverAddress;
 
     /**
-     * (description).
+     * Order id.
      *
      * @required
      * @var string
@@ -50,7 +50,7 @@ class TransactionBackground extends AbstractModel
     protected $orderId;
 
     /**
-     * (description).
+     * Amount.
      *
      * @required
      * @var float
@@ -58,7 +58,7 @@ class TransactionBackground extends AbstractModel
     protected $amount;
 
     /**
-     * (description).
+     * Currency.
      *
      * @required
      * @var string
@@ -66,7 +66,7 @@ class TransactionBackground extends AbstractModel
     protected $currency;
 
     /**
-     * (description).
+     * Title.
      *
      * @required
      * @var string
@@ -74,7 +74,7 @@ class TransactionBackground extends AbstractModel
     protected $title;
 
     /**
-     * (description).
+     * Remote order id.
      *
      * @required
      * @var string
@@ -82,7 +82,7 @@ class TransactionBackground extends AbstractModel
     protected $remoteId;
 
     /**
-     * (description).
+     * Banks system URL.
      *
      * @required
      * @var string
@@ -90,7 +90,7 @@ class TransactionBackground extends AbstractModel
     protected $bankHref;
 
     /**
-     * (description).
+     * Hash.
      *
      * @required
      * @var string

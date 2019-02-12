@@ -61,7 +61,10 @@
         "codeception/codeception": "^2.0",
         "codeception/aspect-mock": "^2.0",
         "league/factory-muffin": "^3.0",
-        "league/factory-muffin-faker": "^1.0"
+        "league/factory-muffin-faker": "^1.0",
+        "phpmd/phpmd": "^2.6",
+        "pdepend/pdepend": "^2.5",
+        "phpmetrics/phpmetrics": "^2.4"
     },
     "provide": {
         "psr/log-implementation": "1.0"

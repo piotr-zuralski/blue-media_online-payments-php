@@ -48,6 +48,9 @@ class GatewayModel extends AbstractModel
     const GATEWAY_ID_SPOLDZIELCZA_GRUPA_BANKOWA = 35;
     const GATEWAY_ID_BGZ = 71;
     const GATEWAY_ID_OTHER = 9;
+    const GATEWAY_ID_BLIK = 509;
+    const GATEWAY_ID_VISA_CHECKOUT = 1511;
+    const GATEWAY_ID_GOOGLE_PAY = 1512;
 
     const GATEWAY_TYPE_PBL              = 'PBL';
     const GATEWAY_TYPE_FAST_TRANSFER    = 'Szybki przelew';
@@ -93,6 +96,8 @@ class GatewayModel extends AbstractModel
         self::GATEWAY_ID_IPKO => 1,
         self::GATEWAY_ID_INTELIGO => 1,
         self::GATEWAY_ID_IKO => 1,
+        self::GATEWAY_ID_VISA_CHECKOUT => 1,
+        self::GATEWAY_ID_GOOGLE_PAY => 1,
     );
 
     /**

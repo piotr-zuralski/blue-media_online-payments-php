@@ -85,6 +85,7 @@ function configForm()
     <option value="71" ' . ('71' == $gatewayId ? 'selected="selected"' : '') . '>Szybki przelew - Przelew BGŻ (71)</option>
     <option value="1017" ' . ('1017' == $gatewayId ? 'selected="selected"' : '') . '>Szybki przelew - Przelew Bank Pocztowy (1017)</option>
     <option value="9" ' . ('9' == $gatewayId ? 'selected="selected"' : '') . '>Szybki przelew - Przelew z innego banku (9)</option>
+    <option value="509" ' . ('9' == $gatewayId ? 'selected="selected"' : '') . '>BLIK (509)</option>
     </select></label> ');
     $result .= sprintf(' <input type="submit"/></form>');
     $result .= sprintf('<code>serviceId: %s, hashingSalt: %s, hashingSeparator: "%s", gatewayId: "%s"</code><br>', $serviceId, $hashingSalt, $hashingSeparator, $gatewayId);

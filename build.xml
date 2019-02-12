@@ -31,87 +31,13 @@
     </target>
 
     <target name="composer:get" hidden="true" depends="initialize">
+        <exec command="command -v composer.phar" outputProperty="composer:path"/>
+
         <available file="${composer:path}" property="composer:exists" value="1"/>
-        <echo message="composer:exists ${composer:exists}"/>
         <if>
-            <not><equals arg1="${composer:exists}" arg2="1"/></not>
+            <not><equals arg1="${composer:path}" arg2="1"/></not>
             <then>
-                <echo message="Composer: file ${composer:path} does not exists"/>
-
-                <!--<httpget url="https://getcomposer.org/installer" dir="${project.build_dir}" filename="composer-installer.php"/>-->
-                <!--<httpget url="https://composer.github.io/installer.sig" dir="${project.build_dir}" filename="composer-installer.php.sha384"/>-->
-
-                <!--<phpcpd>-->
-                <!--<httpget url="https://phar.phpunit.de/phpcpd.phar" dir="${project.bin_dir}" filename="phpcpd.phar" followRedirects="true"/>-->
-                <!--<chmod file="${project.bin_dir}/phpcpd.phar" mode="0700"/>-->
-
-                <!--<phploc>-->
-                <!--<httpget url="https://phar.phpunit.de/phploc.phar" dir="${project.bin_dir}" filename="phploc.phar" followRedirects="true"/>-->
-                <!--<chmod file="${project.bin_dir}/phploc.phar" mode="0700"/>-->
-
-                <!--<phpmd>-->
-                 <httpget url="https://static.phpmd.org/php/latest/phpmd.phar" dir="${project.bin_dir}" filename="phpmd.phar"/>
-                 <chmod file="${project.bin_dir}/phpmd.phar" mode="0700"/>
-
-                <!--<phpdepend>-->
-                <!-- <httpget url="https://static.pdepend.org/php/latest/pdepend.phar" dir="${project.bin_dir}" filename="pdepend.phar"/> -->
-                <!-- <chmod file="${project.bin_dir}/pdepend.phar" mode="0700"/> -->
-
-                <!--<phpdoc2>-->
-                <httpget url="https://github.com/phpDocumentor/phpDocumentor2/releases/download/v2.9.0/phpDocumentor.phar" dir="${project.bin_dir}" filename="phpdoc.phar" followRedirects="true"/>
-                <chmod file="${project.bin_dir}/phpdoc.phar" mode="0700"/>
-
-                <!--<phpunit>-->
-                <httpget url="https://phar.phpunit.de/phpunit-5.phar" dir="${project.bin_dir}" filename="phpunit.phar" followRedirects="true"/>
-                <chmod file="${project.bin_dir}/phpunit.phar" mode="0700"/>
-
-                <!--<httpget url="https://codeception.github.io/codecept.phar" dir="${project.bin_dir}" filename="codecept.phar" followRedirects="true" />-->
-                <!--<chmod file="${project.bin_dir}/codecept.phar" mode="0700"/>-->
-
-                <httpget url="https://phar.phpunit.de/phpdcd.phar" dir="${project.bin_dir}" filename="phpdcd.phar" followRedirects="true"/>
-                <chmod file="${project.bin_dir}/phpdcd.phar" mode="0700"/>
-
-                <httpget url="https://github.com/phpmetrics/PhpMetrics/raw/master/build/phpmetrics.phar" dir="${project.bin_dir}" filename="phpmetrics.phar" followRedirects="true"/>
-                <chmod file="${project.bin_dir}/phpmetrics.phar" mode="0700"/>
-
-                <httpget url="https://github.com/phpmetrics/ComposerExtension/raw/master/composer-extension.phar" dir="${project.bin_dir}" filename="phpmetrics-composer-extension.phar" followRedirects="true" />
-                <chmod file="${project.bin_dir}/phpmetrics-composer-extension.phar" mode="0700"/>
-
-                <httpget url="https://github.com/humbug/humbug/releases/download/1.0.0-alpha2/humbug.phar" dir="${project.bin_dir}" filename="humbug.phar" followRedirects="true"/>
-                <httpget url="https://github.com/humbug/humbug/releases/download/1.0.0-alpha2/humbug.phar.pubkey" dir="${project.bin_dir}" filename="humbug.phar.pubkey" followRedirects="true"/>
-                <chmod file="${project.bin_dir}/humbug.phar" mode="0700"/>
-
-                <!--<httpget url="https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.13.1/php-cs-fixer.phar" dir="${project.bin_dir}" filename="php-cs-fixer.phar" followRedirects="true"/>-->
-                <!--<chmod file="${project.bin_dir}/php-cs-fixer.phar" mode="0700"/>-->
-
-                <!--<httpget url="https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar" dir="${project.bin_dir}" filename="phpcs.phar" followRedirects="true"/>-->
-                <!--<chmod file="${project.bin_dir}/phpcs.phar" mode="0700"/>-->
-
-                <!--<httpget url="https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar" dir="${project.bin_dir}" filename="phpcbf.phar" followRedirects="true"/>-->
-                <!--<chmod file="${project.bin_dir}/phpcbf.phar" mode="0700"/>-->
-
-
-
-                <filehash file="${project.build_dir}/composer-installer.php" algorithm="sha384" propertyname="composer:actual_signature"/>
-                <loadfile file="${project.build_dir}/composer-installer.php.sha384" property="composer:expected_signature"/>
-                <chmod file="${project.build_dir}/composer-installer.php" mode="0700"/>
-                <condition property="composer:veryfied" value="true">
-                    <equals arg1="${composer:actual_signature}" arg2="${composer:expected_signature}" casesensitive="false" trim="true"/>
-                </condition>
-                <if>
-                    <not><equals arg1="${composer:veryfied}" arg2="true"/></not>
-                    <then>
-                        <delete file="${project.build_dir}/composer-installer.php"/>
-                        <delete file="${project.build_dir}/composer-installer.php.sha384"/>
-                        <fail message="Composer: Invalid installer signature (${composer:actual_signature}, ${composer:expected_signature})"/>
-                    </then>
-                    <else>
-                        <exec command="php ${project.build_dir}/composer-installer.php --install-dir=${project.bin_dir} --filename=composer.phar" checkreturn="true" logoutput="true"/>
-                        <delete file="${project.build_dir}/composer-installer.php"/>
-                        <delete file="${project.build_dir}/composer-installer.php.sha384"/>
-                        <chmod file="${composer:path}" mode="0700"/>
-                    </else>
-                </if>
+                <property name="composer:path" value="${project.bin_dir}/composer.phar"/>
             </then>
         </if>
 
@@ -255,7 +181,7 @@
 
     <target name="qc:phpmd" description="QC: PHP Mess Detector">
         <!--<echo message="Skipping qc:phpmd" level="warning"/>-->
-        <exec executable="${project.bin_dir}/phpmd.phar" checkreturn="true" logoutput="true">
+        <exec executable="${project.bin_dir}/phpmd" checkreturn="true" logoutput="true">
             <arg path="${project.src_dir}"/>
             <arg value="text"/>
             <arg value="codesize"/>

@@ -116,14 +116,24 @@ class Gateway
         $xmlData = XMLParser::parse($this->response);
 
         $transactionBackground = new Model\TransactionBackground();
+
+        if (isset($xmlData->receiverNRB)) {
+            $transactionBackground->setReceiverNrb((string) $xmlData->receiverNRB);
+        }
+        if (isset($xmlData->receiverName)) {
+            $transactionBackground->setReceiverName((string) $xmlData->receiverName);
+        }
+        if (isset($xmlData->currency)) {
+            $transactionBackground->setCurrency((string) $xmlData->currency);
+        }
+        if (isset($xmlData->title)) {
+            $transactionBackground->setTitle((string) $xmlData->title);
+        }
+
         $transactionBackground
-            ->setReceiverNrb((string) $xmlData->receiverNRB)
-            ->setReceiverName((string) $xmlData->receiverName)
             ->setReceiverAddress((string) $xmlData->receiverAddress)
             ->setOrderId((string) $xmlData->orderID)
             ->setAmount((string) $xmlData->amount)
-            ->setCurrency((string) $xmlData->currency)
-            ->setTitle((string) $xmlData->title)
             ->setRemoteId((string) $xmlData->remoteID)
             ->setBankHref((string) $xmlData->bankHref)
             ->setHash((string) $xmlData->hash);
@@ -361,13 +371,15 @@ class Gateway
         $transaction->setServiceId(self::$serviceId);
         $transaction->setHash(self::generateHash($transaction->toArray()));
         $transaction->validate();
+        $transactionData = $transaction->toArray();
 
         $responseObject = self::$httpClient->post(
             self::getActionUrl(self::PAYMENT_ACTON_PAYMENT),
             array('BmHeader' => 'pay-bm'),
-            $transaction->toArray()
+            $transactionData
         );
 
+        Logger::log(Logger::DEBUG, 'Sending transaction data', array('transactionData' => $transactionData));
         $this->response = (string) $responseObject->getBody();
 
         return $this->parseResponse();

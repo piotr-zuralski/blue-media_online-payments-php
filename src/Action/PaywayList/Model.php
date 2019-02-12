@@ -151,10 +151,14 @@ class Model extends AbstractModel
             throw new DomainException('Hash cannot be empty');
         }
         if ($this->serviceId !== $serviceId) {
-            throw new DomainException(sprintf('Not equal ServiceId, $this->serviceId: "%s", $serviceId: "%s"', $this->serviceId, $serviceId));
+            throw new DomainException(
+                sprintf('Not equal ServiceId, $this->serviceId: "%s", $serviceId: "%s"', $this->serviceId, $serviceId)
+            );
         }
         if ($this->messageId !== $messageId) {
-            throw new DomainException('Not equal MessageId ' . $this->messageId . ' ' . $messageId);
+            throw new DomainException(
+                sprintf('Not equal MessageId, $this->messageId: "%s", $messageId: "%s"', $this->messageId, $messageId)
+            );
         }
     }
 }

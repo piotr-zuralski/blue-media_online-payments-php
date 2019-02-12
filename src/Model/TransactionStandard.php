@@ -119,6 +119,34 @@ class TransactionStandard extends AbstractModel
     protected $linkValidityTime;
 
     /**
+     * Transaction authorization code.
+     *
+     * @var string
+     */
+    protected $authorizationCode;
+
+    /**
+     * BLIK Alias UID key.
+     *
+     * @var string
+     */
+    protected $blikUIDKey;
+
+    /**
+     * BLIK Alias UID label.
+     *
+     * @var string
+     */
+    protected $blikUIDLabel;
+
+    /**
+     * BLIK banks mobile application key.
+     *
+     * @var string
+     */
+    protected $blikAMKey;
+
+    /**
      * Hash.
      *
      * @var string
@@ -501,6 +529,79 @@ class TransactionStandard extends AbstractModel
     }
 
     /**
+     * @return string
+     */
+    public function getAuthorizationCode()
+    {
+        return $this->authorizationCode;
+    }
+
+    /**
+     * @param  string $authorizationCode
+     * @return $this
+     */
+    public function setAuthorizationCode($authorizationCode)
+    {
+        $this->authorizationCode = $authorizationCode;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlikUIDKey()
+    {
+        return $this->blikUIDKey;
+    }
+
+    /**
+     * @param string $blikUIDKey
+     */
+    public function setBlikUIDKey($blikUIDKey)
+    {
+        $this->blikUIDKey = $blikUIDKey;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlikUIDLabel()
+    {
+        return $this->blikUIDLabel;
+    }
+
+    /**
+     * @param string $blikUIDLabel
+     */
+    public function setBlikUIDLabel($blikUIDLabel)
+    {
+        $this->blikUIDLabel = $blikUIDLabel;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlikAMKey()
+    {
+        return $this->blikAMKey;
+    }
+
+    /**
+     * @param string $blikAMKey
+     */
+    public function setBlikAMKey($blikAMKey)
+    {
+        $this->blikAMKey = $blikAMKey;
+
+        return $this;
+    }
+
+    /**
      * Validates model.
      *
      * @return void
@@ -563,6 +664,18 @@ class TransactionStandard extends AbstractModel
         if (!empty($this->getReceiverName())) {
             /* 12 */$result['ReceiverName'] = $this->getReceiverName();
         }
+        if (!empty($this->authorizationCode)) {
+            /* 40 */$result['AuthorizationCode'] = $this->getAuthorizationCode();
+        }
+        if (!empty($this->blikUIDKey)) {
+            /* 42 */$result['BlikUIDKey'] = $this->getBlikUIDKey();
+        }
+        if (!empty($this->blikUIDLabel)) {
+            /* 43 */$result['BlikUIDLabel'] = $this->getBlikUIDLabel();
+        }
+        if (!empty($this->blikAMKey)) {
+            /* 44 */$result['BlikAMKey'] = $this->getBlikAMKey();
+        }
 
         if ($this->getValidityTime() instanceof DateTime) {
             $result['ValidityTime'] = $this->getValidityTime()->format('Y-m-d H:i:s');
@@ -594,7 +707,7 @@ class TransactionStandard extends AbstractModel
             }
             $result .= sprintf('<input type="hidden" name="%s" value="%s" />', $fieldName, $fieldValue) . PHP_EOL;
         }
-        $result .= '<input type="submit" value="Przekieruj" />' . PHP_EOL;
+        $result .= '<input type="submit" />' . PHP_EOL;
         $result .= '</form>' . PHP_EOL;
         $result .= '<script type="text/javascript">document.BlueMediaPaymentForm.submit();</script>';
         $result .= '<noscript><p>Masz wy&#322;&#261;czon&#261; obs&#322;ug&#281; JavaScript.<br>';

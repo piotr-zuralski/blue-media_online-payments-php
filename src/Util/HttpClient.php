@@ -12,7 +12,6 @@ use GuzzleHttp;
  * @package   BlueMedia\OnlinePayments\Util
  * @since     2017-09-30
  * @version   2.4.1
- * $Id:$
  */
 class HttpClient
 {

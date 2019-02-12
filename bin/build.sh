@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 # Piotr Żuralski <piotr@zuralski.net>
 # copyright 2015 zuralski.net
@@ -57,6 +57,18 @@ do
     fi
 done
 
+phive=`command -v bin/phive`;
+if [[ ! ${phive} || ! -f ${phive} ]]; then
+    wget -O phive.phar https://phar.io/releases/phive.phar
+    wget -O phive.phar.asc https://phar.io/releases/phive.phar.asc
+    gpg --keyserver pool.sks-keyservers.net --recv-keys 0x9D8A98B29B2D5D79
+    gpg --verify phive.phar.asc phive.phar
+    chmod +x phive.phar
+    mv phive.phar bin/phive
+fi
+
+${phive} install
+
 composer=`command -v composer`;
 if [[ ! ${composer} || ! -f ${composer} ]]; then
     curl -sS https://getcomposer.org/installer | php -- --install-dir=`pwd`/bin --filename=composer;
@@ -65,10 +77,14 @@ fi
 
 if [ ${composer} ]; then
     ${composer} self-update;
-    ${composer} install;
+    ${composer} install --dev;
 fi
 
 ${composer} outdated -D
 
-./bin/phing -k > builds/build.log 2>&1;
+mkdir -p ${_pwd}/builds;
+
+./bin/phing.phar -k > ${_pwd}/build.log 2>&1 &
+
+tail -f ${_pwd}/build.log;
 echo -e 'done build';

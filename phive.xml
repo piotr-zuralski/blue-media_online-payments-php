@@ -3,9 +3,13 @@
   <phar name="phpstan/phpstan" version="^0.9" installed="0.10.5" location="./bin/phpstan.phar" copy="false"/>
   <phar name="squizlabs/php_codesniffer/phpcs" version="^3.2" installed="3.3.2" location="./bin/phpcs.phar" copy="false"/>
   <phar name="squizlabs/php_codesniffer/phpcbf" version="^3.2" installed="3.3.2" location="./bin/phpcbf.phar" copy="false"/>
-  <phar name="phpcpd" version="^3.0" installed="3.0.1" location="./bin/phpcpd.phar" copy="false"/>
+  <phar name="phpcpd" version="4.1" installed="4.1.0" location="./bin/phpcpd.phar" copy="false"/>
   <phar name="phploc" version="^4.0" installed="4.0.1" location="./bin/phploc.phar" copy="false"/>
-  <phar name="php-cs-fixer" version="^2.13.1" installed="2.13.1" location="./bin/php-cs-fixer.phar" copy="false"/>
-  <phar name="phingofficial/phing" version="^2.16" installed="2.16.1" location="./bin/phing" copy="false"/>
+  <phar name="php-cs-fixer" version="2.14" installed="2.14.0" location="./bin/php-cs-fixer.phar" copy="false"/>
+  <phar name="phing" version="^2.16" installed="2.16.1" location="./bin/phing.phar" copy="false"/>
   <phar name="composer/composer" version="^1.7" installed="1.7.3" location="./bin/composer.phar" copy="false"/>
+  <phar name="phpcs" version="^3.4" installed="3.4.0" location="./bin/phpcs.phar" copy="false"/>
+  <phar name="phpdocumentor" version="2.9" installed="2.9.0" location="./bin/phpDocumentor.phar" copy="false"/>
+  <phar name="phpstan" version="0.11" installed="0.11.1" location="./bin/phpstan.phar" copy="false"/>
+  <phar name="phpdcd" url="https://phar.phpunit.de/phpdcd-1.0.2.phar" version="1.0.2" installed="1.0.2" location="./bin/phpdcd.phar" copy="false"/>
 </phive>

@@ -1,45 +1,55 @@
-# [Płatności Online BM](https://platnosci.bm.pl/)
+# [Blue Media Online Payments System](https://platnosci.bm.pl/)
 
-Biblioteka integracyjna do systemu Płatności online BM
+Integration library for the BM (Blue Media) Online Payments System
 
-## Wymagania
+## Requirements
 
-1. PHP od wersji 5.5
-2. Wymagane rozszeżenia:
+1. PHP from version 5.5
+2. Required extensions:
     - xmlwriter
     - xmlreader
     - iconv
     - mbstring
     - hash
-3. Rozszeżenie cURL jest zalecane ale nie wymagane.
+3. The cURL extension is recommended but not required.
 
-## Instalacja
+## Installation
 
 ### Composer
 
-Zalecanym sposobem instalacji za pośrednictwem [Composer](http://getcomposer.org).
+The recommended way to install via [Composer](http://getcomposer.org).
 
-1. [Zainstaluj Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
-2. Aby zainstalować "Płatności Online BM" wraz z zależnościami, uruchom Composer w głównym katalogu "Płatności Online BM":
+1. [Install Composer](https://getcomposer.org/doc/00-intro.md#installation-linux-unix-osx)
+2. To install "Blue Media Online Payments System" with dependencies, run Composer in the main "Blue Media Online Payments System" directory:
 
 ```bash
-composer.phar install
+composer install
 ```
 
-3. Po zainstalowaniu, w projekcie należy załadować autoloader Composer:
+or if you want to add "Blue Media Online Payments System" to your project, just run:
+
+```bash
+composer require blue-media/online-payments-php
+```
+
+3. After installation, the Composer autoloader must be loaded in the project:
 
 ```php
 require 'vendor/autoload.php';
 ```
 
-Można potem aktualizować "Płatności Online BM" za pomocą Composer:
+You can then update "Blue Media Online Payments System" using Composer:
 
 ```bash
-composer.phar update blue-media/online-payments
+composer update blue-media/online-payments-php
 ```
 
-## Dokumentacja
+## Documentation
 
-1. Strona informacyjna [Płatności Online BM](https://platnosci.bm.pl/)
-2. [Przykłady użycia](https://gitlab.com/blue-media/online-payments-php/tree/master/examples)
-2. [Specyfikacja](https://gitlab.com/blue-media/online-payments-php/tree/master/docs/)
+For latest documentation, specifications or question please contact [Blue Media](mailto:info@bm.pl)
+
+1. Information page [Online Payments BM](https://platnosci.bm.pl/)
+2. [Examples of use](https://gitlab.com/blue-media/online-payments-php/tree/master/examples)
+3. [Specification](https://gitlab.com/blue-media/online-payments-php/tree/master/docs/)
+4. [Administrative panel - production](https://oplacasie.bm.pl/)
+5. [Administrative panel - testing](https://oplacasie-accept.bm.pl/)
